@@ -2,6 +2,7 @@
 // Released under the terms of the CPL Common Public License version 1.0.
 package fitnesse.wiki;
 
+import fitnesse.wikitext.parser3.WikiText;
 import fitnesse.util.Clock;
 import fitnesse.wiki.fs.WikiPageProperties;
 import fitnesse.wikitext.parser.CompositeVariableSource;
@@ -53,7 +54,9 @@ public abstract class BaseWikitextPage extends BaseWikiPage implements WikitextP
 
   @Override
   public String getHtml() {
-    return new HtmlTranslator(new WikiSourcePage(this), getParsingPage()).translateTree(getSyntaxTree());
+    //return new HtmlTranslator(new WikiSourcePage(this), getParsingPage()).translateTree(getSyntaxTree());
+    ParsingPage page = getParsingPage();
+    return new WikiText(page, page).toHtml(getData().getContent());
   }
 
   @Override
