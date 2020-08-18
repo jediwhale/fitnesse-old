@@ -16,6 +16,7 @@ public enum SymbolType {
   SEE,
   STRIKE,
   STYLE,
+  TABLE,
   TEXT,
   WIKI_LINK
 }

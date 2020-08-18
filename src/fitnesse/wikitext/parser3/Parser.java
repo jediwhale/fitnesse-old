@@ -146,6 +146,7 @@ public class Parser {
     parseRules.put(TokenType.SEE, Keyword.parse(SymbolType.SEE));
     parseRules.put(TokenType.STRIKE, Pair.parse(SymbolType.STRIKE));
     parseRules.put(TokenType.STYLE, Style::parse);
+    parseRules.put(TokenType.CELL_DELIMITER, Table::parse);
     parseRules.put(TokenType.VARIABLE, Variable::parseGet);
     parseRules.put(TokenType.WIKI_PATH, WikiPath::parse);
   }

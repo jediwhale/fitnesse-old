@@ -25,5 +25,4 @@ public class Style {
       translator.translate(symbol.getChild(1)) +
       "</" + "span" + ">";
   }
-
 }

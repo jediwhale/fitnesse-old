@@ -4,16 +4,15 @@ import static fitnesse.wikitext.parser3.WikiPath.isWikiWordPath;
 
 public class Scanner {
   private static final Matcher[] wikiPageTypes = {
-    Matcher.make(TokenType.BOLD_ITALIC),
 
     Matcher.make(TokenType.ALIAS_START),
     Matcher.make(TokenType.ALIAS_MIDDLE),
     Matcher.make(TokenType.ALIAS_END),
     Matcher.makeWord(TokenType.ANCHOR_NAME),
     Matcher.make(TokenType.ANCHOR_REFERENCE),
-    Matcher.make(TokenType.BOLD),
+    Matcher.make(TokenType.BOLD_ITALIC),
+    Matcher.make(TokenType.CELL_DELIMITER),
     Matcher.makeWord(TokenType.DEFINE),
-    Matcher.make(TokenType.ITALIC),
     Matcher.makeWord(TokenType.SEE),
     Matcher.make(TokenType.STRIKE),
     Matcher.make(TokenType.STYLE),
@@ -30,10 +29,12 @@ public class Scanner {
     Matcher.make(TokenType.VARIABLE),
     Matcher.makeBlankSpace(TokenType.BLANK_SPACE),
 
+    Matcher.make(TokenType.BOLD),
     Matcher.make(TokenType.BRACE_START),
     Matcher.make(TokenType.BRACE_END),
     Matcher.make(TokenType.BRACKET_START),
     Matcher.make(TokenType.BRACKET_END),
+    Matcher.make(TokenType.ITALIC),
     Matcher.make(TokenType.PARENTHESIS_START),
     Matcher.make(TokenType.PARENTHESIS_END)
   };

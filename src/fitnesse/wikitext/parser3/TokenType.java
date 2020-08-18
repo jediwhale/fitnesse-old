@@ -13,6 +13,7 @@ public class TokenType {
   public static final TokenType BRACE_START = new TokenType("BraceStart", "{");
   public static final TokenType BRACKET_END = new TokenType("BracketEnd", "]");
   public static final TokenType BRACKET_START = new TokenType("BracketStart", "[");
+  public static final TokenType CELL_DELIMITER = new TokenType("CellDelimiter", "|");
   public static final TokenType DEFINE = new TokenType("Define", "!define");
   public static final TokenType END = new TokenType("End");
   public static final TokenType ITALIC = new TokenType("Italic", "''");
