@@ -15,12 +15,14 @@ public class TableTest {
   public void parses() {
     assertParses("TABLE(LIST(LIST(TEXT=a)))", "|a|");
     assertParses("TABLE(LIST(LIST(TEXT=a),LIST(TEXT=b)))", "|a|b|");
+    assertParses("TABLE(LIST(LIST(TEXT=a)),LIST(LIST(TEXT=b)))", "|a|\n|b|");
   }
 
   @Test
   public void translates() {
     assertTranslates(table(row(cell("a"))), "|a|");
     assertTranslates(table(row(cell("a") + cell("b"))), "|a|b|");
+    assertTranslates(table(row(cell("a") )+ row(cell("b"))), "|a|\n|b|");
   }
 
   private static String table(String row) {
