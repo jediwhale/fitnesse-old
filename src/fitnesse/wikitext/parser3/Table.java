@@ -6,9 +6,11 @@ public class Table {
   public static Symbol parse(Parser parser) {
     Symbol result = new Symbol(SymbolType.TABLE);
     parser.advance();
-    Symbol cell = parser.parseList(parser.peek(-1));
     Symbol row = new Symbol(SymbolType.LIST);
-    row.add(cell);
+    do {
+      Symbol cell = parser.parseList(DELIMITER);
+      row.add(cell);
+    } while (!parser.peek(0).isEndOfLine());
     result.add(row);
     return result;
   }
@@ -16,8 +18,18 @@ public class Table {
   public static String translate(Symbol symbol, Translator translator) {
     return "<table>" + HtmlElement.endl +
       "\t<tr>" + HtmlElement.endl +
-      "\t\t<td>" + translator.translate(symbol.getChild(0).getChild(0)) + "</td>" + HtmlElement.endl +
+      translateRow(symbol.getChild(0), translator) +
       "\t</tr>" + HtmlElement.endl +
       "</table>" + HtmlElement.endl;
   }
+
+  private static String translateRow(Symbol row, TranslateSymbol translator) {
+    return row.translateChildren(child-> cell(child, translator));
+  }
+
+  private static String cell(Symbol cell, TranslateSymbol translator) {
+    return "\t\t<td>" + translator.translate(cell) + "</td>" + HtmlElement.endl;
+  }
+
+  private static final Token DELIMITER = new Token(TokenType.CELL_DELIMITER);
 }

@@ -35,12 +35,16 @@ public class Token {
 
   public Symbol asSymbol(SymbolType type) { return new Symbol(type, content); }
 
+  public boolean isEndOfLine() {
+    return isType(TokenType.NEW_LINE) || isType(TokenType.END);
+  }
+
   public boolean isVariable() {
-    return type == TokenType.TEXT && content.chars().allMatch(c -> Character.isLetterOrDigit(c) || c == '_');
+    return isType(TokenType.TEXT) && content.chars().allMatch(c -> Character.isLetterOrDigit(c) || c == '_');
   }
 
   public boolean isWord() {
-    return type == TokenType.TEXT && content.chars().allMatch(c -> Character.isLetterOrDigit(c) || c == '_' || c == '.');
+    return isType(TokenType.TEXT) && content.chars().allMatch(c -> Character.isLetterOrDigit(c) || c == '_' || c == '.');
   }
 
   public String toString() {

@@ -74,11 +74,9 @@ public class Symbol {
     return content + translateChildren(translator);
   }
 
-  public String translateChildren(Translator translator) {
+  public String translateChildren(TranslateSymbol translator) {
     StringBuilder result = new StringBuilder();
-    for (Symbol child : children) {
-      result.append(translator.translate(child));
-    }
+    children.stream().map(translator::translate).forEach(result::append);
     return result.toString();
   }
 
