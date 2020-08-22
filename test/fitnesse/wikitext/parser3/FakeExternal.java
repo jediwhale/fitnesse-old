@@ -5,8 +5,13 @@ import java.util.Optional;
 
 public class FakeExternal implements External, VariableSource {
   @Override
-  public String translateLink(String path, LinkFormatter existingPage, LinkFormatter newPage) {
-    return path.contains("New") ? newPage.formatLink("Fake." + path) : existingPage.formatLink("Fake." + path);
+  public String fullPath(String input) {
+    return "Fake." + input;
+  }
+
+  @Override
+  public boolean exists(String input) {
+    return !input.contains("New");
   }
 
   @Override

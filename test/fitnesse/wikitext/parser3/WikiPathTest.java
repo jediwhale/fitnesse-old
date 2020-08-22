@@ -22,6 +22,7 @@ public class WikiPathTest {
   public void scansWikiWords() {
     assertScans("WikiPath=HiThere", "HiThere");
     assertScans("WikiPath=HiThere.BoB", "HiThere.BoB");
+    assertScans("WikiPath=<HiThere.BoB", "<HiThere.BoB");
   }
 
   @Test

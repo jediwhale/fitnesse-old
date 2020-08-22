@@ -6,8 +6,13 @@ import java.util.function.Predicate;
 public class Text {
 
   public Text(String text) {
+    this(text, 0);
+  }
+
+  public Text(String text, int offset) {
     this.text = text;
-    start = 0;
+    this.offset = offset;
+    start = offset;
     end = text.length();
   }
 
@@ -35,7 +40,7 @@ public class Text {
   }
 
   public boolean matchAll(String separator, Predicate<Text> matcher) {
-    start = 0;
+    start = offset;
     while (start < text.length()) {
       end = text.indexOf(separator, start);
       if (end == -1) end = text.length();
@@ -48,6 +53,7 @@ public class Text {
 
 
   private final String text;
+  private int offset;
   private int start;
   private int end;
 }

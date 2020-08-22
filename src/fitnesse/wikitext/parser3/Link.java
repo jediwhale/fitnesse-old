@@ -14,9 +14,10 @@ public class Link {
   }
 
   public static String makeWikiLink(External external, String wikiPath, String trailer, String description) {
-    return external.translateLink(wikiPath,
-      path -> makeLink(description, path + trailer, ""),
-      path -> description + makeLink("[?]", path + "?edit&amp;nonExistent=true", "title=\"create page\""));
+    String fullPath = external.fullPath(wikiPath);
+    return external.exists(wikiPath)
+      ? makeLink(description, fullPath + trailer, "")
+      : description + makeLink("[?]", fullPath + "?edit&amp;nonExistent=true", "title=\"create page\"");
   }
 
   public static String makeLink(String description, String path, String attributes) {

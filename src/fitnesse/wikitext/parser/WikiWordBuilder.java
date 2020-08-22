@@ -34,7 +34,7 @@ public class WikiWordBuilder {
       }
     }
 
-    private String makePath(SourcePage page, String content) {
+    public static String makePath(SourcePage page, String content) {
         if (content.startsWith("^") || content.startsWith(">")) {
             return makeChildPath(page, content);
         }
@@ -60,11 +60,11 @@ public class WikiWordBuilder {
         return text + link.htmlInline();
     }
 
-    private String makeParentPath(SourcePage page, String content) {
+    private static String makeParentPath(SourcePage page, String content) {
         return page.findParentPath(content.substring(1));
     }
 
-    private String makeChildPath(SourcePage page, String content) {
+    private static String makeChildPath(SourcePage page, String content) {
         return String.format("%s.%s", page.getName(), content.substring(1));
     }
 

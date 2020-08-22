@@ -1,5 +1,7 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.html.HtmlUtil;
+
 public class WikiPath {
 
   @FunctionalInterface
@@ -26,12 +28,14 @@ public class WikiPath {
   }
 
   public static boolean isWikiWordPath(String input) {
-    return new Text(input).matchAll(".", WikiPath::isWikiWord);
+    int offset = ("<>^.".contains(input.substring(0, 1))) ? 1 : 0;
+    if (offset >= input.length()) return false;
+    return new Text(input, offset).matchAll(".", WikiPath::isWikiWord);
   }
 
   public static String translate(Symbol symbol, Translator translator) {
     final String content = symbol.getContent();
-    return Link.makeWikiLink(translator.getExternal(), content, "", content);
+    return Link.makeWikiLink(translator.getExternal(), content, "", HtmlUtil.escapeHTML(content));
   }
 
   private static boolean isPageName(Text text) {
