@@ -34,8 +34,8 @@ public class WikiPath {
   }
 
   public static String translate(Symbol symbol, Translator translator) {
-    final String content = symbol.getContent();
-    return Link.makeWikiLink(translator.getExternal(), content, "", HtmlUtil.escapeHTML(content));
+    final String content = symbol.translateContent(translator);
+    return Link.makeWikiLink(translator.getExternal(), symbol.getContent(), "", content);
   }
 
   private static boolean isPageName(Text text) {

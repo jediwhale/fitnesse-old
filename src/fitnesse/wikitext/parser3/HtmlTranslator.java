@@ -17,6 +17,8 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.ITALIC, Pair.translate("i"));
     symbolTypes.put(SymbolType.LINK, Link::translate);
     symbolTypes.put(SymbolType.LIST, Symbol::translateChildren);
+    symbolTypes.put(SymbolType.PATH, Path::translate);
+    symbolTypes.put(SymbolType.SEE, See::translate);
     symbolTypes.put(SymbolType.STRIKE, Pair.translate("strike"));
     symbolTypes.put(SymbolType.STYLE, Style::translate);
     symbolTypes.put(SymbolType.TABLE, Table::translate);

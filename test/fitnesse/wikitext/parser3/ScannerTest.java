@@ -55,23 +55,8 @@ public class ScannerTest {
   }
 
   @Test
-  public void scansNote() {
-    assertScans("Note=!note ,Text=something", "!note something");
-  }
-
-  @Test
-  public void scansPath() {
-    assertScans("Path=!path ,Text=something", "!path something");
-  }
-
-  @Test
   public void scansPreformat() {
     assertScans("PreformatStart={{{,Text=hi'''there,PreformatEnd=}}}", "{{{hi'''there}}}");
-  }
-
-  @Test
-  public void scansSee() {
-    assertScans("See=!see ,Text=something", "!see something");
   }
 
   @Test

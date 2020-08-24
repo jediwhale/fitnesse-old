@@ -1,5 +1,7 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.html.HtmlUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +73,7 @@ public class Symbol {
   }
 
   public String translateContent(Translator translator) {
-    return content + translateChildren(translator);
+    return HtmlUtil.escapeHTML(content) + translateChildren(translator);
   }
 
   public String translateChildren(TranslateSymbol translator) {

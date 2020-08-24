@@ -26,23 +26,8 @@ public class ParserTest {
   }
 
   @Test
-  public void parsesPath() {
-    assertParses("PATH(TEXT=stuff)", "!path stuff");
-  }
-
-  @Test
-  public void parsesPathWithLeadingAndTrailing() {
-    assertParses("TEXT=some,PATH(TEXT=stuff),TEXT= ,TEXT=here", "some!path stuff here");
-  }
-
-  @Test
   public void parsesPreformat() {
     assertParses("PREFORMAT(TEXT=stuff)", "{{{stuff}}}");
-  }
-
-  @Test
-  public void parsesSee() {
-    assertParses("SEE(TEXT=stuff)", "!see stuff");
   }
 
   @Test
