@@ -32,8 +32,6 @@ public class AliasTest {
     assertTranslates(Html.anchor("https://example.com/myfile", "tag"), "[[tag][https://example.com/myfile]]");
     assertTranslates(Html.anchor("notes://example.com/myfile", "tag"), "[[tag][notes://example.com/myfile]]");
     assertTranslates(Html.anchor("files/my file", "tag"), "[[tag][http://files/my file]]");
-    assertTranslates("tag" + Html.anchor("Fake.NewPage?edit&amp;nonExistent=true", "title=\"create page\"", "[?]"), "[[tag][NewPage]]");
-    assertTranslates("tag" + Html.anchor("Fake.NewPage?edit&amp;nonExistent=true", "title=\"create page\"", "[?]"), "[[tag][NewPage?ignored]]");
     assertTranslates(Html.anchor("Fake.other.one_of-them", "tag"), "[[tag][other.one_of-them]]");
   }
 

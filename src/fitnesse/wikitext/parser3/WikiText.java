@@ -21,22 +21,16 @@ public class WikiText {
   private final VariableSource variables;
 
   private static class ExternalAdapter implements External {
-    public ExternalAdapter(SourcePage sourcePage) {
-      this.sourcePage = sourcePage;
+    public ExternalAdapter(SourcePage page) {
+      this.page = page;
     }
 
     @Override
-    public String fullPath(String input) {
-      String wikiWordPath = WikiWordBuilder.makePath(sourcePage, input);
-      return sourcePage.makeFullPathOfTarget(wikiWordPath);
+    public String buildLink(String path, String description, String trailer) {
+      return new WikiWordBuilder(page, path, description).buildLink(trailer, path);
     }
 
-    @Override
-    public boolean exists(String input) {
-      return !sourcePage.targetExists(input);
-    }
-
-    private final SourcePage sourcePage;
+    private final SourcePage page;
   }
 
   private static class VariableSourceAdapter implements VariableSource {

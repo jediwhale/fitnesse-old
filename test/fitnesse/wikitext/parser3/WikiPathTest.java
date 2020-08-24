@@ -34,7 +34,6 @@ public class WikiPathTest {
   @Test
   public void translates() {
     assertTranslates(Html.anchor("Fake.HiThere", "HiThere"), "HiThere");
-    assertTranslates("NewPage" + Html.anchor("Fake.NewPage?edit&amp;nonExistent=true", "title=\"create page\"", "[?]"), "NewPage");
   }
 
   private void assertWikiWord(boolean expected, String input) {

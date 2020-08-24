@@ -8,6 +8,6 @@ public class Html {
   }
 
   public static String anchor(String reference, String attributes, String content) {
-    return "<a href=\"" + reference + "\"" + (attributes.length() > 0 ? " " : "") + attributes + ">" + content + "</a>";
+    return "<a " + attributes + (attributes.length() > 0 ? " " : "") + "href=\"" + reference + "\">" + content + "</a>";
   }
 }
