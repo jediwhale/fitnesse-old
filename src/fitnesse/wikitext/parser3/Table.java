@@ -29,7 +29,7 @@ public class Table {
   }
 
   private static String cell(Symbol cell, TranslateSymbol translator) {
-    return "\t\t<td>" + translator.translate(cell) + "</td>" + HtmlElement.endl;
+    return "\t\t<td>" + translator.translate(cell).trim() + "</td>" + HtmlElement.endl;
   }
 
   private static final Token DELIMITER = new Token(TokenType.CELL_DELIMITER);
