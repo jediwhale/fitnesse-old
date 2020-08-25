@@ -13,6 +13,7 @@ public class ParserTest {
   @Test
   public void parsesLiteral() {
     assertParses("TEXT=stuff", "!-stuff-!");
+    assertParses("TEXT=some,TEXT=stuff,TEXT=here", "some!-stuff-!here");
   }
 
   @Test

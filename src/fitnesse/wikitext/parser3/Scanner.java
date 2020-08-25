@@ -39,7 +39,6 @@ public class Scanner {
     Matcher.make(TokenType.PARENTHESIS_END)
   };
 
-  private static final Matcher[] literalTypes = { Matcher.make(TokenType.LITERAL_END) };
   private static final Matcher[] preformatTypes = { Matcher.make(TokenType.PREFORMAT_END) };
 
   public Scanner(String input) {
@@ -66,9 +65,6 @@ public class Scanner {
       String matched = match.read(content);
       if (matched.length() > 0) {
         add(match.asToken(matched));
-        if (match.isType(TokenType.LITERAL_START)) {
-          scan(literalTypes);
-        }
         if (match.isType(TokenType.PREFORMAT_START)) {
           scan(preformatTypes);
         }

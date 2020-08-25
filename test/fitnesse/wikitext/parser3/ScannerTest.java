@@ -29,17 +29,10 @@ public class ScannerTest {
 
   @Test
   public void scansLiteral() {
-    assertScans("LiteralStart=!-,Text=hi'''there,LiteralEnd=-!", "!-hi'''there-!");
-  }
-
-  @Test
-  public void scansLiteralWithLeadingAndTrailingText() {
-    assertScans("Text=say,LiteralStart=!-,Text=hi''there,LiteralEnd=-!,Text=now", "say!-hi''there-!now");
-  }
-
-  @Test
-  public void scansLiteralWithoutTerminator() {
-    assertScans("LiteralStart=!-,Text=hi--there", "!-hi--there");
+    assertScans("LiteralStart=!-,Text=hi,Bold=''',Text=there,LiteralEnd=-!", "!-hi'''there-!");
+    assertScans("Text=say,LiteralStart=!-,Text=hi,Italic='',Text=there,LiteralEnd=-!,Text=now", "say!-hi''there-!now");
+    assertScans("LiteralStart=!-,Text=hi,LiteralEnd=-!,CellDelimiter=|,Text=there", "!-hi-!|there");
+    assertScans("LiteralStart=!-,Text=hi,Strike=--,Text=there", "!-hi--there");
   }
 
   @Test
