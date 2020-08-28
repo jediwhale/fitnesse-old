@@ -19,15 +19,11 @@ public class Table {
   }
 
   public static String translate(Symbol table, TranslateSymbol<String> translator) {
-    HtmlTag result = HtmlTag.name("table");
-    table.visitChildren(child -> row(child, translator), result::add);
-    return result.html();
+    return table.collectChildren(child -> row(child, translator), HtmlTag.name("table"), HtmlTag::add).html();
   }
 
   private static HtmlTag row(Symbol row, TranslateSymbol<String> translator) {
-    HtmlTag result = HtmlTag.name("tr");
-    row.visitChildren(child -> cell(child, translator), result::add);
-    return result;
+    return row.collectChildren(child -> cell(child, translator), HtmlTag.name("tr"), HtmlTag::add);
   }
 
   private static HtmlTag cell(Symbol cell, TranslateSymbol<String> translator) {

@@ -4,7 +4,7 @@ import fitnesse.html.HtmlUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public class Symbol {
   public static Symbol error(String message) { return new Symbol(SymbolType.ERROR, message); }
@@ -78,13 +78,12 @@ public class Symbol {
   }
 
   public String translateChildren(TranslateSymbol<String> translator) {
-    StringBuilder result = new StringBuilder();
-    visitChildren(translator, result::append);
-    return result.toString();
+    return collectChildren(translator, new StringBuilder(), StringBuilder::append).toString();
   }
 
-  public <T> void visitChildren(TranslateSymbol<T> translator, Consumer<T> visitor) {
-    children.stream().map(translator::translate).forEach(visitor);
+  public <T, U> U collectChildren(TranslateSymbol<T> translator, U initial, BiConsumer<U, ? super T> accumulator) {
+    children.stream().map(translator::translate).forEachOrdered(item -> accumulator.accept(initial, item));
+    return initial;
   }
 
   public String toString() {
