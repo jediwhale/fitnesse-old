@@ -76,6 +76,6 @@ public class VariableTest {
   }
 
   private String translateDefine(String expected) {
-    return "<span class=\"meta\">variable defined: " + expected + "</span>" + Html.NEW_LINE;
+    return "<span class=\"meta\">variable defined: " + expected + "</span>";
   }
 }

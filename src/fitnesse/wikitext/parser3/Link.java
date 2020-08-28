@@ -1,5 +1,7 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.html.HtmlTag;
+
 public class Link {
   public static Symbol parse(Parser parser) {
     Symbol result = parser.peek(0).asSymbol(SymbolType.LINK);
@@ -19,7 +21,7 @@ public class Link {
 
   public static String makeLink(String description, String path, String attributes) {
     int files = path.indexOf("//files/");
-    return Html.anchor((files < 0 ? path : path.substring(files + 2)), attributes, description);
+    return HtmlTag.name("a").attribute("href", files < 0 ? path : path.substring(files + 2)).body(description).htmlInline();
   }
 
   private static final Terminator LINK_TERMINATOR = new Terminator(token -> !token.isType(TokenType.TEXT), "non-text");

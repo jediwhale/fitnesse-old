@@ -1,6 +1,6 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.html.HtmlElement;
+import fitnesse.html.HtmlTag;
 
 public class Table {
   public static Symbol parse(Parser parser) {
@@ -18,18 +18,20 @@ public class Table {
     return result;
   }
 
-  public static String translate(Symbol symbol, Translator translator) {
-    return "<table>" + HtmlElement.endl +
-      symbol.translateChildren(child -> row(child, translator)) +
-      "</table>" + HtmlElement.endl;
+  public static String translate(Symbol table, TranslateSymbol<String> translator) {
+    HtmlTag result = HtmlTag.name("table");
+    table.visitChildren(child -> row(child, translator), result::add);
+    return result.html();
   }
 
-  private static String row(Symbol row, TranslateSymbol translator) {
-    return "\t<tr>" + HtmlElement.endl + row.translateChildren(child-> cell(child, translator)) + "\t</tr>" + HtmlElement.endl;
+  private static HtmlTag row(Symbol row, TranslateSymbol<String> translator) {
+    HtmlTag result = HtmlTag.name("tr");
+    row.visitChildren(child -> cell(child, translator), result::add);
+    return result;
   }
 
-  private static String cell(Symbol cell, TranslateSymbol translator) {
-    return "\t\t<td>" + translator.translate(cell).trim() + "</td>" + HtmlElement.endl;
+  private static HtmlTag cell(Symbol cell, TranslateSymbol<String> translator) {
+    return HtmlTag.name("td").body(translator.translate(cell).trim());
   }
 
   private static final Token DELIMITER = new Token(TokenType.CELL_DELIMITER);

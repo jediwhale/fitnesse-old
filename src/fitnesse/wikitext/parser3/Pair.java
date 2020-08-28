@@ -1,5 +1,7 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.html.HtmlTag;
+
 public class Pair {
   public static ParseRule parse(SymbolType symbolType) {
     return parser -> {
@@ -11,15 +13,11 @@ public class Pair {
 
   public static TranslateRule translate(String tag) {
     return (symbol, translator) ->
-      "<" + tag + ">" +
-        symbol.translateChildren(translator) +
-        "</" + tag + ">";
+      HtmlTag.name(tag).body(symbol.translateChildren(translator)).htmlInline();
   }
 
   public static TranslateRule translate(String tag1, String tag2) {
     return (symbol, translator) ->
-      "<" + tag1 + "><" + tag2 + ">" +
-        symbol.translateChildren(translator) +
-        "</" + tag2 + "></" + tag1 + ">";
+      HtmlTag.name(tag1).child(HtmlTag.name(tag2).body(symbol.translateChildren(translator))).htmlInline();
   }
 }

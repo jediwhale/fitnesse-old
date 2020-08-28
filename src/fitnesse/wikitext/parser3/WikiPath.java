@@ -1,7 +1,5 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.html.HtmlUtil;
-
 public class WikiPath {
 
   @FunctionalInterface

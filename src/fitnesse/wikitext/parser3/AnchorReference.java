@@ -1,7 +1,10 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.html.HtmlTag;
+
 public class AnchorReference {
   public static String translate(Symbol symbol, Translator translator) {
-    return Html.anchor("#" + symbol.getContent(), ".#" + symbol.getContent());
+    String content = symbol.translateContent(translator);
+    return HtmlTag.name("a").attribute("href", "#" + content).body(".#" + content).htmlInline();
   }
 }

@@ -1,5 +1,7 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.html.HtmlTag;
+
 public class Style {
   public static Symbol parse(Parser parser) {
     if (!parser.peek(1).isType(TokenType.TEXT)) {
@@ -21,8 +23,6 @@ public class Style {
   }
 
   public static String translate(Symbol symbol, Translator translator) {
-    return "<" + "span class=\"" + symbol.getContent(0) + "\">" +
-      translator.translate(symbol.getChild(1)) +
-      "</" + "span" + ">";
+    return HtmlTag.name("span").attribute("class", symbol.getContent(0)).body(translator.translate(symbol.getChild(1))).htmlInline();
   }
 }

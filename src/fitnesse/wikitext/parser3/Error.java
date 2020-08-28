@@ -1,11 +1,9 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.html.HtmlTag;
+
 public class Error {
   public static String translate(Symbol symbol, Translator translator) {
-    return
-      " <span class=\"error\">" +
-        symbol.getContent() +
-        symbol.translateChildren(translator) +
-        "</span> ";
+    return " " + HtmlTag.name("span").attribute("class", "error").body(symbol.translateContent(translator)).htmlInline() + " ";
   }
 }

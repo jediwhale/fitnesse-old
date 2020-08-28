@@ -53,7 +53,7 @@ public class Text {
 
 
   private final String text;
-  private int offset;
+  private final int offset;
   private int start;
   private int end;
 }

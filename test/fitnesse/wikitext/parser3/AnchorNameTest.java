@@ -1,5 +1,6 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.html.HtmlElement;
 import org.junit.Test;
 
 import static fitnesse.wikitext.parser3.Helper.*;
@@ -30,6 +31,6 @@ public class AnchorNameTest {
   private static final String ERROR = toError("!anchor  Name must be alphanumeric");
 
   private String html(String name) {
-    return "<a name=\"" + name + "\" />";
+    return "<a name=\"" + name + "\"/>" + HtmlElement.endl;
   }
 }

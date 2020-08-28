@@ -1,5 +1,7 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.html.HtmlTag;
+
 public class Variable {
   public static Symbol parsePut(Parser parser) {
     Symbol result = new Symbol(SymbolType.DEFINE);
@@ -26,7 +28,7 @@ public class Variable {
     parser.advance();
     String name = parser.peek(0).getContent();
     Symbol result = parser.getVariable(name)
-      .map(value -> parser.parseString(value))
+      .map(parser::parseString)
       .orElseGet(() -> Symbol.error("Undefined variable: " + name));
     parser.advance();
     parser.advance(); //check braceend
@@ -34,10 +36,9 @@ public class Variable {
   }
 
   public static String translate(Symbol symbol, Translator translator) {
-    return "<span class=\"meta\">variable defined: "
-      + symbol.getContent(0)
-      + "="
-      + symbol.getContent(1)
-      + "</span>" + Html.NEW_LINE;
+    return HtmlTag.name("span")
+      .attribute("class", "meta")
+      .text("variable defined: " + symbol.getContent(0) + "=" + symbol.getContent(1))
+      .htmlInline();
   }
 }
