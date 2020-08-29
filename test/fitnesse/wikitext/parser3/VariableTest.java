@@ -7,11 +7,6 @@ import static org.junit.Assert.assertEquals;
 import static fitnesse.wikitext.parser3.Helper.*;
 
 public class VariableTest {
-  @Test
-  public void scansPut() {
-    assertScans("Define=!define ", "!define ");
-    assertScans("Text=!!definer", "!!definer");
-  }
 
   @Test
   public void parsesPut() {

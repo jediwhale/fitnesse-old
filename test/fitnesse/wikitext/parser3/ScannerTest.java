@@ -57,4 +57,31 @@ public class ScannerTest {
     assertScans("Text=hi,Bold=''',Text=there", "hi'''there");
   }
 
+  @Test public void scansAnchorName() { assertScansWord("!anchor", "AnchorName"); }
+
+  @Test public void scansCenterLine() { assertScansWord("!c", "CenterLine"); }
+
+  @Test public void scansDefine() { assertScansWord("!define", "Define"); }
+
+  @Test public void scansHeadings() { assertScansWord("!headings", "Headings"); }
+
+  @Test public void scansImage() { assertScansWord("!img", "Image"); }
+
+  @Test public void scansInclude() { assertScansWord("!include", "Include"); }
+
+  @Test public void scansMeta() { assertScansWord("!meta", "Meta"); }
+
+  @Test public void scansNote() { assertScansWord("!note", "Note"); }
+
+  @Test public void scansPath() { assertScansWord("!path", "Path"); }
+
+  @Test public void scansSee() { assertScansWord("!see", "See"); }
+
+  private void assertScansWord(String word, String tokenType) {
+    assertScans("Text=" + word + "hi", word + "hi");
+    assertScans("Text=" + word + "!see", word + "!see");
+    assertScans(tokenType + "=" + word + " ,Text=hi", word + " hi");
+    assertScans("Text=hi," + tokenType + "=" + word + " ,Text=there", "hi" + word + " there");
+    assertScans("Text=" + word.substring(0,1) + ",BlankSpace= ,Text=" + word.substring(1), word.substring(0,1) + " " + word.substring(1));
+  }
 }

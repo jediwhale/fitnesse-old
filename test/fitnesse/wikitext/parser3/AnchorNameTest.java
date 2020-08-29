@@ -8,13 +8,6 @@ import static fitnesse.wikitext.parser3.Helper.*;
 public class AnchorNameTest {
 
   @Test
-  public void scans() {
-    assertScans("AnchorName=!anchor ,Text=name", "!anchor name");
-    assertScans("Text=!,BlankSpace= ,Text=anchor,BlankSpace= ,Text=name", "! anchor name");
-    assertScans("Text=!anchorname", "!anchorname");
-  }
-
-  @Test
   public void parses() {
     assertParses("ANCHOR_NAME=name", "!anchor name");
   }
