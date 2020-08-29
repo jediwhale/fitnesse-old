@@ -43,8 +43,6 @@ public class Scanner {
     TokenType.PARENTHESIS_END
   };
 
-  private static final TokenType[] preformatTypes = { TokenType.PREFORMAT_END };
-
   public Scanner(String input) {
     content = new Content(input);
   }
@@ -69,9 +67,6 @@ public class Scanner {
       String matched = match.read(content);
       if (matched.length() > 0) {
         add(match.asToken(matched));
-        if (match.equals(TokenType.PREFORMAT_START)) {
-          scan(preformatTypes);
-        }
         return true;
       }
     }

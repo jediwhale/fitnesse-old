@@ -49,7 +49,7 @@ public class ScannerTest {
 
   @Test
   public void scansPreformat() {
-    assertScans("PreformatStart={{{,Text=hi'''there,PreformatEnd=}}}", "{{{hi'''there}}}");
+    assertScans("PreformatStart={{{,Text=hi,PreformatEnd=}}}", "{{{hi}}}");
   }
 
   @Test
