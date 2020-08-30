@@ -63,6 +63,15 @@ public class ScannerTest {
 
   @Test public void scansDefine() { assertScansWord("!define", "Define"); }
 
+  @Test public void scansHeader() {
+    assertScansWord("!1", "Header");
+    assertScansWord("!2", "Header");
+    assertScansWord("!3", "Header");
+    assertScansWord("!4", "Header");
+    assertScansWord("!5", "Header");
+    assertScansWord("!6", "Header");
+  }
+
   @Test public void scansHeadings() { assertScansWord("!headings", "Headings"); }
 
   @Test public void scansImage() { assertScansWord("!img", "Image"); }

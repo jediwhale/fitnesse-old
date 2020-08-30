@@ -13,6 +13,7 @@ public class Scanner {
     TokenType.CELL_DELIMITER,
     TokenType.CENTER_LINE,
     TokenType.DEFINE,
+    TokenType.HEADER,
     TokenType.HEADINGS,
     TokenType.IMAGE,
     TokenType.INCLUDE,

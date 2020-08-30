@@ -1,5 +1,7 @@
 package fitnesse.wikitext.parser3;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 public class TokenType {
@@ -19,17 +21,19 @@ public class TokenType {
   public static final TokenType CENTER_LINE = new TokenType("CenterLine").matchWord("!c");
   public static final TokenType DEFINE = new TokenType("Define").matchWord("!define");
   public static final TokenType END = new TokenType("End");
+  public static final TokenType HEADER = new TokenType("Header")
+    .matchWord("!1").matchWord("!2").matchWord("!3").matchWord("!4").matchWord("!5").matchWord("!6");
   public static final TokenType HEADINGS = new TokenType("Headings").matchWord("!headings");
   public static final TokenType IMAGE = new TokenType("Image").matchWord("!img");
   public static final TokenType INCLUDE = new TokenType("Include").matchWord("!include");
   public static final TokenType ITALIC = new TokenType("Italic").match("''");
-  public static final TokenType LINK = new TokenType("Link").matchStrings(new String[]{"http://", "https://"});
+  public static final TokenType LINK = new TokenType("Link").match("http://").match("https://");
   public static final TokenType LITERAL_END = new TokenType("LiteralEnd").match("-!");
   public static final TokenType LITERAL_START = new TokenType("LiteralStart").match("!-");
   public static final TokenType META = new TokenType("Meta").matchWord("!meta");
   public static final TokenType NESTING_START = new TokenType("NestingStart").match("!(");
   public static final TokenType NESTING_END = new TokenType("NestingEnd").match(")!");
-  public static final TokenType NEW_LINE = new TokenType("NewLine").matchStrings(new String[]{"\r\n", "\n", "\r"});
+  public static final TokenType NEW_LINE = new TokenType("NewLine").match("\r\n").match("\n").match("\r");
   public static final TokenType NOTE = new TokenType("Note").matchWord("!note");
   public static final TokenType PARENTHESIS_END = new TokenType("ParenthesisEnd").match(")");
   public static final TokenType PARENTHESIS_START = new TokenType("ParenthesisStart").match("(");
@@ -50,34 +54,24 @@ public class TokenType {
 
   public TokenType match(String match) {
     this.match = match;
-    reader = content -> matchString(content, match);
-    return this;
-  }
-
-  public TokenType matchStrings(String[] matches) {
-    reader = content -> {
-      for (String match1 : matches) {
-        if (matchString(content, match1).length() > 0) return match1;
-      }
-      return "";
-    };
+    readers.add(content -> matchString(content, match));
     return this;
   }
 
   public TokenType matchWord(String match) {
     this.match = match;
-    reader = content -> {
+    readers.add(content -> {
       if (content.startsWith(match) && content.isBlankSpaceAt(match.length())) {
         content.advance(match.length());
         return match + readBlankSpace(content);
       }
       return "";
-    };
+    });
     return this;
   }
 
   public TokenType matchBlank() {
-    reader = TokenType::readBlankSpace;
+    readers.add(TokenType::readBlankSpace);
     return this;
   }
 
@@ -85,7 +79,14 @@ public class TokenType {
 
   public String getMatch() { return match; }
   public String toString() { return name; }
-  public String read(Content content) { return reader.apply(content); }
+
+  public String read(Content content) {
+    for (Function<Content, String>reader : readers) {
+      String result = reader.apply(content);
+      if (result.length() > 0) return result;
+    }
+    return "";
+  }
 
   private static String matchString(Content content, String match) {
     if (content.startsWith(match)) {
@@ -104,6 +105,6 @@ public class TokenType {
   }
 
   private final String name;
+  private final List<Function<Content, String>> readers = new ArrayList<>(1);
   private String match;
-  private Function<Content, String> reader;
 }
