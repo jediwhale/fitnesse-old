@@ -3,6 +3,7 @@ package fitnesse.wikitext.parser3;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class TokenList {
@@ -14,6 +15,17 @@ public class TokenList {
 
   public Token peek(int offset) {
     return current + offset < tokens.size() ? tokens.get(current + offset) : endToken;
+  }
+
+  public boolean hasLast(Predicate<TokenType> terminator) {
+    return tokens.size() > 0 && terminator.test(tokens.get(tokens.size() - 1).getType());
+  }
+
+  public void addText(StringBuilder text, Function<String, TokenType> textType) {
+    if (text.length() == 0) return;
+    String input = text.toString();
+    tokens.add(new Token(textType.apply(input), input));
+    text.setLength(0);
   }
 
   public void consumeToTerminator(Terminator terminator, Consumer<Token> action, Consumer<String> error) {

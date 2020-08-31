@@ -6,7 +6,11 @@ public class Content {
   }
 
   public boolean startsWith(String match) {
-    return content.startsWith(match, current);
+    return startsWith(match, 0);
+  }
+
+  public boolean startsWith(String match, int offset) {
+    return content.startsWith(match, current + offset);
   }
 
   public void advance(int length) { current += length; }

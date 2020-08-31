@@ -29,10 +29,11 @@ public class ScannerTest {
 
   @Test
   public void scansLiteral() {
-    assertScans("LiteralStart=!-,Text=hi,Bold=''',Text=there,LiteralEnd=-!", "!-hi'''there-!");
-    assertScans("Text=say,LiteralStart=!-,Text=hi,Italic='',Text=there,LiteralEnd=-!,Text=now", "say!-hi''there-!now");
+    assertScans("LiteralStart=!-,Text=hi'''there,LiteralEnd=-!", "!-hi'''there-!");
+    assertScans("LiteralStart=!-,Text=HiThere,LiteralEnd=-!", "!-HiThere-!");
+    assertScans("Text=say,LiteralStart=!-,Text=hi''there,LiteralEnd=-!,Text=now", "say!-hi''there-!now");
     assertScans("LiteralStart=!-,Text=hi,LiteralEnd=-!,CellDelimiter=|,Text=there", "!-hi-!|there");
-    assertScans("LiteralStart=!-,Text=hi,Strike=--,Text=there", "!-hi--there");
+    assertScans("LiteralStart=!-,Text=hi--there", "!-hi--there");
   }
 
   @Test
@@ -86,11 +87,59 @@ public class ScannerTest {
 
   @Test public void scansSee() { assertScansWord("!see", "See"); }
 
+  @Test
+  public void scansHorizontalRule() {
+    assertScans("Strike=--,Text=-", "---");
+    assertScans("HorizontalRule=----", "----");
+    assertScans("Text=hi,HorizontalRule=----,Text=there", "hi----there");
+    assertScans("HorizontalRule=-----", "-----");
+    assertScans("HorizontalRule=--------", "--------");
+  }
+
+  @Test
+  public void scansHashTable() {
+    assertScans("HashTable=!{,Text=key1,Colon=:,Text=value1,Comma=,,Text=key2,Colon=:,Text=value2,BraceEnd=}",
+      "!{key1:value1,key2:value2}");
+  }
+
+  @Test
+  public void scansPlainTextTable() {
+    assertScans("PlainTextTableStart=![,NewLine=\n,Text=hi,NewLine=\n,Text=there,NewLine=\n,PlainTextTableEnd=]!",
+      "![\nhi\nthere\n]!");
+  }
+
+  @Test
+  public void scansCollapsible() {
+    assertScans("CollapsibleStart=!*,Text=stuff,CollapsibleEnd=*!", "!*stuff*!");
+    assertScans("CollapsibleStart=!**,Text=stuff,CollapsibleEnd=**!", "!**stuff**!");
+  }
+
+  @Test
+  public void scansContents() {
+    assertScans("Text=hi,Contents=!contents,Text=there", "hi!contentsthere");
+  }
+
+  @Test
+  public void scansHelp() {
+    assertScans("Text=hi,Help=!help,Text=there", "hi!helpthere");
+  }
+
+  @Test
+  public void scansLastModified() {
+    assertScans("Text=hi,LastModified=!lastmodified,Text=there", "hi!lastmodifiedthere");
+  }
+
+  @Test
+  public void scansToday() {
+    assertScans("Text=hi,Today=!today,Text=there", "hi!todaythere");
+  }
+
   private void assertScansWord(String word, String tokenType) {
     assertScans("Text=" + word + "hi", word + "hi");
     assertScans("Text=" + word + "!see", word + "!see");
     assertScans(tokenType + "=" + word + " ,Text=hi", word + " hi");
     assertScans("Text=hi," + tokenType + "=" + word + " ,Text=there", "hi" + word + " there");
-    assertScans("Text=" + word.substring(0,1) + ",BlankSpace= ,Text=" + word.substring(1), word.substring(0,1) + " " + word.substring(1));
+    assertScans("Text=" + word.substring(0,1) + ",BlankSpace= ,Text=" + word.substring(1),
+      word.substring(0,1) + " " + word.substring(1));
   }
 }

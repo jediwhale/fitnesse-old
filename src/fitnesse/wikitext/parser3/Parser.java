@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 public class Parser {
   public static Symbol parse(String input, VariableSource variables) {
-    return new Parser(new Scanner(input).scan(), variables).parseList(END_TERMINATOR, error -> error);
+    return new Parser(new Scanner().scan(input), variables).parseList(END_TERMINATOR, error -> error);
   }
 
   public Parser(TokenList tokens, VariableSource variables) {

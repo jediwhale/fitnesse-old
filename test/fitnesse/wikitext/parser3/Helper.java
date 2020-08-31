@@ -26,6 +26,6 @@ public class Helper {
   public static FakeExternal external = new FakeExternal();
 
   private static TokenList scan(String input) {
-    return new Scanner(input).scan();
+    return new Scanner().scan(input);
   }
 }
