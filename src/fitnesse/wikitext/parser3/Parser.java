@@ -1,6 +1,5 @@
 package fitnesse.wikitext.parser3;
 
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -54,10 +53,7 @@ public class Parser {
   }
 
   public Symbol parseCurrent() {
-    TokenType type = peek(0).getType();
-    return parseRules.containsKey(type)
-      ? parseRules.get(type).parse(this)
-      : defaultRule();
+    return peek(0).getType().parse(this);
   }
 
   public Symbol makeError(String message, int tokenCount) {
@@ -86,9 +82,9 @@ public class Parser {
     return result;
   }
 
-  private Symbol defaultRule() {
-    Symbol result = peek(0).asSymbol(SymbolType.TEXT); //todo: or could be 'unexpected token' error?
-    advance();
+  public static Symbol defaultRule(Parser parser) {
+    Symbol result = parser.peek(0).asSymbol(SymbolType.TEXT);
+    parser.advance();
     return result;
   }
 
@@ -129,27 +125,6 @@ public class Parser {
   private static final Terminator END_TERMINATOR = new Terminator(TokenType.END);
   private static final Terminator LITERAL_TERMINATOR = new Terminator(TokenType.LITERAL_END);
   private static final Terminator NESTING_TERMINATOR = new Terminator(TokenType.NESTING_END);
-
-  private static final HashMap<TokenType, ParseRule> parseRules = new HashMap<>();
-
-  static {
-    parseRules.put(TokenType.ALIAS_START, Alias::parse);
-    parseRules.put(TokenType.ANCHOR_NAME, Keyword.parseWord(SymbolType.ANCHOR_NAME));
-    parseRules.put(TokenType.ANCHOR_REFERENCE, Keyword.parseWord(SymbolType.ANCHOR_REFERENCE));
-    parseRules.put(TokenType.BOLD, Pair.parse(SymbolType.BOLD));
-    parseRules.put(TokenType.BOLD_ITALIC, Pair.parse(SymbolType.BOLD_ITALIC));
-    parseRules.put(TokenType.DEFINE, Variable::parsePut);
-    parseRules.put(TokenType.ITALIC, Pair.parse(SymbolType.ITALIC));
-    parseRules.put(TokenType.LINK, Link::parse);
-    parseRules.put(TokenType.PATH, Keyword.parse(SymbolType.PATH));
-    parseRules.put(TokenType.PREFORMAT_START, Pair.parse(SymbolType.PREFORMAT));
-    parseRules.put(TokenType.SEE, Keyword.parse(SymbolType.SEE));
-    parseRules.put(TokenType.STRIKE, Pair.parse(SymbolType.STRIKE));
-    parseRules.put(TokenType.STYLE, Style::parse);
-    parseRules.put(TokenType.CELL_DELIMITER, Table::parse);
-    parseRules.put(TokenType.VARIABLE, Variable::parseGet);
-    parseRules.put(TokenType.WIKI_PATH, WikiPath::parse);
-  }
 
   private final TokenList tokens;
   private final VariableSource variables;
