@@ -1,11 +1,12 @@
 package fitnesse.testsystems.slim.tables;
 
-import fitnesse.wikitext.parser.*;
+import fitnesse.wikitext.MarkUpSystem;
+import fitnesse.wikitext.parser.Maybe;
+import fitnesse.wikitext.parser.ParsingPage;
+import fitnesse.wikitext.parser.SourcePage;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Helper class to translate wiki markup in symbols to a Slim-readable html String
@@ -14,12 +15,10 @@ import java.util.List;
 class WikiSymbolTranslateUtil {
 
   String getHtmlFor(String input) {
-    SourcePage page = new DummySourcePage();
-    Symbol list = Parser.make(new ParsingPage(page), input).parse();
-    return new HtmlTranslator(page, new ParsingPage(page)).translateTree(list);
+    return MarkUpSystem.make().parse(new ParsingPage(new DummySourcePage()), input).translateToHtml();
   }
 
-  private class DummySourcePage implements SourcePage {
+  private static class DummySourcePage implements SourcePage {
     public String content;
     public HashMap<String, String> properties = new HashMap<>();
     public SourcePage includedPage;
@@ -67,7 +66,7 @@ class WikiSymbolTranslateUtil {
 
     @Override
     public Maybe<SourcePage> findIncludedPage(String pageName) {
-      return includedPage != null ? new Maybe<>(includedPage) : Maybe.<SourcePage>nothingBecause("missing");
+      return includedPage != null ? new Maybe<>(includedPage) : Maybe.nothingBecause("missing");
     }
 
     @Override
@@ -82,17 +81,12 @@ class WikiSymbolTranslateUtil {
 
     @Override
     public String getProperty(String propertyKey) {
-      return properties.containsKey(propertyKey) ? properties.get(propertyKey) : "";
+      return properties.getOrDefault(propertyKey, "");
     }
 
     @Override
     public int compareTo(SourcePage other) {
       return getName().compareTo(other.getName());
-    }
-
-    @Override
-    public List<Symbol> getSymbols(final SymbolType symbolType) {
-      return Collections.emptyList();
     }
   }
 }
