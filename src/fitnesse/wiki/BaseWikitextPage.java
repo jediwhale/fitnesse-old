@@ -2,7 +2,6 @@
 // Released under the terms of the CPL Common Public License version 1.0.
 package fitnesse.wiki;
 
-import fitnesse.wikitext.parser3.WikiText;
 import fitnesse.util.Clock;
 import fitnesse.wiki.fs.WikiPageProperties;
 import fitnesse.wikitext.CompositeVariableSource;
