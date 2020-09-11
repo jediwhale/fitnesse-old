@@ -38,7 +38,8 @@ public class Scanner {
   }
 
   public  static void scanLiteral(Content content, TokenList tokens) {
-    new Scanner(TokenTypes.LITERAL_TYPES, type -> type == TokenType.LITERAL_END, text -> TokenType.TEXT).scan(content, tokens);
+    new Scanner(TokenTypes.LITERAL_TYPES, type -> type == TokenType.LITERAL_END, text -> TokenType.TEXT)
+      .scan(content, tokens);
   }
 
   public  static void scanHashTable(Content content, TokenList tokens) {

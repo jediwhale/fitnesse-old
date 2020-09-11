@@ -30,6 +30,7 @@ public class Token {
       : isType(TokenType.PREFORMAT_START) ? TokenType.PREFORMAT_END
       : isType(TokenType.ALIAS_START) ? TokenType.ALIAS_MIDDLE
       : isType(TokenType.ALIAS_MIDDLE) ? TokenType.ALIAS_END
+      : isType(TokenType.LITERAL_START) ? TokenType.LITERAL_END
       : type;
   }
 

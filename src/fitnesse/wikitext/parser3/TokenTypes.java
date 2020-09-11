@@ -67,6 +67,25 @@ public class TokenTypes {
     HASH_TABLE_TYPES.add(TokenType.COMMA);
   }
 
+  public static final ArrayList<TokenType> REFACTORING_TYPES = new ArrayList<>(Arrays.asList(
+    //TokenType.COMMENT
+    TokenType.ALIAS_END,
+    TokenType.ALIAS_MIDDLE,
+    TokenType.ALIAS_START,
+    TokenType.IMAGE,
+    TokenType.LINK,
+    TokenType.LITERAL_START,
+    TokenType.NEW_LINE,
+    TokenType.PATH,
+    TokenType.PREFORMAT_END,
+    TokenType.PREFORMAT_START,
+    TokenType.WIKI_PATH,
+
+    TokenType.BLANK_SPACE,
+    TokenType.BRACKET_END,
+    TokenType.BRACKET_START
+  ));
+
   public static final ArrayList<TokenType> VARIABLE_DEFINITION_TYPES = new ArrayList<>(Arrays.asList(
     //TokenType.COMMENT
     TokenType.DEFINE,

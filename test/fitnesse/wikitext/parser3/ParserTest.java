@@ -12,13 +12,13 @@ public class ParserTest {
 
   @Test
   public void parsesLiteral() {
-    assertParses("TEXT=stuff", "!-stuff-!");
-    assertParses("TEXT=some,TEXT=stuff,TEXT=here", "some!-stuff-!here");
+    assertParses("LIST(INPUT_TEXT=!-,TEXT=stuff,INPUT_TEXT=-!)", "!-stuff-!");
+    assertParses("TEXT=some,LIST(INPUT_TEXT=!-,TEXT=stuff,INPUT_TEXT=-!),TEXT=here", "some!-stuff-!here");
   }
 
   @Test
   public void parsesLiteralError() {
-    assertParses("TEXT=stuff,ERROR=Missing terminator: -!", "!-stuff");
+    assertParses("LIST(ERROR=!- Missing terminator: -!,TEXT=stuff)", "!-stuff");
   }
 
   @Test

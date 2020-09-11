@@ -47,7 +47,7 @@ public class AliasTest {
 
   @Test
   public void translatesWithVariableLink() {
-    external.put("x", "3");
+    external.putVariable("x", "3");
     assertTranslates(Html.anchor("Fake.PageTwo3", "tag"), "[[tag][PageTwo${x}]]");
   }
 }

@@ -62,7 +62,8 @@ public class TokenType {
   public static final TokenType LITERAL_END = new TokenType("LiteralEnd").match("-!");
   public static final TokenType LITERAL_START = new TokenType("LiteralStart")
     .match("!-")
-    .scan(Scanner::scanLiteral);
+    .scan(Scanner::scanLiteral)
+    .rule(Literal::parse);
   public static final TokenType META = new TokenType("Meta").matchWord("!meta");
   public static final TokenType NESTING_START = new TokenType("NestingStart").match("!(");
   public static final TokenType NESTING_END = new TokenType("NestingEnd").match(")!");

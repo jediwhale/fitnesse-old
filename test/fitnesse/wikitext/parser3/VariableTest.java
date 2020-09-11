@@ -30,12 +30,12 @@ public class VariableTest {
   @Test
   public void putsVariables() {
     parse("!define x {y}");
-    assertEquals("y", external.get("x").orElse(""));
+    assertEquals("y", external.findVariable("x").orElse(""));
   }
 
   @Test
   public void translatesPutNestedVariable() {
-    external.put("x", "b");
+    external.putVariable("x", "b");
     assertTranslates(translateDefine("y=a${x}c") + " abc", "!define y (a${x}c) ${y}");
   }
 
@@ -46,13 +46,13 @@ public class VariableTest {
 
   @Test
   public void parsesGet() {
-    external.put("x", "y");
+    external.putVariable("x", "y");
     assertParses("LIST(TEXT=y)", "${x}");
   }
 
   @Test
   public void translatesGet() {
-    external.put("x", "y");
+    external.putVariable("x", "y");
     assertTranslates("y", "${x}");
   }
 

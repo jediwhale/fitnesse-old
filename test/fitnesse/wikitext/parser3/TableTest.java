@@ -15,7 +15,7 @@ public class TableTest {
   public void parses() {
     assertParses("TABLE(LIST(LIST(TEXT=a)))", "|a|");
     assertParses("TABLE(LIST(LIST(TEXT=a),LIST(TEXT=b)))", "|a|b|");
-    assertParses("TABLE(LIST(LIST(TEXT=a),LIST(TEXT=b)))", "|!-a-!|b|");
+    assertParses("TABLE(LIST(LIST(LIST(INPUT_TEXT=!-,TEXT=a,INPUT_TEXT=-!)),LIST(TEXT=b)))", "|!-a-!|b|");
     assertParses("TABLE(LIST(LIST(TEXT=a)),LIST(LIST(TEXT=b)))", "|a|\n|b|");
   }
 

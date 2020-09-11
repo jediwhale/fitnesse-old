@@ -1,19 +1,20 @@
 package fitnesse.wikitext.parser3;
 
-import java.util.List;
+import fitnesse.wikitext.VariableStore;
+
 import java.util.Optional;
 import java.util.function.Function;
 
 public class Parser {
-  public static Symbol parse(String input, VariableSource variables) {
+  public static Symbol parse(String input, VariableStore variables) {
     return parse(input, variables, new Scanner());
   }
 
-  public static Symbol parse(String input, VariableSource variables, Scanner scanner) {
+  public static Symbol parse(String input, VariableStore variables, Scanner scanner) {
     return new Parser(scanner.scan(input), variables).parseList(END_TERMINATOR, error -> error);
   }
 
-  public Parser(TokenList tokens, VariableSource variables) {
+  public Parser(TokenList tokens, VariableStore variables) {
     this.tokens = tokens;
     this.variables = variables;
   }
@@ -71,11 +72,11 @@ public class Parser {
   }
 
   public Optional<String> getVariable(String name) {
-    return variables.get(name);
+    return variables.findVariable(name);
   }
 
   public void putVariable(String name, String value) {
-    variables.put(name, value);
+    variables.putVariable(name, value);
   }
 
   private Symbol parseList(Terminator terminator, Function<String, String> message) {
@@ -99,26 +100,11 @@ public class Parser {
   }
 
   private void parseToken(Symbol parent, Token token) {
-    if (token.isType(TokenType.LITERAL_START)) {
-      parseLiteral(parent);
-    } else if (token.isType(TokenType.NESTING_START)) {
+    if (token.isType(TokenType.NESTING_START)) {
       parseNesting(parent);
     } else {
       parent.add(parseCurrent());
     }
-  }
-
-  private void parseLiteral(Symbol parent) {
-    advance();
-    tokens.consumeToTerminator(LITERAL_TERMINATOR,
-      token -> addText(parent, token),
-      parent::addError);
-    advance();
-  }
-
-  private void addText(Symbol parent, Token token) {
-    parent.add(token.asSymbol(SymbolType.TEXT));
-    advance();
   }
 
   private void parseNesting(Symbol parent) {
@@ -128,9 +114,8 @@ public class Parser {
   }
 
   private static final Terminator END_TERMINATOR = new Terminator(TokenType.END);
-  private static final Terminator LITERAL_TERMINATOR = new Terminator(TokenType.LITERAL_END);
   private static final Terminator NESTING_TERMINATOR = new Terminator(TokenType.NESTING_END);
 
   private final TokenList tokens;
-  private final VariableSource variables;
+  private final VariableStore variables;
 }

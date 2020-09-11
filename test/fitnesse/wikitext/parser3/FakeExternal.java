@@ -1,17 +1,18 @@
 package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlTag;
+import fitnesse.wikitext.VariableStore;
 
 import java.util.HashMap;
 import java.util.Optional;
 
-public class FakeExternal implements External, VariableSource {
+public class FakeExternal implements External, VariableStore {
 
   @Override
-  public void put(String name, String value) { variables.put(name, value); }
+  public void putVariable(String name, String value) { variables.put(name, value); }
 
   @Override
-  public Optional<String> get(String name) { return Optional.ofNullable(variables.get(name)); }
+  public Optional<String> findVariable(String name) { return Optional.ofNullable(variables.get(name)); }
 
   @Override
   public String buildLink(String path, String description, String trailer) {

@@ -1,12 +1,14 @@
 package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlUtil;
+import fitnesse.util.Tree;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class Symbol {
+public class Symbol implements Tree<Symbol> {
   public static Symbol error(String message) { return new Symbol(SymbolType.ERROR, message); }
 
   public static Symbol makeList(Symbol ...children) { return make(SymbolType.LIST, children); }
@@ -31,9 +33,8 @@ public class Symbol {
     add(Symbol.error(error));
   }
 
-
   public void addErrorFirst(String error) {
-    children.add(0, Symbol.error(error));
+    addFirst(Symbol.error(error));
   }
 
   public boolean hasError() {
@@ -53,6 +54,10 @@ public class Symbol {
     children.add(child);
   }
 
+  public void addFirst(Symbol child) {
+    children.add(0, child);
+  }
+
   public boolean hasChild(int child) {
     return child < children.size();
   }
@@ -67,6 +72,10 @@ public class Symbol {
 
   public String getContent() {
     return content;
+  }
+
+  public void setContent(String input) {
+    content = input;
   }
 
   public SymbolType getType() {
@@ -101,7 +110,13 @@ public class Symbol {
     return result.toString();
   }
 
+  private String content;
   private final SymbolType type;
-  private final String content;
   private final List<Symbol> children;
+
+  @Override
+  public Symbol getNode() { return this; }
+
+  @Override
+  public Collection<? extends Tree<Symbol>> getChildren() { return children; }
 }
