@@ -1,13 +1,12 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.util.Tree;
 import fitnesse.util.TreeWalker;
 import fitnesse.wiki.PathParser;
 import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiSourcePage;
 import fitnesse.wikitext.MarkUpSystem;
+import fitnesse.wikitext.ParsingPage;
 import fitnesse.wikitext.SyntaxTree;
-import fitnesse.wikitext.parser.ParsingPage;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -45,8 +44,7 @@ public class MarkUpSystemV3 implements MarkUpSystem {
   private void findReferences(Symbol tree, Function<String, Optional<String>> changeReference) {
     tree.walkPreOrder(new TreeWalker<Symbol>() {
       @Override
-      public boolean visit(Tree<Symbol> tree) {
-        Symbol node = tree.getNode();
+      public boolean visit(Symbol node) {
         if (node.getType() == SymbolType.WIKI_LINK) {
           changeReference.apply(node.getContent()).ifPresent(node::setContent);
         } else if (node.getType() == SymbolType.ALIAS) {
@@ -60,7 +58,7 @@ public class MarkUpSystemV3 implements MarkUpSystem {
       }
 
       @Override
-      public boolean visitChildren(Symbol node) {
+      public boolean visitBranches(Symbol node) {
         return node.getType() != SymbolType.ALIAS;
       }
     });

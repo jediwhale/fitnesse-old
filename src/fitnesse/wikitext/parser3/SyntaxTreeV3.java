@@ -1,10 +1,9 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.util.Tree;
 import fitnesse.util.TreeWalker;
+import fitnesse.wikitext.ParsingPage;
+import fitnesse.wikitext.SourcePage;
 import fitnesse.wikitext.SyntaxTree;
-import fitnesse.wikitext.parser.ParsingPage;
-import fitnesse.wikitext.parser.SourcePage;
 import fitnesse.wikitext.parser.WikiWordBuilder;
 
 import java.util.Optional;
@@ -20,13 +19,13 @@ public class SyntaxTreeV3 implements SyntaxTree {
     StringBuilder result = new StringBuilder();
     tree.walkPreOrder(new TreeWalker<Symbol>() {
       @Override
-      public boolean visit(Tree<Symbol> tree) {
-        result.append(tree.getNode().getContent());
+      public boolean visit(Symbol node) {
+        result.append(node.getContent());
         return true;
       }
 
       @Override
-      public boolean visitChildren(Symbol node) { return true; }
+      public boolean visitBranches(Symbol node) { return true; }
     });
     return result.toString();
   }

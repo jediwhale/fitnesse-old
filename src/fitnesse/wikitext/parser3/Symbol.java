@@ -118,5 +118,5 @@ public class Symbol implements Tree<Symbol> {
   public Symbol getNode() { return this; }
 
   @Override
-  public Collection<? extends Tree<Symbol>> getChildren() { return children; }
+  public Collection<? extends Tree<Symbol>> getBranches() { return children; }
 }

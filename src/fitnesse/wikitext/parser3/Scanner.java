@@ -1,5 +1,6 @@
 package fitnesse.wikitext.parser3;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -15,7 +16,11 @@ public class Scanner {
     this(types, type -> false, Scanner::wikiTextType);
   }
 
-  public Scanner(List<TokenType> matches, Predicate<TokenType> terminator, Function<String, TokenType> textType) {
+  public Scanner(TokenType match, Function<String, TokenType> textType) {
+    this(Collections.singletonList(match), type -> type == match, textType);
+  }
+
+  private Scanner(List<TokenType> matches, Predicate<TokenType> terminator, Function<String, TokenType> textType) {
     this.matches = matches;
     this.textType = textType;
     this.terminator = terminator;
@@ -35,11 +40,6 @@ public class Scanner {
       }
     }
     tokens.addText(text, textType);
-  }
-
-  public  static void scanLiteral(Content content, TokenList tokens) {
-    new Scanner(TokenTypes.LITERAL_TYPES, type -> type == TokenType.LITERAL_END, text -> TokenType.TEXT)
-      .scan(content, tokens);
   }
 
   public  static void scanHashTable(Content content, TokenList tokens) {

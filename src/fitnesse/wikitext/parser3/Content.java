@@ -27,6 +27,10 @@ public class Content {
     return current + offset < content.length() && Character.isWhitespace(content.charAt(current + offset));
   }
 
+  public boolean isStartLine() {
+    return current == 0 || content.charAt(current - 1) == '\n' || content.charAt(current - 1) == '\r';
+  }
+
   private final String content;
   private int current = 0;
 }

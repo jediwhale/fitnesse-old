@@ -36,6 +36,9 @@ public class TokenType {
   public static final TokenType COLLAPSIBLE_START = new TokenType("CollapsibleStart").matchRepeatAfter("!", "*");
   public static final TokenType COLON = new TokenType("Colon").match(":");
   public static final TokenType COMMA = new TokenType("Comma").match(",");
+  public static final TokenType COMMENT = new TokenType("Comment").matchStartLine("#")
+    .scan(Comment::scan)
+    .rule(Comment::parse);
   public static final TokenType CONTENTS = new TokenType("Contents").match("!contents");
   public static final TokenType DEFINE = new TokenType("Define")
     .matchWord("!define")
@@ -62,7 +65,7 @@ public class TokenType {
   public static final TokenType LITERAL_END = new TokenType("LiteralEnd").match("-!");
   public static final TokenType LITERAL_START = new TokenType("LiteralStart")
     .match("!-")
-    .scan(Scanner::scanLiteral)
+    .scan(Literal::scan)
     .rule(Literal::parse);
   public static final TokenType META = new TokenType("Meta").matchWord("!meta");
   public static final TokenType NESTING_START = new TokenType("NestingStart").match("!(");
@@ -125,6 +128,12 @@ public class TokenType {
     return this;
   }
 
+  public TokenType matchStartLine(String string) {
+    this.match = string;
+    readers.add(content -> (content.isStartLine()) ? matchString(content, string) : "");
+    return this;
+  }
+
   public TokenType matchRepeatAfter(String start, String repeat) {
     this.match = start + repeat;
     readers.add(content -> {
@@ -179,7 +188,7 @@ public class TokenType {
   public String toString() { return name; }
 
   public String read(Content content) {
-    for (Function<Content, String>reader : readers) {
+    for (Function<Content, String> reader : readers) {
       String result = reader.apply(content);
       if (result.length() > 0) return result;
     }

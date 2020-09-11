@@ -2,7 +2,6 @@ package fitnesse.wikitext.parser3;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
 public class TokenTypes {
 
@@ -17,6 +16,7 @@ public class TokenTypes {
     TokenType.CENTER_LINE,
     TokenType.COLLAPSIBLE_END,
     TokenType.COLLAPSIBLE_START,
+    TokenType.COMMENT,
     TokenType.CONTENTS,
     TokenType.DEFINE,
     TokenType.HASH_TABLE,
@@ -57,10 +57,6 @@ public class TokenTypes {
     TokenType.STRIKE
   ));
 
-  public static final ArrayList<TokenType> LITERAL_TYPES = new ArrayList<>(Collections.singletonList(
-    TokenType.LITERAL_END
-  ));
-
   public static final ArrayList<TokenType> HASH_TABLE_TYPES = new ArrayList<>(WIKI_PAGE_TYPES);
   static {
     HASH_TABLE_TYPES.add(TokenType.COLON);
@@ -68,10 +64,10 @@ public class TokenTypes {
   }
 
   public static final ArrayList<TokenType> REFACTORING_TYPES = new ArrayList<>(Arrays.asList(
-    //TokenType.COMMENT
     TokenType.ALIAS_END,
     TokenType.ALIAS_MIDDLE,
     TokenType.ALIAS_START,
+    TokenType.COMMENT,
     TokenType.IMAGE,
     TokenType.LINK,
     TokenType.LITERAL_START,
@@ -87,7 +83,7 @@ public class TokenTypes {
   ));
 
   public static final ArrayList<TokenType> VARIABLE_DEFINITION_TYPES = new ArrayList<>(Arrays.asList(
-    //TokenType.COMMENT
+    TokenType.COMMENT,
     TokenType.DEFINE,
     TokenType.INCLUDE,
     TokenType.LITERAL_START,
