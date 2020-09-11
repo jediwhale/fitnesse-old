@@ -1,7 +1,6 @@
 package fitnesse.wikitext;
 
 import fitnesse.wiki.WikiPage;
-import fitnesse.wikitext.parser.ParsingPage;
 import fitnesse.wikitext.parser.MarkUpSystemV2;
 import fitnesse.wikitext.parser3.MarkUpSystemV3;
 
