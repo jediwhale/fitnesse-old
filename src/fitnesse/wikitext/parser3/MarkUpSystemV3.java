@@ -48,7 +48,7 @@ public class MarkUpSystemV3 implements MarkUpSystem {
         if (node.getType() == SymbolType.WIKI_LINK) {
           changeReference.apply(node.getContent()).ifPresent(node::setContent);
         } else if (node.getType() == SymbolType.ALIAS) {
-          Symbol wikiWord = node.getChild(1).getChild(0);
+          Symbol wikiWord = node.getChild(3).getChild(0);
           String aliasReference = wikiWord.getContent();
           if (PathParser.isWikiPath(aliasReference)) {
             changeReference.apply(aliasReference).ifPresent(wikiWord::setContent);

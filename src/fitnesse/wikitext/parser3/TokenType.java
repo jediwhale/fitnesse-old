@@ -82,7 +82,8 @@ public class TokenType {
   public static final TokenType PREFORMAT_END = new TokenType("PreformatEnd").match("}}}");
   public static final TokenType PREFORMAT_START = new TokenType("PreformatStart")
     .match("{{{")
-    .rule(Pair.parse(SymbolType.PREFORMAT));
+    .scan(Preformat::scan)
+    .rule(Preformat::parse);
   public static final TokenType SEE = new TokenType("See")
     .matchWord("!see")
     .rule(Keyword.parse(SymbolType.SEE));

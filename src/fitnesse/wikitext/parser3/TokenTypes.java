@@ -73,7 +73,6 @@ public class TokenTypes {
     TokenType.LITERAL_START,
     TokenType.NEW_LINE,
     TokenType.PATH,
-    TokenType.PREFORMAT_END,
     TokenType.PREFORMAT_START,
     TokenType.WIKI_PATH,
 

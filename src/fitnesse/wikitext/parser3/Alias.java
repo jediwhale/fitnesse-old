@@ -19,20 +19,25 @@ public class Alias {
       parser.move(-1);
       return Symbol.makeList(Symbol.error(start.getContent()), description, Symbol.error(middle.getContent() + " Empty link"));
     }
-    return Symbol.make(SymbolType.ALIAS, description, link);
+    return Symbol.make(SymbolType.ALIAS,
+      Symbol.inputText(TokenType.ALIAS_START),
+      description,
+      Symbol.inputText(TokenType.ALIAS_MIDDLE),
+      link,
+      Symbol.inputText(TokenType.ALIAS_END));
   }
 
   public static String translate(Symbol symbol, Translator translator) {
-    if (symbol.getChild(0).getChild(0).getType() == SymbolType.WIKI_LINK) {
-      return translator.translate(symbol.getChild(0));
+    if (symbol.getChild(1).getChild(0).getType() == SymbolType.WIKI_LINK) {
+      return translator.translate(symbol.getChild(1));
     }
-    SymbolType substitute = symbol.getChild(1).getChild(0).getType() == SymbolType.LINK
+    SymbolType substitute = symbol.getChild(3).getChild(0).getType() == SymbolType.LINK
       ? SymbolType.LINK
       : SymbolType.WIKI_LINK;
     String link = translator.copy()
       .substitute(substitute, SymbolType.TEXT)
-      .translate(symbol.getChild(1));
-    String description = translator.translate(symbol.getChild(0));
+      .translate(symbol.getChild(3));
+    String description = translator.translate(symbol.getChild(1));
     return WikiPath.makeLink(link,
       (path, trailer) -> Link.makeWikiLink(translator.getExternal(), path, trailer, description),
       path -> Link.makeLink(description, path, ""));

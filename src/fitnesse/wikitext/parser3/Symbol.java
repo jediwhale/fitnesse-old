@@ -110,6 +110,10 @@ public class Symbol implements Tree<Symbol> {
     return result.toString();
   }
 
+  static Symbol inputText(TokenType tokenType) {
+    return new Symbol(SymbolType.INPUT_TEXT, tokenType.getMatch());
+  }
+
   private String content;
   private final SymbolType type;
   private final List<Symbol> children;

@@ -28,7 +28,7 @@ public class ParserTest {
 
   @Test
   public void parsesPreformat() {
-    assertParses("PREFORMAT(TEXT=stuff)", "{{{stuff}}}");
+    assertParses("LIST(INPUT_TEXT={{{,TEXT=stuff,INPUT_TEXT=}}})", "{{{stuff}}}");
   }
 
   @Test

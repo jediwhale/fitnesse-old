@@ -1,9 +1,8 @@
 package fitnesse.wikitext.parser3;
 
-public class Literal {
-
+public class Preformat {
   public  static void scan(Content content, TokenList tokens) {
-    new Scanner(TokenType.LITERAL_END, text -> TokenType.TEXT)
+    new Scanner(TokenType.PREFORMAT_END, text -> TokenType.TEXT)
       .scan(content, tokens);
   }
 
@@ -11,9 +10,8 @@ public class Literal {
     parser.advance();
     Symbol result = parser.parseList(parser.peek(-1));
     if (result.hasError()) return result;
-    result.addFirst(Symbol.inputText(TokenType.LITERAL_START));
-    result.add(Symbol.inputText(TokenType.LITERAL_END));
+    result.addFirst(Symbol.inputText(TokenType.PREFORMAT_START));
+    result.add(Symbol.inputText(TokenType.PREFORMAT_END));
     return result;
   }
-
 }
