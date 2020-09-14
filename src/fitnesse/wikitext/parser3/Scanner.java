@@ -2,6 +2,7 @@ package fitnesse.wikitext.parser3;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -48,9 +49,9 @@ public class Scanner {
 
   private boolean findMatch(Content content, TokenList tokens) {
     for (TokenType match : matches) {
-      String matched = match.read(content);
-      if (matched.length() > 0) {
-        add(match.asToken(matched), tokens);
+      Optional<String> matched = match.read(content);
+      if (matched.isPresent()) {
+        add(match.asToken(matched.get()), tokens);
         match.scan(content, tokens);
         return true;
       }

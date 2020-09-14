@@ -8,7 +8,7 @@ public class Comment {
 
   public static Symbol parse(Parser parser) {
     parser.advance();
-    String content = TokenType.COMMENT.getMatch() + parser.peek(0).getContent();
+    String content = parser.peek(-1).getContent() + parser.peek(0).getContent();
     parser.advance();
     if (parser.peek(0).isType(TokenType.NEW_LINE)) {
       content += parser.peek(0).getContent();

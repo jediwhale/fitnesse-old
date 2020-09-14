@@ -83,7 +83,7 @@ public class ScannerTest {
 
   @Test public void scansNote() { assertScansWord("!note", "Note"); }
 
-  @Test public void scansPath() { assertScansWord("!path", "Path"); }
+  @Test public void scansPath() { assertScansWordAtStart("!path", "Path"); }
 
   @Test public void scansSee() { assertScansWord("!see", "See"); }
 
@@ -116,22 +116,22 @@ public class ScannerTest {
 
   @Test
   public void scansContents() {
-    assertScans("Text=hi,Contents=!contents,Text=there", "hi!contentsthere");
+    assertScansWord("!contents", "Contents");
   }
 
   @Test
   public void scansHelp() {
-    assertScans("Text=hi,Help=!help,Text=there", "hi!helpthere");
+    assertScansWord("!help", "Help");
   }
 
   @Test
   public void scansLastModified() {
-    assertScans("Text=hi,LastModified=!lastmodified,Text=there", "hi!lastmodifiedthere");
+    assertScansWord("!lastmodified", "LastModified");
   }
 
   @Test
   public void scansToday() {
-    assertScans("Text=hi,Today=!today,Text=there", "hi!todaythere");
+    assertScansWord("!today", "Today");
   }
 
   private void assertScansWord(String word, String tokenType) {
@@ -139,6 +139,16 @@ public class ScannerTest {
     assertScans("Text=" + word + "!see", word + "!see");
     assertScans(tokenType + "=" + word + " ,Text=hi", word + " hi");
     assertScans("Text=hi," + tokenType + "=" + word + " ,Text=there", "hi" + word + " there");
+    assertScans("Text=" + word.substring(0,1) + ",BlankSpace= ,Text=" + word.substring(1),
+      word.substring(0,1) + " " + word.substring(1));
+  }
+
+  private void assertScansWordAtStart(String word, String tokenType) {
+    assertScans("Text=" + word + "hi", word + "hi");
+    assertScans("Text=" + word + "!see", word + "!see");
+    assertScans(tokenType + "=" + word + " ,Text=hi", word + " hi");
+    assertScans("Text=hi" + word + ",BlankSpace= ,Text=there", "hi" + word + " there");
+    assertScans("Text=hi,NewLine=\n," + tokenType + "=" + word + " ,Text=there", "hi\n" + word + " there");
     assertScans("Text=" + word.substring(0,1) + ",BlankSpace= ,Text=" + word.substring(1),
       word.substring(0,1) + " " + word.substring(1));
   }

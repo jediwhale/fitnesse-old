@@ -2,7 +2,11 @@ package fitnesse.wikitext.parser3;
 
 public class Content {
   public Content(String content) {
-    this.content = content;
+    this(content, 0);
+  }
+
+  public Content(Content other) {
+    this(other.content, other.current);
   }
 
   public boolean startsWith(String match) {
@@ -31,6 +35,11 @@ public class Content {
     return current == 0 || content.charAt(current - 1) == '\n' || content.charAt(current - 1) == '\r';
   }
 
+  private Content(String content, int current) {
+    this.content = content;
+    this.current = current;
+  }
+
   private final String content;
-  private int current = 0;
+  private int current;
 }
