@@ -12,8 +12,8 @@ public class ParserTest {
 
   @Test
   public void parsesLiteral() {
-    assertParses("LIST(INPUT_TEXT=!-,TEXT=stuff,INPUT_TEXT=-!)", "!-stuff-!");
-    assertParses("TEXT=some,LIST(INPUT_TEXT=!-,TEXT=stuff,INPUT_TEXT=-!),TEXT=here", "some!-stuff-!here");
+    assertParses("LIST(SOURCE=!-,TEXT=stuff,SOURCE=-!)", "!-stuff-!");
+    assertParses("TEXT=some,LIST(SOURCE=!-,TEXT=stuff,SOURCE=-!),TEXT=here", "some!-stuff-!here");
   }
 
   @Test
@@ -28,7 +28,7 @@ public class ParserTest {
 
   @Test
   public void parsesPreformat() {
-    assertParses("LIST(INPUT_TEXT={{{,TEXT=stuff,INPUT_TEXT=}}})", "{{{stuff}}}");
+    assertParses("LIST(SOURCE={{{,TEXT=stuff,SOURCE=}}})", "{{{stuff}}}");
   }
 
   @Test

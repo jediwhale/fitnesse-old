@@ -21,7 +21,7 @@ public class Scanner {
     this(Collections.singletonList(match), type -> type == match, textType);
   }
 
-  private Scanner(List<TokenType> matches, Predicate<TokenType> terminator, Function<String, TokenType> textType) {
+  public Scanner(List<TokenType> matches, Predicate<TokenType> terminator, Function<String, TokenType> textType) {
     this.matches = matches;
     this.textType = textType;
     this.terminator = terminator;

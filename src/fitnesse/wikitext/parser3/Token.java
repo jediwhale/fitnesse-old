@@ -20,7 +20,9 @@ public class Token {
   }
 
   public Terminator terminator() {
-    return new Terminator(endType());// todo: can inline endType() and use static terminators
+    return isType(TokenType.PATH)
+      ? new Terminator(token -> token.isType(TokenType.NEW_LINE) || token.isType(TokenType.END), "")
+      : new Terminator(endType());// todo: can inline endType() and use static terminators
   }
 
   private TokenType endType() {
@@ -31,6 +33,7 @@ public class Token {
       : isType(TokenType.ALIAS_START) ? TokenType.ALIAS_MIDDLE
       : isType(TokenType.ALIAS_MIDDLE) ? TokenType.ALIAS_END
       : isType(TokenType.LITERAL_START) ? TokenType.LITERAL_END
+      : isType(TokenType.PATH) ? TokenType.NEW_LINE
       : type;
   }
 

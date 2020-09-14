@@ -14,6 +14,6 @@ public class Comment {
       content += parser.peek(0).getContent();
       parser.advance();
     }
-    return new Symbol(SymbolType.INPUT_TEXT, content);
+    return new Symbol(SymbolType.SOURCE, content);
   }
 }

@@ -3,6 +3,7 @@ package fitnesse.wikitext.parser3;
 import org.junit.Test;
 
 import static fitnesse.wikitext.parser3.Helper.assertScans;
+import static fitnesse.wikitext.parser3.Helper.assertScansWord;
 
 public class ScannerTest {
   @Test
@@ -83,8 +84,6 @@ public class ScannerTest {
 
   @Test public void scansNote() { assertScansWord("!note", "Note"); }
 
-  @Test public void scansPath() { assertScansWordAtStart("!path", "Path"); }
-
   @Test public void scansSee() { assertScansWord("!see", "See"); }
 
   @Test
@@ -132,24 +131,5 @@ public class ScannerTest {
   @Test
   public void scansToday() {
     assertScansWord("!today", "Today");
-  }
-
-  private void assertScansWord(String word, String tokenType) {
-    assertScans("Text=" + word + "hi", word + "hi");
-    assertScans("Text=" + word + "!see", word + "!see");
-    assertScans(tokenType + "=" + word + " ,Text=hi", word + " hi");
-    assertScans("Text=hi," + tokenType + "=" + word + " ,Text=there", "hi" + word + " there");
-    assertScans("Text=" + word.substring(0,1) + ",BlankSpace= ,Text=" + word.substring(1),
-      word.substring(0,1) + " " + word.substring(1));
-  }
-
-  private void assertScansWordAtStart(String word, String tokenType) {
-    assertScans("Text=" + word + "hi", word + "hi");
-    assertScans("Text=" + word + "!see", word + "!see");
-    assertScans(tokenType + "=" + word + " ,Text=hi", word + " hi");
-    assertScans("Text=hi" + word + ",BlankSpace= ,Text=there", "hi" + word + " there");
-    assertScans("Text=hi,NewLine=\n," + tokenType + "=" + word + " ,Text=there", "hi\n" + word + " there");
-    assertScans("Text=" + word.substring(0,1) + ",BlankSpace= ,Text=" + word.substring(1),
-      word.substring(0,1) + " " + word.substring(1));
   }
 }

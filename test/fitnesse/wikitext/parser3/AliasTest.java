@@ -13,8 +13,8 @@ public class AliasTest {
 
   @Test
   public void parsesAlias() {
-    assertParses("ALIAS(INPUT_TEXT=[[,LIST(TEXT=hi),INPUT_TEXT=][,LIST(TEXT=there),INPUT_TEXT=]])", "[[hi][there]]");
-    assertParses("ALIAS(INPUT_TEXT=[[,LIST(TEXT=hi),INPUT_TEXT=][,LIST(WIKI_LINK=ThereBob),INPUT_TEXT=]])", "[[hi][ThereBob]]");
+    assertParses("ALIAS(SOURCE=[[,LIST(TEXT=hi),SOURCE=][,LIST(TEXT=there),SOURCE=]])", "[[hi][there]]");
+    assertParses("ALIAS(SOURCE=[[,LIST(TEXT=hi),SOURCE=][,LIST(WIKI_LINK=ThereBob),SOURCE=]])", "[[hi][ThereBob]]");
   }
 
   @Test

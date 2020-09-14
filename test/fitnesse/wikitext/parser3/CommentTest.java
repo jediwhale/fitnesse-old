@@ -15,7 +15,7 @@ public class CommentTest {
 
   @Test
   public void parses() {
-    assertParses("INPUT_TEXT=#comment", "#comment");
-    assertParses("TEXT=hi,TEXT=\n,INPUT_TEXT=#comment\n,TEXT=there", "hi\n#comment\nthere");
+    assertParses("SOURCE=#comment", "#comment");
+    assertParses("TEXT=hi,TEXT=\n,SOURCE=#comment\n,TEXT=there", "hi\n#comment\nthere");
   }
 }

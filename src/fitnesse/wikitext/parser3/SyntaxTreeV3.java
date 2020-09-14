@@ -15,7 +15,7 @@ public class SyntaxTreeV3 implements SyntaxTree {
     this.page = page;
   }
 
-  public String translateToMarkUp() {
+  public String translateToMarkUp() { //todo: if errors in tree??
     StringBuilder result = new StringBuilder();
     tree.walkPreOrder(new TreeWalker<Symbol>() {
       @Override

@@ -72,7 +72,8 @@ public class TokenType {
   public static final TokenType PARENTHESIS_START = new TokenType("ParenthesisStart", "(");
   public static final TokenType PATH = new TokenType("Path")
     .matches(startLine(), word("!path"))
-    .rule(Keyword.parse(SymbolType.PATH));
+    .scan(Path::scan)
+    .rule(Path::parse);
   public static final TokenType PLAIN_TEXT_TABLE_END = new TokenType("PlainTextTableEnd", "]!");
   public static final TokenType PLAIN_TEXT_TABLE_START = new TokenType("PlainTextTableStart", "![");
   public static final TokenType PREFORMAT_END = new TokenType("PreformatEnd", "}}}");
