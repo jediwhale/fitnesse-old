@@ -21,10 +21,10 @@ public class TokenList {
     return tokens.size() > 0 && terminator.test(tokens.get(tokens.size() - 1).getType());
   }
 
-  public void addText(StringBuilder text, Function<String, TokenType> textType) {
+  public void addText(StringBuilder text) {
     if (text.length() == 0) return;
     String input = text.toString();
-    tokens.add(new Token(textType.apply(input), input));
+    tokens.add(new Token(TokenType.TEXT, input));
     text.setLength(0);
   }
 

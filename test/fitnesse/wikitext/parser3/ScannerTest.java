@@ -28,14 +28,6 @@ public class ScannerTest {
     assertScans("Text=hi,BlankSpace=\t \t,Text=there", "hi\t \tthere");
   }
 
-  @Test
-  public void scansLiteral() {
-    assertScans("LiteralStart=!-,Text=hi'''there,LiteralEnd=-!", "!-hi'''there-!");
-    assertScans("LiteralStart=!-,Text=HiThere,LiteralEnd=-!", "!-HiThere-!");
-    assertScans("Text=say,LiteralStart=!-,Text=hi''there,LiteralEnd=-!,Text=now", "say!-hi''there-!now");
-    assertScans("LiteralStart=!-,Text=hi,LiteralEnd=-!,CellDelimiter=|,Text=there", "!-hi-!|there");
-    assertScans("LiteralStart=!-,Text=hi--there", "!-hi--there");
-  }
 
   @Test
   public void scansNesting() {

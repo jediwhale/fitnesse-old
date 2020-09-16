@@ -6,7 +6,7 @@ public class Link {
   public static Symbol parse(Parser parser) {
     Symbol result = parser.peek(0).asSymbol(SymbolType.LINK);
     parser.advance();
-    parser.parseToTerminator(result, LINK_TERMINATOR);
+    new Parser(parser).parseToTerminator(result, LINK_TERMINATOR);
     return result;
   }
 

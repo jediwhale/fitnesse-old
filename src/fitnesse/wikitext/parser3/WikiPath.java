@@ -8,12 +8,6 @@ public class WikiPath {
   @FunctionalInterface
   interface OtherPath { String make(String path); }
 
-  public static Symbol parse(Parser parser) {
-    Symbol result = parser.peek(0).asSymbol(SymbolType.WIKI_LINK);
-    parser.advance();
-    return result;
-  }
-
   public static String makeLink(String input, PagePath makePage, OtherPath makeOther) {
     int separator = input.indexOf("?", 1); //todo: clean up
     if (separator < 0) separator = input.indexOf("#", 1);

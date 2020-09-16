@@ -74,7 +74,6 @@ public class TokenTypes {
     TokenType.NEW_LINE,
     TokenType.PATH,
     TokenType.PREFORMAT_START,
-    TokenType.WIKI_PATH,
 
     TokenType.BLANK_SPACE,
     TokenType.BRACKET_END,

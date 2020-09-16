@@ -4,6 +4,7 @@ import fitnesse.wikitext.VariableStore;
 
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class Parser {
   public static Symbol parse(String input, VariableStore variables) {
@@ -17,6 +18,13 @@ public class Parser {
   public Parser(TokenList tokens, VariableStore variables) {
     this.tokens = tokens;
     this.variables = variables;
+    isWikiLink = WikiPath::isWikiWordPath;
+  }
+
+  public Parser(Parser parent) {
+    this.tokens = parent.tokens;
+    this.variables = parent.variables;
+    isWikiLink = content -> false;
   }
 
   public Symbol parseString(String input) {
@@ -89,7 +97,8 @@ public class Parser {
   }
 
   public static Symbol defaultRule(Parser parser) {
-    Symbol result = parser.peek(0).asSymbol(SymbolType.TEXT);
+    String content = parser.peek(0).getContent();
+    Symbol result = new Symbol(parser.isWikiLink.test(content) ? SymbolType.WIKI_LINK : SymbolType.TEXT, content);
     parser.advance();
     return result;
   }
@@ -116,6 +125,7 @@ public class Parser {
   private static final Terminator END_TERMINATOR = new Terminator(TokenType.END);
   private static final Terminator NESTING_TERMINATOR = new Terminator(TokenType.NESTING_END);
 
+  private final Predicate<String> isWikiLink;
   private final TokenList tokens;
   private final VariableStore variables;
 }

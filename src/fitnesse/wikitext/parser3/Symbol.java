@@ -110,7 +110,7 @@ public class Symbol implements Tree<Symbol> {
     return result.toString();
   }
 
-  static Symbol inputText(TokenType tokenType) {
+  static Symbol source(TokenType tokenType) {
     return new Symbol(SymbolType.SOURCE, tokenType.getMatch());
   }
 

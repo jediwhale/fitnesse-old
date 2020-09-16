@@ -20,11 +20,11 @@ public class Alias {
       return Symbol.makeList(Symbol.error(start.getContent()), description, Symbol.error(middle.getContent() + " Empty link"));
     }
     return Symbol.make(SymbolType.ALIAS,
-      Symbol.inputText(TokenType.ALIAS_START),
+      Symbol.source(TokenType.ALIAS_START),
       description,
-      Symbol.inputText(TokenType.ALIAS_MIDDLE),
+      Symbol.source(TokenType.ALIAS_MIDDLE),
       link,
-      Symbol.inputText(TokenType.ALIAS_END));
+      Symbol.source(TokenType.ALIAS_END));
   }
 
   public static String translate(Symbol symbol, Translator translator) {

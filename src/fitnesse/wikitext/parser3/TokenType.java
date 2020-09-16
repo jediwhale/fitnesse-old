@@ -72,7 +72,6 @@ public class TokenType {
   public static final TokenType PARENTHESIS_START = new TokenType("ParenthesisStart", "(");
   public static final TokenType PATH = new TokenType("Path")
     .matches(startLine(), word("!path"))
-    .scan(Path::scan)
     .rule(Path::parse);
   public static final TokenType PLAIN_TEXT_TABLE_END = new TokenType("PlainTextTableEnd", "]!");
   public static final TokenType PLAIN_TEXT_TABLE_START = new TokenType("PlainTextTableStart", "![");
@@ -91,8 +90,6 @@ public class TokenType {
   public static final TokenType TODAY = new TokenType("Today").matches(word("!today"));
   public static final TokenType VARIABLE = new TokenType("Variable", "${")
     .rule(Variable::parseGet);
-  public static final TokenType WIKI_PATH = new TokenType("WikiPath")
-    .rule(WikiPath::parse);
 
   public TokenType(String name, String match) {
     this.match = match;

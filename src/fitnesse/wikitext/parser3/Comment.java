@@ -2,7 +2,7 @@ package fitnesse.wikitext.parser3;
 
 public class Comment {
   public  static void scan(Content content, TokenList tokens) {
-    new Scanner(TokenType.NEW_LINE, text -> TokenType.TEXT)
+    new Scanner(TokenType.NEW_LINE)
       .scan(content, tokens);
   }
 

@@ -19,14 +19,8 @@ public class WikiPathTest {
   }
 
   @Test
-  public void scansWikiWords() {
-    assertScans("WikiPath=HiThere", "HiThere");
-    assertScans("WikiPath=HiThere.BoB", "HiThere.BoB");
-    assertScans("WikiPath=<HiThere.BoB", "<HiThere.BoB");
-  }
-
-  @Test
   public void parses() {
+    assertParses("TEXT=Hi,TEXT= ,TEXT=There", "Hi There");
     assertParses("WIKI_LINK=HiThere", "HiThere");
     assertParses("WIKI_LINK=HiThere.BoB", "HiThere.BoB");
   }
