@@ -1,6 +1,5 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.util.TreeWalker;
 import fitnesse.wiki.PathParser;
 import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiSourcePage;
@@ -42,25 +41,17 @@ public class MarkUpSystemV3 implements MarkUpSystem {
   }
 
   private void findReferences(Symbol tree, Function<String, Optional<String>> changeReference) {
-    tree.walkPreOrder(new TreeWalker<Symbol>() {
-      @Override
-      public boolean visit(Symbol node) {
-        if (node.getType() == SymbolType.WIKI_LINK) {
-          changeReference.apply(node.getContent()).ifPresent(node::setContent);
-        } else if (node.getType() == SymbolType.ALIAS) {
-          Symbol wikiWord = node.getChild(3).getChild(0);
-          String aliasReference = wikiWord.getContent();
-          if (PathParser.isWikiPath(aliasReference)) {
-            changeReference.apply(aliasReference).ifPresent(wikiWord::setContent);
-          }
+    tree.walkPreOrder(node -> {
+      if (node.getType() == SymbolType.WIKI_LINK) {
+        changeReference.apply(node.getContent()).ifPresent(node::setContent);
+      } else if (node.getType() == SymbolType.ALIAS) {
+        Symbol wikiWord = node.getChild(3).getChild(0);
+        String aliasReference = wikiWord.getContent();
+        if (PathParser.isWikiPath(aliasReference)) {
+          changeReference.apply(aliasReference).ifPresent(wikiWord::setContent);
         }
-        return true;
       }
-
-      @Override
-      public boolean visitBranches(Symbol node) {
-        return node.getType() != SymbolType.ALIAS;
-      }
-    });
+    },
+    node -> node.getType() != SymbolType.ALIAS);
   }
 }
