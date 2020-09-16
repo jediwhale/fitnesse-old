@@ -12,11 +12,6 @@ public class KeywordTest {
   }
 
   @Test
-  public void scansPath() {
-    assertScans("Path=!path ,Text=something", "!path something");
-  }
-
-  @Test
   public void scansSee() {
     assertScans("See=!see ,Text=something", "!see something");
   }

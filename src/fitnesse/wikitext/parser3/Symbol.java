@@ -70,6 +70,10 @@ public class Symbol implements Tree<Symbol> {
     return children.get(child);
   }
 
+  public Symbol getLastChild() {
+    return children.get(children.size() - 1);
+  }
+
   public String getContent() {
     return content;
   }
