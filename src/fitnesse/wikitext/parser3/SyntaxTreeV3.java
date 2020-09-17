@@ -48,6 +48,21 @@ public class SyntaxTreeV3 implements SyntaxTree {
     });
   }
 
+  public void findWhereUsed(Consumer<String> takeWhere) {
+    tree.walkPreOrder(node -> {
+      if (node.getType() == SymbolType.WIKI_LINK) {
+        takeWhere.accept(node.getContent());
+      }
+      else if (node.getType() == SymbolType.ALIAS) {
+        String linkText = node.getChild(3).getChild(0).getContent(); //todo: this kind of thing should be in Alias class
+        if (linkText.contains("?")) {
+          linkText = linkText.substring(0, linkText.indexOf('?'));
+        }
+        takeWhere.accept(linkText);
+      }
+    });
+  }
+
   private final Symbol tree;
   private final ParsingPage page;
 

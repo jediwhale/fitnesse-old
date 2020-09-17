@@ -25,7 +25,10 @@ public class MarkUpSystemV3 implements MarkUpSystem {
 
   @Override
   public void findWhereUsed(WikiPage page, Consumer<String> takeWhereUsed) {
-
+    final ParsingPage parsingPage = new ParsingPage(new WikiSourcePage(page));
+    Symbol symbol = Parser.parse(page.getData().getContent(), parsingPage, new Scanner(TokenTypes.REFACTORING_TYPES));
+    SyntaxTreeV3 syntaxTree = new SyntaxTreeV3(symbol, parsingPage);
+    syntaxTree.findWhereUsed(takeWhereUsed);
   }
 
   @Override
