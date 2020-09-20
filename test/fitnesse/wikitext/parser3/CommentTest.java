@@ -8,8 +8,11 @@ import static fitnesse.wikitext.parser3.Helper.assertScans;
 public class CommentTest {
   @Test
   public void scans() {
-    assertScans("Comment=#,Text=comment", "#comment");
-    assertScans("Text=hi,NewLine=\n,Comment=#,Text=comment,NewLine=\n,Text=there", "hi\n#comment\nthere");
+    assertScans("Comment=#comment", "#comment");
+    assertScans("Comment=#comment\n,Text=more", "#comment\nmore");
+    assertScans("Comment=#comment\r,Text=more", "#comment\rmore");
+    assertScans("Comment=#comment\r\n,Text=more", "#comment\r\nmore");
+    assertScans("Text=hi,NewLine=\n,Comment=#comment\n,Text=there", "hi\n#comment\nthere");
     assertScans("Text=not#comment", "not#comment");
   }
 

@@ -3,11 +3,9 @@ package fitnesse.wikitext.parser3;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import static fitnesse.wikitext.parser3.MatchContent.*;
+
 public class TokenType {
-  @FunctionalInterface
-  private interface MatchContent {
-    Optional<String> check(Content content);
-  }
 
   public static final TokenType ALIAS_END = new TokenType("AliasEnd", "]]");
   public static final TokenType ALIAS_MIDDLE = new TokenType("AliasMiddle", "][");
@@ -35,8 +33,7 @@ public class TokenType {
   public static final TokenType COLON = new TokenType("Colon", ":");
   public static final TokenType COMMA = new TokenType("Comma", ",");
   public static final TokenType COMMENT = new TokenType("Comment")
-    .matches(startLine(), text("#"))
-    .scan(Comment::scan)
+    .matches(startLine(), text("#"), endWith(matchOne(text("\r\n"), text("\n"), text("\r"))))
     .rule(Comment::parse);
   public static final TokenType CONTENTS = new TokenType("Contents").matches(word("!contents"));
   public static final TokenType DEFINE = new TokenType("Define")
@@ -135,67 +132,8 @@ public class TokenType {
   }
 
   private TokenType matchOneOf(MatchContent... matchItems) {
-    matcher = content -> {
-      for (MatchContent item : matchItems) {
-        Optional<String> result = item.check(content);
-        if (result.isPresent()) return result;
-      }
-      return Optional.empty();
-    };
+    matcher = matchOne(matchItems);
     return this;
-  }
-
-  private static MatchContent matchAll(MatchContent[] matchItems) {
-    return content -> {
-      Content trial = new Content(content);
-      StringBuilder result = new StringBuilder();
-      for (MatchContent item : matchItems) {
-        Optional<String> itemResult = item.check(trial);
-        if (!itemResult.isPresent()) return Optional.empty();
-        result.append(itemResult.get());
-      }
-      content.advance(result.length());
-      return Optional.of(result.toString());
-    };
-  }
-
-  private static MatchContent text(String text) {
-    return content -> {
-      if (content.startsWith(text)) {
-        content.advance(text.length());
-        return Optional.of(text);
-      }
-      return Optional.empty();
-    };
-  }
-
-  private static MatchContent word(String match) {
-    return matchAll(new MatchContent[] {text(match), blank()});
-  }
-
-  private static MatchContent blank() {
-    return content -> {
-      StringBuilder result = new StringBuilder();
-      while (content.isBlankSpaceAt(0)) {
-        result.append(content.advance());
-      }
-      return result.length() > 0 ? Optional.of(result.toString()) : Optional.empty();
-    };
-  }
-
-  private static MatchContent repeat(String repeat) {
-    return content -> {
-      StringBuilder result = new StringBuilder();
-      while (content.startsWith(repeat)) {
-        result.append(repeat);
-        content.advance(repeat.length());
-      }
-      return result.length() > 0 ? Optional.of(result.toString()) : Optional.empty();
-    };
-  }
-
-  private static MatchContent startLine() {
-    return content -> (content.isStartLine()) ? Optional.of("") : Optional.empty();
   }
 
   private BiConsumer<Content, TokenList> scanner = (content, tokens) -> {};

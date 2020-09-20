@@ -10,11 +10,7 @@ public class Content {
   }
 
   public boolean startsWith(String match) {
-    return startsWith(match, 0);
-  }
-
-  public boolean startsWith(String match, int offset) {
-    return content.startsWith(match, current + offset);
+    return content.startsWith(match, current);
   }
 
   public void advance(int length) { current += length; }
@@ -27,8 +23,8 @@ public class Content {
     return current < content.length();
   }
 
-  public boolean isBlankSpaceAt(int offset) {
-    return current + offset < content.length() && Character.isWhitespace(content.charAt(current + offset));
+  public boolean isBlankSpace() {
+    return current  < content.length() && Character.isWhitespace(content.charAt(current));
   }
 
   public boolean isStartLine() {

@@ -11,17 +11,6 @@ public class ParserTest {
   }
 
   @Test
-  public void parsesLiteral() {
-    assertParses("LIST(SOURCE=!-,TEXT=stuff,SOURCE=-!)", "!-stuff-!");
-    assertParses("TEXT=some,LIST(SOURCE=!-,TEXT=stuff,SOURCE=-!),TEXT=here", "some!-stuff-!here");
-  }
-
-  @Test
-  public void parsesLiteralError() {
-    assertParses("LIST(ERROR=!- Missing terminator: -!,TEXT=stuff)", "!-stuff");
-  }
-
-  @Test
   public void parsesNesting() {
     assertParses("ITALIC(ITALIC(TEXT=stuff))", "''!(''stuff'')!''");
   }

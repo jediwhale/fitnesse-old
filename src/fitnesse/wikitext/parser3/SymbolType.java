@@ -8,6 +8,7 @@ public enum SymbolType {
   BOLD_ITALIC,
   DEFINE,
   ERROR,
+  INCLUDE,
   ITALIC,
   LINK,
   LIST,
