@@ -2,6 +2,7 @@ package fitnesse.wikitext.parser3;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 import static fitnesse.wikitext.parser3.MatchContent.*;
 
@@ -105,6 +106,11 @@ public class TokenType {
     return this;
   }
 
+  public TokenType useScan(Consumer<TokenSource> useScan) {
+    this.useScan = useScan;
+    return this;
+  }
+
   public TokenType rule(ParseRule parseRule) {
     this.parseRule = parseRule;
     return this;
@@ -122,6 +128,8 @@ public class TokenType {
     scanner.accept(content, tokens);
   }
 
+  public void useScan(TokenSource source) { useScan.accept(source); }
+
   public Symbol parse(Parser parser) {
     return parseRule.parse(parser);
   }
@@ -137,6 +145,7 @@ public class TokenType {
   }
 
   private BiConsumer<Content, TokenList> scanner = (content, tokens) -> {};
+  private Consumer<TokenSource> useScan = s -> {};
   private ParseRule parseRule = Parser::defaultRule;
   private MatchContent matcher;
 
