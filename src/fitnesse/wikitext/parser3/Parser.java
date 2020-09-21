@@ -2,20 +2,22 @@ package fitnesse.wikitext.parser3;
 
 import fitnesse.wikitext.VariableStore;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class Parser {
   public static Symbol parse(String input, VariableStore variables) {
-    return parse(input, variables, new Scanner());
+    return parse(input, variables, TokenTypes.WIKI_PAGE_TYPES);
   }
 
-  public static Symbol parse(String input, VariableStore variables, Scanner scanner) {
-    return new Parser(scanner.scan(input), variables).parseList(END_TERMINATOR, error -> error);
+  public static Symbol parse(String input, VariableStore variables, List<TokenType> tokenTypes) {
+    return new Parser(new TokenSource(new Content(input), tokenTypes), variables).parseList(END_TERMINATOR, error -> error);
   }
 
-  public Parser(TokenList tokens, VariableStore variables) {
+  public Parser(TokenSource tokens, VariableStore variables) {
     this.tokens = tokens;
     this.variables = variables;
     isWikiLink = WikiPath::isWikiWordPath;
@@ -31,20 +33,14 @@ public class Parser {
     return parse(input, variables);
   }
 
-  public Token peek(int offset) {
-    return tokens.peek(offset);
-  }
+  public Token peek(int offset) { return tokens.peek(offset); }
 
-  public void move(int movement) {
-    tokens.move(movement);
-  }
+  public void putBack() { tokens.putBack(); }
 
-  public void advance() {
-    move(1);
-  }
+  public Token advance() { return tokens.take(); }
 
   public void parseToTerminator(Symbol parent, Terminator terminator) {
-    tokens.consumeToTerminator(terminator,
+    consumeToTerminator(terminator,
       token -> parseToken(parent, token),
       parent::addError);
   }
@@ -59,7 +55,7 @@ public class Parser {
 
   public String parseText(Token start) {
     StringBuilder result = new StringBuilder();
-    tokens.consumeToTerminator(start.terminator(),
+    consumeToTerminator(start.terminator(),
       token -> appendContent(result, token),
       result::append);
     advance();
@@ -89,7 +85,7 @@ public class Parser {
 
   private Symbol parseList(Terminator terminator, Function<String, String> message) {
     Symbol result = new Symbol(SymbolType.LIST);
-    tokens.consumeToTerminator(terminator,
+    consumeToTerminator(terminator,
       token -> parseToken(result, token),
       error -> result.addErrorFirst(message.apply(error)));
     advance();
@@ -122,10 +118,22 @@ public class Parser {
     advance();
   }
 
+  private void consumeToTerminator(Terminator terminator, Consumer<Token> action, Consumer<String> error) {
+    while (true) {
+      Token token = peek(0);
+      if (terminator.matches(token)) break;
+      if (token.isType(TokenType.END)) {
+        error.accept("Missing terminator: " + terminator.getName());
+        break;
+      }
+      action.accept(token);
+    }
+  }
+
   private static final Terminator END_TERMINATOR = new Terminator(TokenType.END);
   private static final Terminator NESTING_TERMINATOR = new Terminator(TokenType.NESTING_END);
 
   private final Predicate<String> isWikiLink;
-  private final TokenList tokens;
+  private final TokenSource tokens;
   private final VariableStore variables;
 }

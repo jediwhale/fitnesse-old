@@ -24,7 +24,7 @@ public class Helper {
   }
   public static void assertScans(String expected, String input) {
     String result = expected + (expected.length() > 0 ? "," : "") + "End";
-    assertEquals(input, result, scan(input).toString());
+    assertEquals(input, result, scan(input));
   }
 
   public static void assertParses(String expected, String input) {
@@ -44,7 +44,14 @@ public class Helper {
 
   public static FakeExternal external = new FakeExternal();
 
-  private static TokenList scan(String input) {
-    return new Scanner().scan(input);
+  private static String scan(String input) {
+    TokenSource source = new TokenSource(new Content(input), TokenTypes.WIKI_PAGE_TYPES);
+    StringBuilder result = new StringBuilder();
+    do {
+      Token token = source.take();
+      if (result.length() > 0) result.append(",");
+      result.append(token.toString());
+    } while (source.getPrevious().getType() != TokenType.END);
+    return result.toString();
   }
 }

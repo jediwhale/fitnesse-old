@@ -1,7 +1,8 @@
 package fitnesse.wikitext.parser3;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static fitnesse.wikitext.parser3.MatchContent.*;
@@ -42,7 +43,7 @@ public class TokenType {
     .rule(Variable::parsePut);
   public static final TokenType END = new TokenType("End");
   public static final TokenType HASH_TABLE = new TokenType("HashTable", "!{")
-    .scan(Scanner::scanHashTable);
+    .useScan(HashTable::scan);
   public static final TokenType HEADER = new TokenType("Header")
     .matchOneOf(word("!1"), word("!2"), word("!3"), word("!4"), word("!5"), word("!6"));
   public static final TokenType HORIZONTAL_RULE = new TokenType("HorizontalRule").matches(text("---"), repeat("-"));
@@ -58,7 +59,7 @@ public class TokenType {
     .rule(Link::parse);
   public static final TokenType LITERAL_END = new TokenType("LiteralEnd", "-!");
   public static final TokenType LITERAL_START = new TokenType("LiteralStart", "!-")
-    .scan(Literal::scan)
+    .useScan(LITERAL_END)
     .rule(Literal::parse);
   public static final TokenType META = new TokenType("Meta").matches(word("!meta"));
   public static final TokenType NESTING_START = new TokenType("NestingStart", "!(");
@@ -75,7 +76,7 @@ public class TokenType {
   public static final TokenType PLAIN_TEXT_TABLE_START = new TokenType("PlainTextTableStart", "![");
   public static final TokenType PREFORMAT_END = new TokenType("PreformatEnd", "}}}");
   public static final TokenType PREFORMAT_START = new TokenType("PreformatStart", "{{{")
-    .scan(Preformat::scan)
+    .useScan(PREFORMAT_END)
     .rule(Preformat::parse);
   public static final TokenType SEE = new TokenType("See")
     .matches(word("!see"))
@@ -101,9 +102,8 @@ public class TokenType {
     matcher = content -> Optional.empty();
   }
 
-  public TokenType scan(BiConsumer<Content, TokenList> scanner) {
-    this.scanner = scanner;
-    return this;
+  public TokenType useScan(TokenType terminator) {
+    return useScan(source -> source.use(new ArrayList<>(Collections.singletonList(terminator)), type -> type == terminator));
   }
 
   public TokenType useScan(Consumer<TokenSource> useScan) {
@@ -124,10 +124,6 @@ public class TokenType {
     return matcher.check(content);
   }
 
-  public void scan(Content content, TokenList tokens) {
-    scanner.accept(content, tokens);
-  }
-
   public void useScan(TokenSource source) { useScan.accept(source); }
 
   public Symbol parse(Parser parser) {
@@ -144,7 +140,6 @@ public class TokenType {
     return this;
   }
 
-  private BiConsumer<Content, TokenList> scanner = (content, tokens) -> {};
   private Consumer<TokenSource> useScan = s -> {};
   private ParseRule parseRule = Parser::defaultRule;
   private MatchContent matcher;

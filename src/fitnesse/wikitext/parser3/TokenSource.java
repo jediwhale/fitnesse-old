@@ -14,11 +14,13 @@ class TokenSource {
     scanTypes.push(new ScanTypes(types, terminator));
   }
 
-  Token next() {
+  Token take() {
     while (results.isEmpty()) readResult();
     previous = results.remove();
     return previous;
   }
+
+  void putBack() { results.addFirst(previous); }
 
   Token peek(int offset) {
     while (results.size() <= offset) readResult();

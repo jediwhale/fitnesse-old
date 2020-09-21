@@ -2,21 +2,21 @@ package fitnesse.wikitext.parser3;
 
 public class Alias {
   public static Symbol parse(Parser parser) {
-    Token start = parser.peek(0);
-    parser.advance();
+    Token start = parser.advance();
     final Symbol description = parser.parseList(start);
     if (description.hasError()) return description;
     if (!description.hasChild(0)) {
-      parser.move(-1);
+      parser.putBack();
       return Symbol.error(start.getContent() + " Empty description");
     }
-    Token middle = parser.peek(-1);
+    parser.putBack();
+    Token middle = parser.advance();
     final Symbol link = parser.parseList(middle);
     if (link.hasError()) {
       return Symbol.makeList(Symbol.error(start.getContent()), description, link);
     }
     if (!link.hasChild(0)) {
-      parser.move(-1);
+      parser.putBack();
       return Symbol.makeList(Symbol.error(start.getContent()), description, Symbol.error(middle.getContent() + " Empty link"));
     }
     return Symbol.make(SymbolType.ALIAS,

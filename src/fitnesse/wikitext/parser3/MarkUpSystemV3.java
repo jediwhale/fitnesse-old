@@ -19,14 +19,14 @@ public class MarkUpSystemV3 implements MarkUpSystem {
 
   @Override
   public String variableValueToHtml(ParsingPage page, String variableValue) {
-    Symbol symbol = Parser.parse(variableValue, page, new Scanner(TokenTypes.VARIABLE_DEFINITION_TYPES));
+    Symbol symbol = Parser.parse(variableValue, page, TokenTypes.VARIABLE_DEFINITION_TYPES);
     return new SyntaxTreeV3(symbol, page).translateToHtml();
   }
 
   @Override
   public void findWhereUsed(WikiPage page, Consumer<String> takeWhereUsed) {
     final ParsingPage parsingPage = new ParsingPage(new WikiSourcePage(page));
-    Symbol symbol = Parser.parse(page.getData().getContent(), parsingPage, new Scanner(TokenTypes.REFACTORING_TYPES));
+    Symbol symbol = Parser.parse(page.getData().getContent(), parsingPage, TokenTypes.REFACTORING_TYPES);
     SyntaxTreeV3 syntaxTree = new SyntaxTreeV3(symbol, parsingPage);
     syntaxTree.findWhereUsed(takeWhereUsed);
   }
@@ -37,7 +37,7 @@ public class MarkUpSystemV3 implements MarkUpSystem {
     Symbol symbol = Parser.parse(
       page.getData().getContent(),
       parsingPage,
-      new Scanner(TokenTypes.REFACTORING_TYPES));
+      TokenTypes.REFACTORING_TYPES);
     SyntaxTreeV3 syntaxTree = new SyntaxTreeV3(symbol, parsingPage);
     findReferences(symbol, changeReference);
     return syntaxTree.translateToMarkUp();
