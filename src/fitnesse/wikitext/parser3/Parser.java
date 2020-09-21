@@ -14,28 +14,30 @@ public class Parser {
   }
 
   public static Symbol parse(String input, VariableStore variables, List<TokenType> tokenTypes) {
-    return new Parser(new TokenSource(new Content(input), tokenTypes), variables).parseList(END_TERMINATOR, error -> error);
+    return new Parser(new Content(input), tokenTypes, variables).parseList(END_TERMINATOR, error -> error);
   }
 
-  public Parser(TokenSource tokens, VariableStore variables) {
-    this.tokens = tokens;
+  public Parser(Content content, List<TokenType> tokenTypes, VariableStore variables) {
+    this.content = content;
+    this.tokens = new TokenSource(content, tokenTypes);
     this.variables = variables;
     isWikiLink = WikiPath::isWikiWordPath;
   }
 
   public Parser(Parser parent) {
+    this.content = parent.content;
     this.tokens = parent.tokens;
     this.variables = parent.variables;
     isWikiLink = content -> false;
   }
 
-  public Symbol parseString(String input) {
-    return parse(input, variables);
-  }
-
   public Token peek(int offset) { return tokens.peek(offset); }
 
   public void putBack() { tokens.putBack(); }
+
+  public void putInput(String input) {
+    content.put(input);
+  }
 
   public Token advance() { return tokens.take(); }
 
@@ -134,6 +136,7 @@ public class Parser {
   private static final Terminator NESTING_TERMINATOR = new Terminator(TokenType.NESTING_END);
 
   private final Predicate<String> isWikiLink;
+  private final Content content;
   private final TokenSource tokens;
   private final VariableStore variables;
 }

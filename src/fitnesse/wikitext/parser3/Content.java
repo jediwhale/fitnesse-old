@@ -9,6 +9,10 @@ public class Content {
     this(other.content, other.current);
   }
 
+  public void put(String input) {
+    content = content.substring(0, current) + input + content.substring(current);
+  }
+
   public boolean startsWith(String match) {
     return content.startsWith(match, current);
   }
@@ -36,6 +40,6 @@ public class Content {
     this.current = current;
   }
 
-  private final String content;
+  private String content;
   private int current;
 }

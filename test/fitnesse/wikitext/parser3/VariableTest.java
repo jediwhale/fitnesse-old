@@ -47,13 +47,19 @@ public class VariableTest {
   @Test
   public void parsesGet() {
     external.putVariable("x", "y");
-    assertParses("LIST(TEXT=y)", "${x}");
+    assertParses("TEXT,TEXT=y", "${x}");
   }
 
   @Test
   public void translatesGet() {
     external.putVariable("x", "y");
     assertTranslates("y", "${x}");
+  }
+
+  @Test
+  public void translatesGetToken() {
+    external.putVariable("x", "''");
+    assertTranslates("<i>hi</i>", "${x}hi${x}");
   }
 
   @Test

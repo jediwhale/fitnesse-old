@@ -2,6 +2,8 @@ package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlTag;
 
+import java.util.Optional;
+
 public class Variable {
   public static Symbol parsePut(Parser parser) {
     Symbol result = new Symbol(SymbolType.DEFINE);
@@ -26,13 +28,12 @@ public class Variable {
 
   public static Symbol parseGet(Parser parser) {
     parser.advance();
-    String name = parser.peek(0).getContent();
-    Symbol result = parser.getVariable(name)
-      .map(parser::parseString)
-      .orElseGet(() -> Symbol.error("Undefined variable: " + name));
-    parser.advance();
+    String name = parser.advance().getContent(); //check text
     parser.advance(); //check braceend
-    return result;
+    Optional<String> value = parser.getVariable(name);
+    if (!value.isPresent()) return Symbol.error("Undefined variable: " + name);
+    parser.putInput(value.get());
+    return new Symbol(SymbolType.TEXT, "");
   }
 
   public static String translate(Symbol symbol, Translator translator) {
