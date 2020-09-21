@@ -4,12 +4,9 @@ import java.util.*;
 import java.util.function.Predicate;
 
 class TokenSource {
-  TokenSource(Content content) {
+  TokenSource(Content content, List<TokenType> types) {
     this.content = content;
     results = new LinkedList<>();
-  }
-
-  void use(List<TokenType> types) {
     use(types, type -> false);
   }
 
@@ -18,26 +15,37 @@ class TokenSource {
   }
 
   Token next() {
-    while (results.isEmpty()) {
-      if (content.more()) {
-        Optional<Token> token = scanTypes.peek().findMatch(content);
-        if (token.isPresent()) {
-          addResult(token.get());
-          token.get().getType().useScan(this);
-          if (scanTypes.peek().isTerminated(token.get().getType())) {
-            scanTypes.pop();
-          }
-        }
-        else {
-          text.append(content.advance());
-        }
-      } else {
-        addResult(new Token(TokenType.END));
-      }
-    }
-    return results.remove();
+    while (results.isEmpty()) readResult();
+    previous = results.remove();
+    return previous;
   }
 
+  Token peek(int offset) {
+    while (results.size() <= offset) readResult();
+    return results.get(offset);
+  }
+
+  Token getPrevious() {
+    return previous;
+  }
+
+  private void readResult() {
+    if (content.more()) {
+      Optional<Token> token = scanTypes.peek().findMatch(content);
+      if (token.isPresent()) {
+        addResult(token.get());
+        token.get().getType().useScan(this);
+        if (scanTypes.peek().isTerminated(token.get().getType())) {
+          scanTypes.pop();
+        }
+      }
+      else {
+        text.append(content.advance());
+      }
+    } else {
+      addResult(new Token(TokenType.END));
+    }
+  }
 
   private void addResult(Token token) {
     if (text.length() > 0) {
@@ -47,8 +55,9 @@ class TokenSource {
     results.add(token);
   }
 
+  private Token previous;
   private final Stack<ScanTypes> scanTypes = new Stack<>();
-  private final Queue<Token> results;
+  private final LinkedList<Token> results;
   private final Content content;
   private final StringBuilder text = new StringBuilder();
 
