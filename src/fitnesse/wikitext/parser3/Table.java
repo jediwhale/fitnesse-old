@@ -13,7 +13,7 @@ public class Table {
         row.add(cell);
       } while (!parser.peek(0).isEndOfLine());
       result.add(row);
-      parser.advance();
+      if (parser.peek(0).isType(TokenType.NEW_LINE)) parser.advance();
     } while (parser.peek(0).isType(TokenType.CELL_DELIMITER));
     return result;
   }
