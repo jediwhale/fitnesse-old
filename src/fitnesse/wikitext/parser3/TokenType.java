@@ -62,7 +62,8 @@ public class TokenType {
     .useScan(LITERAL_END)
     .rule(Literal::parse);
   public static final TokenType META = new TokenType("Meta").matches(word("!meta"));
-  public static final TokenType NESTING_START = new TokenType("NestingStart", "!(");
+  public static final TokenType NESTING_START = new TokenType("NestingStart", "!(")
+    .rule(Nesting::parse);
   public static final TokenType NESTING_END = new TokenType("NestingEnd", ")!");
   public static final TokenType NEW_LINE = new TokenType("NewLine")
     .matchOneOf(text("\r\n"), text("\n"), text("\r"));

@@ -35,9 +35,7 @@ public class Parser {
 
   public void putBack() { tokens.putBack(); }
 
-  public void putInput(String input) {
-    content.put(input);
-  }
+  public void putInput(String input) { content.put(input); }
 
   public Token advance() { return tokens.take(); }
 
@@ -107,17 +105,7 @@ public class Parser {
   }
 
   private void parseToken(Symbol parent, Token token) {
-    if (token.isType(TokenType.NESTING_START)) {
-      parseNesting(parent);
-    } else {
       parent.add(parseCurrent());
-    }
-  }
-
-  private void parseNesting(Symbol parent) {
-    advance();
-    parseToTerminator(parent, NESTING_TERMINATOR);
-    advance();
   }
 
   private void consumeToTerminator(Terminator terminator, Consumer<Token> action, Consumer<String> error) {

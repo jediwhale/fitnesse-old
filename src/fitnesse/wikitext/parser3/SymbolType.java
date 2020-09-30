@@ -12,6 +12,7 @@ public enum SymbolType {
   ITALIC,
   LINK,
   LIST,
+  NESTING,
   PATH,
   PREFORMAT,
   SEE,

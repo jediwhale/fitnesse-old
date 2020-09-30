@@ -40,7 +40,7 @@ public class Token {
   public Symbol asSymbol(SymbolType type) { return new Symbol(type, content); }
 
   public boolean isEndOfLine() {
-    return isType(TokenType.NEW_LINE) || isType(TokenType.END);
+    return isType(TokenType.NEW_LINE) || isType(TokenType.END) || isType(TokenType.NESTING_END);
   }
 
   public boolean isVariable() {

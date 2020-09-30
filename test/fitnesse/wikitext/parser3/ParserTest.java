@@ -11,11 +11,6 @@ public class ParserTest {
   }
 
   @Test
-  public void parsesNesting() {
-    assertParses("ITALIC(ITALIC(TEXT=stuff))", "''!(''stuff'')!''");
-  }
-
-  @Test
   public void parsesPreformat() {
     assertParses("LIST(SOURCE={{{,TEXT=stuff,SOURCE=}}})", "{{{stuff}}}");
   }
