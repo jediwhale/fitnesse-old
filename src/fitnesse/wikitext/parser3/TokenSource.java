@@ -10,6 +10,10 @@ class TokenSource {
     use(types, type -> false);
   }
 
+  void putBack() { results.addFirst(previous); }
+  void putContent(String input) { content.put(input); }
+  Token getPrevious() { return previous; }
+
   void use(List<TokenType> types, Predicate<TokenType> terminator) {
     scanTypes.push(new ScanTypes(types, terminator));
   }
@@ -20,15 +24,9 @@ class TokenSource {
     return previous;
   }
 
-  void putBack() { results.addFirst(previous); }
-
   Token peek(int offset) {
     while (results.size() <= offset) readResult();
     return results.get(offset);
-  }
-
-  Token getPrevious() {
-    return previous;
   }
 
   private void readResult() {

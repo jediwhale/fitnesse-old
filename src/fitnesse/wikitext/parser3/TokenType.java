@@ -50,7 +50,9 @@ public class TokenType {
   public static final TokenType HEADINGS = new TokenType("Headings").matches(word("!headings"));
   public static final TokenType HELP = new TokenType("Help").matches(word("!help"));
   public static final TokenType IMAGE = new TokenType("Image").matches(word("!img"));
-  public static final TokenType INCLUDE = new TokenType("Include").matches(word("!include"));
+  public static final TokenType INCLUDE = new TokenType("Include")
+    .matches(word("!include"))
+    .rule(Include::parse);
   public static final TokenType ITALIC = new TokenType("Italic", "''")
     .rule(Pair.parse(SymbolType.ITALIC));
   public static final TokenType LAST_MODIFIED = new TokenType("LastModified").matches(word("!lastmodified"));

@@ -5,7 +5,7 @@ public class Alias {
     Token start = parser.advance();
     final Symbol description = parser.parseList(start);
     if (description.hasError()) return description;
-    if (!description.hasChild(0)) {
+    if (!description.hasChildren()) {
       parser.putBack();
       return Symbol.error(start.getContent() + " Empty description");
     }
@@ -15,7 +15,7 @@ public class Alias {
     if (link.hasError()) {
       return Symbol.makeList(Symbol.error(start.getContent()), description, link);
     }
-    if (!link.hasChild(0)) {
+    if (!link.hasChildren()) {
       parser.putBack();
       return Symbol.makeList(Symbol.error(start.getContent()), description, Symbol.error(middle.getContent() + " Empty link"));
     }

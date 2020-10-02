@@ -4,15 +4,15 @@ import java.util.function.Predicate;
 
 public class Terminator {
   public Terminator(TokenType tokenType) {
-    this(token -> token.isType(tokenType), tokenType.getMatch());
+    this(type -> type == tokenType, tokenType.getMatch());
   }
 
-  public Terminator(Predicate<Token> matcher, String name) {
+  public Terminator(Predicate<TokenType> matcher, String name) {
     this.matcher = matcher;
     this.name = name;
   }
 
-  public boolean matches(Token candidate) {
+  public boolean matches(TokenType candidate) {
     return matcher.test(candidate);
   }
 
@@ -20,6 +20,6 @@ public class Terminator {
     return name;
   }
 
-  private final Predicate<Token> matcher;
+  private final Predicate<TokenType> matcher;
   private final String name;
 }

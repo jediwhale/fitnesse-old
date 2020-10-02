@@ -11,14 +11,18 @@ public class NestingTest {
   }
 
   @Test public void parsesSimple() {
-    assertParses("NESTING(TEXT=hi)", "!(hi)!");
+    assertParses("LIST(TEXT=hi)", "!(hi)!");
   }
 
-  @Test public void parsesNested() {
-    assertParses("ITALIC(NESTING(ITALIC(TEXT=stuff)))", "''!(''stuff'')!''");
+  @Test public void parsesComplex() {
+    assertParses("ITALIC(LIST(ITALIC(TEXT=stuff)))", "''!(''stuff'')!''");
+  }
+
+  @Test public void parsesNoTerminator() {
+    assertParses("LIST(ERROR=!( Missing terminator: )!,TEXT=some,TEXT= ,TEXT=more)", "!(some more");
   }
 
   @Test public void parsesTableInTable() {
-    assertParses("TABLE(LIST(LIST(NESTING(TABLE(LIST(LIST(TEXT=a)))))))", "|!(|a|)!|");
+    assertParses("TABLE(LIST(LIST(LIST(TABLE(LIST(LIST(TEXT=a)))))))", "|!(|a|)!|");
   }
 }

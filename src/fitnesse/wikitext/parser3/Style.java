@@ -16,7 +16,7 @@ public class Style {
     result.add(parser.parseCurrent()); //todo: could be STYLE content?
     Token start = parser.peek(0);
     parser.advance();
-    Symbol list = parser.parseList(start, contents);
+    Symbol list = parser.parseList(SymbolType.LIST, start, contents);
     if (list.hasError()) return list;
     result.add(list); //todo: could be STYLE children?
     return result;

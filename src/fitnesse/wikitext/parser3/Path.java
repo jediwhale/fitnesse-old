@@ -4,8 +4,7 @@ class Path {
 
   static Symbol parse(Parser parser) {
     Symbol source = new Symbol(SymbolType.SOURCE, parser.peek(0).getContent());
-    Token start = parser.advance();
-    Symbol result = new Parser(parser).parseList(start).asType(SymbolType.PATH);
+    Symbol result = new Parser(parser).parseList(SymbolType.PATH, parser.advance());
     result.addFirst(source);
     return result;
   }

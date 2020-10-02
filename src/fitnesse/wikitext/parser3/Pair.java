@@ -4,11 +4,7 @@ import fitnesse.html.HtmlTag;
 
 public class Pair {
   public static ParseRule parse(SymbolType symbolType) {
-    return parser -> {
-      Token start = parser.peek(0);
-      parser.advance();
-      return parser.parseList(start).asType(symbolType);
-    };
+    return parser -> parser.parseList(symbolType, parser.advance());
   }
 
   public static TranslateRule translate(String tag) {

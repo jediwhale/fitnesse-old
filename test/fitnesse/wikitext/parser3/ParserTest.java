@@ -21,7 +21,7 @@ public class ParserTest {
   }
 
   @Test
-  public void parsesWhiteSpace() {
+  public void parsesBlankSpace() {
     assertParses("TEXT=hi,TEXT= ,TEXT=there", "hi there");
   }
 }

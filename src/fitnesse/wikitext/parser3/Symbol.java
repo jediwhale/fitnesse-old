@@ -8,93 +8,92 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class Symbol implements Tree<Symbol> {
-  public static Symbol error(String message) { return new Symbol(SymbolType.ERROR, message); }
+class Symbol implements Tree<Symbol> {
+  static Symbol error(String message) { return new Symbol(SymbolType.ERROR, message); }
 
-  public static Symbol makeList(Symbol ...children) { return make(SymbolType.LIST, children); }
+  static Symbol source(TokenType tokenType) { return new Symbol(SymbolType.SOURCE, tokenType.getMatch()); }
 
-  public static Symbol make(SymbolType type, Symbol ...children) {
+  static Symbol makeList(Symbol ...children) { return make(SymbolType.LIST, children); }
+
+  static Symbol make(SymbolType type, Symbol ...children) {
     Symbol result = new Symbol(type);
     for (Symbol child: children) result.add(child);
     return result;
   }
 
-  public Symbol(SymbolType type, String content) {
+  static Symbol make(SymbolType type, List<Symbol> children) {
+    return new Symbol(
+      children.size() > 0 && children.get(0).getType() == SymbolType.ERROR ? SymbolType.LIST : type,
+      children);
+  }
+
+  Symbol(SymbolType type, String content) {
     this.type = type;
     this.content = content;
     children = new ArrayList<>();
   }
 
-  public Symbol(SymbolType type) {
+  Symbol(SymbolType type, List<Symbol> children) {
+    this.type = type;
+    this.content = "";
+    this.children = children;
+  }
+
+  Symbol(SymbolType type) {
     this(type, "");
   }
 
-  public void addError(String error) {
-    add(Symbol.error(error));
-  }
-
-  public void addErrorFirst(String error) {
-    addFirst(Symbol.error(error));
-  }
-
-  public boolean hasError() {
+  boolean hasError() {
     return
       (type == SymbolType.ERROR) ||
-        (hasChild(0) && getChild(0).getType() == SymbolType.ERROR);
+        (hasChildren() && getChild(0).getType() == SymbolType.ERROR);
   }
 
-  public Symbol asType(SymbolType type) {
-    if (this.type == type || hasError()) return this;
-    Symbol result = new Symbol(type);
-    for (Symbol child: children) result.add(child);
-    return result;
-  }
-
-  public void add(Symbol child) {
+  void add(Symbol child) {
     children.add(child);
   }
 
-  public void addFirst(Symbol child) {
+  void addFirst(Symbol child) {
     children.add(0, child);
   }
 
-  public boolean hasChild(int child) {
-    return child < children.size();
+  boolean hasChildren() {
+    return children.size() > 0;
   }
 
-  public String getContent(int child) {
+  String getContent(int child) {
     return children.get(child).getContent();
   }
 
-  public Symbol getChild(int child) {
+  Symbol getChild(int child) {
     return children.get(child);
   }
 
-  public Symbol getLastChild() {
+  Symbol getLastChild() {
     return children.get(children.size() - 1);
   }
 
-  public String getContent() {
+  String getContent() {
     return content;
   }
 
-  public void setContent(String input) {
+  void setContent(String input) {
     content = input;
   }
 
-  public SymbolType getType() {
+  SymbolType getType() {
     return type;
   }
 
-  public String translateContent(TranslateSymbol<String> translator) {
+  String translateContent(TranslateSymbol<String> translator) {
     return HtmlUtil.escapeHTML(content) + translateChildren(translator);
   }
 
-  public String translateChildren(TranslateSymbol<String> translator) {
+  String translateChildren(TranslateSymbol<String> translator) {
     return collectChildren(translator, new StringBuilder(), StringBuilder::append).toString();
   }
 
-  public <T, U> U collectChildren(TranslateSymbol<T> translator, U initial, BiConsumer<U, ? super T> accumulator) {
+  <T, U> U collectChildren(TranslateSymbol<T> translator, U initial, BiConsumer<U, ? super T> accumulator) {
     children.stream().map(translator::translate).forEachOrdered(item -> accumulator.accept(initial, item));
     return initial;
   }
@@ -112,10 +111,6 @@ public class Symbol implements Tree<Symbol> {
       result.append(")");
     }
     return result.toString();
-  }
-
-  static Symbol source(TokenType tokenType) {
-    return new Symbol(SymbolType.SOURCE, tokenType.getMatch());
   }
 
   private String content;

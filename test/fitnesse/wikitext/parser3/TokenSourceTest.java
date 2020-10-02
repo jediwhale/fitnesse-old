@@ -72,11 +72,6 @@ public class TokenSourceTest {
   }
 
   @Test
-  public void scansNesting() {
-    assertScans("NestingStart=!(,Text=hi,NestingEnd=)!", "!(hi)!");
-  }
-
-  @Test
   public void scansNewLine() {
     assertScans("Text=hi,NewLine=\r\n", "hi\r\n");
     assertScans("Text=hi,NewLine=\n", "hi\n");

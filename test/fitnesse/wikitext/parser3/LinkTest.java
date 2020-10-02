@@ -16,6 +16,7 @@ public class LinkTest {
   @Test
   public void parses() {
     assertParses("LINK=http://(TEXT=somewhere.com)", "http://somewhere.com");
+    assertParses("LINK=http://(TEXT=PageOne)", "http://PageOne");
   }
 
   @Test
