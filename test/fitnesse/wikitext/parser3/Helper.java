@@ -37,7 +37,7 @@ public class Helper {
   }
 
   public static Symbol parse(String input) {
-    return Parser.parse(input, external);
+    return Parser.parse(input, ParseRules.make(external));
   }
 
   public static String toError(String message) { return " <span class=\"error\">" + message + "</span> "; }

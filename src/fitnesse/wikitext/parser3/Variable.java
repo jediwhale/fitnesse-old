@@ -1,11 +1,13 @@
 package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlTag;
+import fitnesse.wikitext.VariableSource;
+import fitnesse.wikitext.VariableStore;
 
 import java.util.Optional;
 
 public class Variable {
-  public static Symbol parsePut(Parser parser) {
+  public static Symbol parsePut(Parser parser, VariableStore variables) {
     Symbol result = new Symbol(SymbolType.DEFINE);
     if (!parser.peek(1).isVariable()) {
       return parser.makeError("Name must be alphanumeric", 1);
@@ -22,15 +24,15 @@ public class Variable {
     Token start = parser.advance();
     result.add(new Symbol(SymbolType.TEXT, parser.parseText(start)));
 
-    parser.putVariable(result.getContent(0), result.getContent(1));
+    variables.putVariable(result.getContent(0), result.getContent(1));
     return result;
   }
 
-  public static Symbol parseGet(Parser parser) {
+  public static Symbol parseGet(Parser parser, VariableSource variables) {
     parser.advance();
     String name = parser.advance().getContent(); //check text
     parser.advance(); //check braceend
-    Optional<String> value = parser.getVariable(name);
+    Optional<String> value = variables.findVariable(name);
     if (!value.isPresent()) return Symbol.error("Undefined variable: " + name);
     parser.putInput(value.get());
     return new Symbol(SymbolType.TEXT, "");

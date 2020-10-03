@@ -1,33 +1,31 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.wikitext.VariableStore;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 class Parser {
-  static Symbol parse(String input, VariableStore variables) {
-    return parse(input, variables, TokenTypes.WIKI_PAGE_TYPES);
+  static Symbol parse(String input, Map<TokenType, ParseRule> rules) {
+    return parse(input, TokenTypes.WIKI_PAGE_TYPES, rules);
   }
 
-  static Symbol parse(String input, VariableStore variables, List<TokenType> tokenTypes) {
-    return new Parser(new Content(input), tokenTypes, variables)
+  static Symbol parse(String input, List<TokenType> tokenTypes, Map<TokenType, ParseRule> rules) {
+    return new Parser(new Content(input), tokenTypes, rules)
       .parseList(SymbolType.LIST, END_TERMINATOR, (list, error) -> {});
   }
 
-  Parser(Content content, List<TokenType> tokenTypes, VariableStore variables) {
+  Parser(Content content, List<TokenType> tokenTypes, Map<TokenType, ParseRule> rules) {
     this.tokens = new TokenSource(content, tokenTypes);
-    this.variables = variables;
+    this.rules = rules;
     isWikiLink = WikiPath::isWikiWordPath;
   }
 
   Parser(Parser parent) {
     this.tokens = parent.tokens;
-    this.variables = parent.variables;
+    this.rules = parent.rules;
     isWikiLink = content -> false;
   }
 
@@ -37,7 +35,7 @@ class Parser {
   Token advance() { return tokens.take(); }
 
   Symbol parseCurrent() {
-    return peek(0).getType().parse(this);
+    return rules.getOrDefault(peek(0).getType(), Parser::defaultRule).parse(this);
   }
 
   Symbol makeError(String message, int tokenCount) {
@@ -47,14 +45,6 @@ class Parser {
       advance();
     }
     return Symbol.error(contents + " " + message);
-  }
-
-  Optional<String> getVariable(String name) {
-    return variables.findVariable(name);
-  }
-
-  void putVariable(String name, String value) {
-    variables.putVariable(name, value);
   }
 
   Symbol parseList(Token start) {
@@ -79,7 +69,7 @@ class Parser {
     return result.toString();
   }
 
-  static Symbol defaultRule(Parser parser) {
+  private static Symbol defaultRule(Parser parser) {
     String content = parser.peek(0).getContent();
     Symbol result = new Symbol(parser.isWikiLink.test(content) ? SymbolType.WIKI_LINK : SymbolType.TEXT, content);
     parser.advance();
@@ -116,5 +106,5 @@ class Parser {
 
   private final Predicate<String> isWikiLink;
   private final TokenSource tokens;
-  private final VariableStore variables;
+  private final Map<TokenType, ParseRule> rules;
 }
