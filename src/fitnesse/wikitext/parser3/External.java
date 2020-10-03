@@ -1,5 +1,8 @@
 package fitnesse.wikitext.parser3;
 
-public interface External {
+import fitnesse.wikitext.parser.Maybe;
+
+interface External { //todo: better name
   String buildLink(String path, String description, String trailer);
+  Maybe<String> findPageContent(String pageName);
 }

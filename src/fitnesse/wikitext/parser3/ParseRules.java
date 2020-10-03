@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 class ParseRules {
-  static Map<TokenType, ParseRule> make(VariableStore variables) {
+  static Map<TokenType, ParseRule> make(VariableStore variables, External external) {
     Map<TokenType, ParseRule> rules = new HashMap<>();
     rules.put(TokenType.ALIAS_START, Alias::parse);
     rules.put(TokenType.ANCHOR_NAME, Keyword.parseWord(SymbolType.ANCHOR_NAME));
@@ -16,7 +16,7 @@ class ParseRules {
     rules.put(TokenType.CELL_DELIMITER, Table::parse);
     rules.put(TokenType.COMMENT, Comment::parse);
     rules.put(TokenType.DEFINE, parser -> Variable.parsePut(parser, variables));
-    rules.put(TokenType.INCLUDE, Include::parse);
+    rules.put(TokenType.INCLUDE, parser -> Include.parse(parser, external));
     rules.put(TokenType.ITALIC, Pair.parse(SymbolType.ITALIC));
     rules.put(TokenType.LINK, Link::parse);
     rules.put(TokenType.LITERAL_START, Literal::parse);

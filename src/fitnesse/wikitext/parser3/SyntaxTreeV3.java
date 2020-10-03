@@ -3,6 +3,7 @@ package fitnesse.wikitext.parser3;
 import fitnesse.wikitext.ParsingPage;
 import fitnesse.wikitext.SourcePage;
 import fitnesse.wikitext.SyntaxTree;
+import fitnesse.wikitext.parser.Maybe;
 import fitnesse.wikitext.parser.WikiWordBuilder;
 
 import java.util.Optional;
@@ -22,7 +23,7 @@ public class SyntaxTreeV3 implements SyntaxTree {
 
   @Override
   public String translateToHtml() {
-    return new HtmlTranslator(new ExternalAdapter(page.getPage())).translate(tree);
+    return new HtmlTranslator(new ExternalAdapter(page)).translate(tree);
   }
 
   @Override
@@ -66,16 +67,4 @@ public class SyntaxTreeV3 implements SyntaxTree {
   private final Symbol tree;
   private final ParsingPage page;
 
-  private static class ExternalAdapter implements External {
-    public ExternalAdapter(SourcePage page) {
-      this.page = page;
-    }
-
-    @Override
-    public String buildLink(String path, String description, String trailer) {
-      return new WikiWordBuilder(page, path, description).buildLink(trailer, path);
-    }
-
-    private final SourcePage page;
-  }
 }

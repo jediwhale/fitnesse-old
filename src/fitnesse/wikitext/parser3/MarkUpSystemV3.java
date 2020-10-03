@@ -14,19 +14,19 @@ import java.util.function.Function;
 public class MarkUpSystemV3 implements MarkUpSystem {
   @Override
   public SyntaxTree parse(ParsingPage page, String content) {
-    return new SyntaxTreeV3(Parser.parse(content, ParseRules.make(page)), page);
+    return new SyntaxTreeV3(Parser.parse(content, ParseRules.make(page, new ExternalAdapter(page))), page);
   }
 
   @Override
   public String variableValueToHtml(ParsingPage page, String variableValue) {
-    Symbol symbol = Parser.parse(variableValue, TokenTypes.VARIABLE_DEFINITION_TYPES, ParseRules.make(page));
+    Symbol symbol = Parser.parse(variableValue, TokenTypes.VARIABLE_DEFINITION_TYPES, ParseRules.make(page, new ExternalAdapter(page)));
     return new SyntaxTreeV3(symbol, page).translateToHtml();
   }
 
   @Override
   public void findWhereUsed(WikiPage page, Consumer<String> takeWhereUsed) {
     final ParsingPage parsingPage = new ParsingPage(new WikiSourcePage(page));
-    Symbol symbol = Parser.parse(page.getData().getContent(), TokenTypes.REFACTORING_TYPES, ParseRules.make(parsingPage));
+    Symbol symbol = Parser.parse(page.getData().getContent(), TokenTypes.REFACTORING_TYPES, ParseRules.make(parsingPage, new ExternalAdapter(parsingPage)));
     SyntaxTreeV3 syntaxTree = new SyntaxTreeV3(symbol, parsingPage);
     syntaxTree.findWhereUsed(takeWhereUsed);
   }
@@ -37,7 +37,7 @@ public class MarkUpSystemV3 implements MarkUpSystem {
     Symbol symbol = Parser.parse(
       page.getData().getContent(),
       TokenTypes.REFACTORING_TYPES,
-      ParseRules.make(parsingPage));
+      ParseRules.make(parsingPage, new ExternalAdapter(parsingPage)));
     SyntaxTreeV3 syntaxTree = new SyntaxTreeV3(symbol, parsingPage);
     findReferences(symbol, changeReference);
     return syntaxTree.translateToMarkUp();

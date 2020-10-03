@@ -29,6 +29,10 @@ class Parser {
     isWikiLink = content -> false;
   }
 
+  Symbol parse(String input) {
+    return parse(input, rules);
+  }
+
   Token peek(int offset) { return tokens.peek(offset); }
   void putBack() { tokens.putBack(); }
   void putInput(String input) { tokens.putContent(input); }
