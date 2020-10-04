@@ -6,21 +6,24 @@ import org.junit.Test;
 import static fitnesse.wikitext.parser3.Helper.*;
 
 public class TableTest {
-  @Test
-  public void scans() {
-    assertScans("CellDelimiter=|,Text=a,CellDelimiter=|","|a|");
+  @Test public void scans() {
+    assertScans("Table=|,Text=a,CellDelimiter=|","|a|");
+    assertScans("Text=say,NewLine=\n,Table=|,Text=a,CellDelimiter=|","say\n|a|");
   }
 
-  @Test
-  public void parses() {
+  @Test public void scansLiteral() {
+    assertScans("Table=!|,Text=''a'',CellDelimiter=|","!|''a''|");
+  }
+
+  @Test public void parses() {
     assertParses("TABLE(LIST(LIST(TEXT=a)))", "|a|");
+    assertParses("TEXT=say,TEXT=\n,TABLE(LIST(LIST(TEXT=a)))", "say\n|a|");
     assertParses("TABLE(LIST(LIST(TEXT=a),LIST(TEXT=b)))", "|a|b|");
     assertParses("TABLE(LIST(LIST(LIST(SOURCE=!-,TEXT=a,SOURCE=-!)),LIST(TEXT=b)))", "|!-a-!|b|");
     assertParses("TABLE(LIST(LIST(TEXT=a)),LIST(LIST(TEXT=b)))", "|a|\n|b|");
   }
 
-  @Test
-  public void translates() {
+  @Test public void translates() {
     assertTranslates(table(row(cell("a"))), "|a|");
     assertTranslates(table(row(cell("a"))), "| a  |");
     assertTranslates(table(row(cell("a") + cell("b"))), "|a|b|");

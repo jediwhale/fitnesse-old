@@ -6,7 +6,7 @@ import java.util.Optional;
 interface MatchContent {
   Optional<String> check(Content content);
 
-  static MatchContent matchAll(MatchContent[] matchItems) {
+  static MatchContent matchAll(MatchContent... matchItems) {
     return content -> {
       Content trial = new Content(content);
       StringBuilder result = new StringBuilder();

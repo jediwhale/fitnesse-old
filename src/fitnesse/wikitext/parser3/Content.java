@@ -2,25 +2,35 @@ package fitnesse.wikitext.parser3;
 
 public class Content {
   public Content(String content) {
-    this(content, 0);
+    this.content = content;
+    this.current = 0;
+    this.isStartLine = true;
   }
 
   public Content(Content other) {
-    this(other.content, other.current);
+    this.content = other.content;
+    this.current = other.current;
+    this.isStartLine = other.isStartLine;
   }
 
   public void put(String input) {
     content = content.substring(0, current) + input + content.substring(current);
   }
 
-  public boolean startsWith(String match) {
-    return content.startsWith(match, current);
+  public void setStartLine() { isStartLine = true; }
+
+  public void advance(int length) {
+    isStartLine = false;
+    current += length;
   }
 
-  public void advance(int length) { current += length; }
-
   public char advance() {
+    isStartLine = false;
     return content.charAt(current++);
+  }
+
+  public boolean startsWith(String match) {
+    return content.startsWith(match, current);
   }
 
   public boolean more() {
@@ -32,14 +42,10 @@ public class Content {
   }
 
   public boolean isStartLine() {
-    return current == 0 || content.charAt(current - 1) == '\n' || content.charAt(current - 1) == '\r';
-  }
-
-  private Content(String content, int current) {
-    this.content = content;
-    this.current = current;
+    return isStartLine;
   }
 
   private String content;
   private int current;
+  private boolean isStartLine;
 }

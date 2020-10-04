@@ -33,7 +33,7 @@ class Parser {
     return parse(input, rules);
   }
 
-  Token peek(int offset) { return tokens.peek(offset); }
+  Token peek(int offset) { return offset >= 0 ? tokens.peek(offset) : tokens.getPrevious(); }
   void putBack() { tokens.putBack(); }
   void putInput(String input) { tokens.putContent(input); }
   Token advance() { return tokens.take(); }

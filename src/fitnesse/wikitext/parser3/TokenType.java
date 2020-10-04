@@ -3,7 +3,7 @@ package fitnesse.wikitext.parser3;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import static fitnesse.wikitext.parser3.MatchContent.*;
 
@@ -22,7 +22,10 @@ public class TokenType {
   public static final TokenType BRACE_START = new TokenType("BraceStart", "{");
   public static final TokenType BRACKET_END = new TokenType("BracketEnd", "]");
   public static final TokenType BRACKET_START = new TokenType("BracketStart", "[");
-  public static final TokenType CELL_DELIMITER = new TokenType("CellDelimiter", "|");
+  public static final TokenType CELL_DELIMITER = new TokenType("CellDelimiter", "|")
+    .matchOneOf(
+      matchAll(text("|"), matchOne(text("\r\n"), text("\n"), text("\r")), text("|")),
+      text("|"));
   public static final TokenType CENTER_LINE = new TokenType("CenterLine").matches(word("!c"));
   public static final TokenType COLLAPSIBLE_END = new TokenType("CollapsibleEnd", "*!").matches(repeat("*"), text("!"));
   public static final TokenType COLLAPSIBLE_START = new TokenType("CollapsibleStart").matches(text("!"), repeat("*"));
@@ -52,10 +55,12 @@ public class TokenType {
   public static final TokenType LITERAL_START = new TokenType("LiteralStart", "!-")
     .useScan(LITERAL_END);
   public static final TokenType META = new TokenType("Meta").matches(word("!meta"));
-  public static final TokenType NESTING_START = new TokenType("NestingStart", "!(");
+  public static final TokenType NESTING_START = new TokenType("NestingStart", "!(")
+    .isStart();
   public static final TokenType NESTING_END = new TokenType("NestingEnd", ")!");
   public static final TokenType NEW_LINE = new TokenType("NewLine")
-    .matchOneOf(text("\r\n"), text("\n"), text("\r"));
+    .matchOneOf(text("\r\n"), text("\n"), text("\r"))
+    .isStart();
   public static final TokenType NOTE = new TokenType("Note").matches(word("!note"));
   public static final TokenType PARENTHESIS_END = new TokenType("ParenthesisEnd", ")");
   public static final TokenType PARENTHESIS_START = new TokenType("ParenthesisStart", "(");
@@ -70,6 +75,9 @@ public class TokenType {
     .matches(word("!see"));
   public static final TokenType STRIKE = new TokenType("Strike", "--");
   public static final TokenType STYLE = new TokenType("Style", "!style_");
+  public static final TokenType TABLE = new TokenType("Table")
+    .matches(startLine(), matchOne(text("-!|"), text("!|"), text("-|"), text("|")))
+    .useScan(Table::scan);
   public static final TokenType TEXT = new TokenType("Text");
   public static final TokenType TODAY = new TokenType("Today").matches(word("!today"));
   public static final TokenType VARIABLE = new TokenType("Variable", "${");
@@ -87,11 +95,16 @@ public class TokenType {
   }
 
   public TokenType useScan(TokenType terminator) {
-    return useScan(source -> source.use(new ArrayList<>(Collections.singletonList(terminator)), type -> type == terminator));
+    return useScan((token, source) -> source.use(new ArrayList<>(Collections.singletonList(terminator)), type -> type == terminator));
   }
 
-  public TokenType useScan(Consumer<TokenSource> useScan) {
+  public TokenType useScan(BiConsumer<Token, TokenSource> useScan) {
     this.useScan = useScan;
+    return this;
+  }
+
+  public TokenType isStart() {
+    isStart = true;
     return this;
   }
 
@@ -100,10 +113,12 @@ public class TokenType {
   public String toString() { return name; }
 
   public Optional<String> read(Content content) {
-    return matcher.check(content);
+    Optional<String> result = matcher.check(content);
+    if (result.isPresent() && isStart) content.setStartLine();
+    return result;
   }
 
-  public void useScan(TokenSource source) { useScan.accept(source); }
+  public void useScan(Token token, TokenSource source) { useScan.accept(token, source); }
 
   private TokenType matches(MatchContent... matchItems) {
     matcher = matchAll(matchItems);
@@ -115,8 +130,9 @@ public class TokenType {
     return this;
   }
 
-  private Consumer<TokenSource> useScan = s -> {};
+  private BiConsumer<Token, TokenSource> useScan = (t, s) -> {};
   private MatchContent matcher;
+  private boolean isStart = false;
 
   private final String match;
   private final String name;

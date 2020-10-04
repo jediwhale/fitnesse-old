@@ -13,7 +13,7 @@ class ParseRules {
     rules.put(TokenType.ANCHOR_REFERENCE, Keyword.parseWord(SymbolType.ANCHOR_REFERENCE));
     rules.put(TokenType.BOLD, Pair.parse(SymbolType.BOLD));
     rules.put(TokenType.BOLD_ITALIC, Pair.parse(SymbolType.BOLD_ITALIC));
-    rules.put(TokenType.CELL_DELIMITER, Table::parse);
+    rules.put(TokenType.TABLE, Table::parse);
     rules.put(TokenType.COMMENT, Comment::parse);
     rules.put(TokenType.DEFINE, parser -> Variable.parsePut(parser, variables));
     rules.put(TokenType.INCLUDE, parser -> Include.parse(parser, external));

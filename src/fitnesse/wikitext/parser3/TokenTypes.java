@@ -12,7 +12,6 @@ public class TokenTypes {
     TokenType.ANCHOR_NAME,
     TokenType.ANCHOR_REFERENCE,
     TokenType.BOLD_ITALIC,
-    TokenType.CELL_DELIMITER,
     TokenType.CENTER_LINE,
     TokenType.COLLAPSIBLE_END,
     TokenType.COLLAPSIBLE_START,
@@ -33,7 +32,6 @@ public class TokenTypes {
     TokenType.META,
     TokenType.NESTING_START,
     TokenType.NESTING_END,
-    TokenType.NEW_LINE,
     TokenType.NOTE,
     TokenType.PATH,
     TokenType.PLAIN_TEXT_TABLE_START,
@@ -42,15 +40,18 @@ public class TokenTypes {
     TokenType.PREFORMAT_END,
     TokenType.SEE,
     TokenType.STYLE,
+    TokenType.TABLE,
     TokenType.TODAY,
     TokenType.VARIABLE,
 
+    TokenType.NEW_LINE,
     TokenType.BLANK_SPACE,
     TokenType.BOLD,
     TokenType.BRACE_START,
     TokenType.BRACE_END,
     TokenType.BRACKET_START,
     TokenType.BRACKET_END,
+    TokenType.CELL_DELIMITER,
     TokenType.ITALIC,
     TokenType.PARENTHESIS_START,
     TokenType.PARENTHESIS_END,
@@ -62,6 +63,14 @@ public class TokenTypes {
     HASH_TABLE_TYPES.add(TokenType.COLON);
     HASH_TABLE_TYPES.add(TokenType.COMMA);
   }
+
+  static final ArrayList<TokenType> LITERAL_TABLE_TYPES = new ArrayList<>(Arrays.asList(
+    TokenType.COMMENT,
+    TokenType.TABLE,
+
+    TokenType.NEW_LINE,
+    TokenType.CELL_DELIMITER
+  ));
 
   public static final ArrayList<TokenType> REFACTORING_TYPES = new ArrayList<>(Arrays.asList(
     TokenType.ALIAS_END,

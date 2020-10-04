@@ -34,7 +34,7 @@ class TokenSource {
       Optional<Token> token = scanTypes.peek().findMatch(content);
       if (token.isPresent()) {
         addResult(token.get());
-        token.get().getType().useScan(this);
+        token.get().getType().useScan(token.get(), this);
         if (scanTypes.peek().isTerminated(token.get().getType())) {
           scanTypes.pop();
         }

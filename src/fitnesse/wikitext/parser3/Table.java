@@ -2,23 +2,28 @@ package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlTag;
 
-public class Table {
-  public static Symbol parse(Parser parser) {
+class Table {
+  static void scan(Token token, TokenSource source) {
+    if (token.getContent().contains("!")) {
+      source.use(TokenTypes.LITERAL_TABLE_TYPES, type -> type == TokenType.NEW_LINE);
+    }
+  }
+
+  static Symbol parse(Parser parser) {
     Symbol result = new Symbol(SymbolType.TABLE);
+    parser.advance();
     do {
-      parser.advance();
       Symbol row = new Symbol(SymbolType.LIST);
       do {
         Symbol cell = parser.parseList(DELIMITER);
         row.add(cell);
-      } while (!parser.peek(0).isEndOfLine());
+      } while (parser.peek(-1).getContent().equals("|") && !parser.peek(0).isEndOfTable()); //todo: clean up
       result.add(row);
-      if (parser.peek(0).isType(TokenType.NEW_LINE)) parser.advance();
-    } while (parser.peek(0).isType(TokenType.CELL_DELIMITER));
+    } while (!parser.peek(0).isEndOfTable());
     return result;
   }
 
-  public static String translate(Symbol table, TranslateSymbol<String> translator) {
+  static String translate(Symbol table, TranslateSymbol<String> translator) {
     return table.collectChildren(child -> row(child, translator), HtmlTag.name("table"), HtmlTag::add).html();
   }
 
