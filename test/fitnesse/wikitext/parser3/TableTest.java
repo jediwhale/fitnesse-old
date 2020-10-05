@@ -30,6 +30,11 @@ public class TableTest {
     assertTranslates(table(row(cell("a") )+ row(cell("b"))), "|a|\n|b|");
   }
 
+  @Test public void translatesVariableInLiteralTable() {
+    external.putVariable("hi", "there");
+    assertTranslates(table(row(cell("there"))), "!|${hi}|");
+  }
+
   private static String table(String row) {
     return "<table>" + HtmlElement.endl + row + "</table>" + HtmlElement.endl;
   }
