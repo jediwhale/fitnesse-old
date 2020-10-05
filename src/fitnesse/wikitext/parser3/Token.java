@@ -44,10 +44,6 @@ public class Token {
     return isType(TokenType.NEW_LINE) || isType(TokenType.END) || isType(TokenType.NESTING_END);
   }
 
-  public boolean isVariable() {
-    return isType(TokenType.TEXT) && content.chars().allMatch(c -> Character.isLetterOrDigit(c) || c == '_');
-  }
-
   public boolean isWord() {
     return isType(TokenType.TEXT) && content.chars().allMatch(c -> Character.isLetterOrDigit(c) || c == '_' || c == '.');
   }

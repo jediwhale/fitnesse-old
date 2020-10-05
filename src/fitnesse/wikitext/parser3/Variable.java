@@ -9,7 +9,7 @@ import java.util.Optional;
 public class Variable {
   public static Symbol parsePut(Parser parser, VariableStore variables) {
     Symbol result = new Symbol(SymbolType.DEFINE);
-    if (!parser.peek(1).isVariable()) {
+    if (!parser.peek(1).isWord()) {
       return parser.makeError("Name must be alphanumeric", 1);
     }
     if (!parser.peek(2).isType(TokenType.BLANK_SPACE)) {

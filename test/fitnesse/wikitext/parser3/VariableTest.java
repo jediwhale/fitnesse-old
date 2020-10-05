@@ -17,6 +17,7 @@ public class VariableTest {
   @Test
   public void translatesPut() {
     assertTranslatesDefine("x=y", "!define x {y}");
+    assertTranslatesDefine("a.b_c=y", "!define a.b_c {y}");
     assertTranslatesDefine("x=''y''", "!define x {''y''}");
   }
 
