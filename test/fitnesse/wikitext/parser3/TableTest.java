@@ -35,6 +35,11 @@ public class TableTest {
     assertTranslates(table(row(cell("there"))), "!|${hi}|");
   }
 
+  // not sure why this is needed since contents are literal already, but v2 parser does it
+  @Test public void translatesLiteralInLiteralTable()  {
+    assertTranslates(table(row(cell("abc"))), "!|a!-b-!c|");
+  }
+
   private static String table(String row) {
     return "<table>" + HtmlElement.endl + row + "</table>" + HtmlElement.endl;
   }

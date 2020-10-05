@@ -65,11 +65,10 @@ public class TokenTypes {
   }
 
   static final ArrayList<TokenType> LITERAL_TABLE_TYPES = new ArrayList<>(Arrays.asList(
-    TokenType.COMMENT,
-    TokenType.TABLE,
+    TokenType.LITERAL_START,
+    TokenType.LITERAL_END,
     TokenType.VARIABLE,
     TokenType.BRACE_END,
-
     TokenType.NEW_LINE,
     TokenType.CELL_DELIMITER
   ));
