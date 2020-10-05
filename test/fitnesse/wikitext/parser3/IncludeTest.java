@@ -12,12 +12,12 @@ public class IncludeTest {
 
   @Test public void parses() {
     external.pageContent = new Maybe<>("stuff");
-    assertParses("INCLUDE(LIST(TEXT=stuff))", "!include MyPage");
+    assertParses("INCLUDE(TEXT=MyPage,LIST(TEXT=stuff))", "!include MyPage");
   }
 
   @Test public void translates() {
     external.pageContent = new Maybe<>("stuff");
-    assertTranslates("stuff", "!include MyPage");
-    assertTranslates("stuff", "!include -setup MyPage");
+    assertTranslates("<span>MyPage</span>stuff", "!include MyPage");
+    assertTranslates("<span>MyPage</span>stuff", "!include -setup MyPage");
   }
 }
