@@ -33,7 +33,11 @@ public class SyntaxTreeV3 implements SyntaxTree {
 
   @Override
   public void findPaths(Consumer<String> takePath) {
-
+    tree.walkPostOrder(node -> {
+      if (node.getType() == SymbolType.PATH) {
+        Path.providePaths(node, takePath);
+      }
+    });
   }
 
   @Override
