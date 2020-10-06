@@ -17,13 +17,15 @@ class Parser {
       .parseList(SymbolType.LIST, END_TERMINATOR, (list, error) -> {});
   }
 
+  Parser noWikiLinks() { return new Parser(this); }
+
   Parser(Content content, List<TokenType> tokenTypes, Map<TokenType, ParseRule> rules) {
     this.tokens = new TokenSource(content, tokenTypes);
     this.rules = rules;
     isWikiLink = WikiPath::isWikiWordPath;
   }
 
-  Parser(Parser parent) {
+  private Parser(Parser parent) {
     this.tokens = parent.tokens;
     this.rules = parent.rules;
     isWikiLink = content -> false;

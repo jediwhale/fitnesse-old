@@ -11,7 +11,7 @@ class TokenSource {
   }
 
   void putBack() { results.addFirst(previous); }
-  void putContent(String input) { content.put(input); }
+  void putContent(String input) { content.put(input); } //todo: doesn't let us combine with previous text
   Token getPrevious() { return previous; }
 
   void use(List<TokenType> types, Predicate<TokenType> terminator) {

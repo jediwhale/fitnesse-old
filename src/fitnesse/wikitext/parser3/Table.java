@@ -10,6 +10,10 @@ class Table {
   }
 
   static Symbol parse(Parser parser) {
+    return parseTable(parser.peek(0).getContent().contains("!") ? parser.noWikiLinks() : parser);
+  }
+
+  private static Symbol parseTable(Parser parser) {
     Symbol result = new Symbol(SymbolType.TABLE);
     parser.advance();
     do {

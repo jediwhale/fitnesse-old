@@ -23,6 +23,10 @@ public class TableTest {
     assertParses("TABLE(LIST(LIST(TEXT=a)),LIST(LIST(TEXT=b)))", "|a|\n|b|");
   }
 
+  @Test public void parsesLiteral() {
+    assertParses("TABLE(LIST(LIST(TEXT=PageOne)))","!|PageOne|");
+  }
+
   @Test public void translates() {
     assertTranslates(table(row(cell("a"))), "|a|");
     assertTranslates(table(row(cell("a"))), "| a  |");

@@ -4,7 +4,7 @@ class Literal {
 
   static Symbol parse(Parser parser) {
     Token start = parser.advance();
-    Symbol result = new Parser(parser).parseList(start);
+    Symbol result = parser.noWikiLinks().parseList(start);
     if (result.hasError()) return result;
     result.addFirst(Symbol.source(TokenType.LITERAL_START));
     result.add(Symbol.source(TokenType.LITERAL_END));
