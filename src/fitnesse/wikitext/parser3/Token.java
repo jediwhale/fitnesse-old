@@ -22,12 +22,13 @@ public class Token {
   public Terminator terminator() {
     return isType(TokenType.PATH)
       ? new Terminator(type -> type == TokenType.NEW_LINE || type == TokenType.END, "")
-      : new Terminator(endType());// todo: can inline endType() and use static terminators
+      : new Terminator(endType()); //todo: can inline endType() and use static terminators
   }
 
   private TokenType endType() {
     return isType(TokenType.BRACE_START) ? TokenType.BRACE_END
       : isType(TokenType.BRACKET_START) ? TokenType.BRACKET_END
+      : isType(TokenType.EXPRESSION_START) ? TokenType.EXPRESSION_END
       : isType(TokenType.PARENTHESIS_START) ? TokenType.PARENTHESIS_END
       : isType(TokenType.NESTING_START) ? TokenType.NESTING_END
       : isType(TokenType.PREFORMAT_START) ? TokenType.PREFORMAT_END

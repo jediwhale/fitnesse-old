@@ -13,9 +13,9 @@ class ParseRules {
     rules.put(TokenType.ANCHOR_REFERENCE, Keyword.parseWord(SymbolType.ANCHOR_REFERENCE));
     rules.put(TokenType.BOLD, Pair.parse(SymbolType.BOLD));
     rules.put(TokenType.BOLD_ITALIC, Pair.parse(SymbolType.BOLD_ITALIC));
-    rules.put(TokenType.TABLE, Table::parse);
     rules.put(TokenType.COMMENT, Comment::parse);
     rules.put(TokenType.DEFINE, parser -> Variable.parsePut(parser, variables));
+    rules.put(TokenType.EXPRESSION_START, Expression::parse);
     rules.put(TokenType.INCLUDE, parser -> Include.parse(parser, external));
     rules.put(TokenType.ITALIC, Pair.parse(SymbolType.ITALIC));
     rules.put(TokenType.LINK, Link::parse);
@@ -26,6 +26,7 @@ class ParseRules {
     rules.put(TokenType.SEE, Keyword.parse(SymbolType.SEE));
     rules.put(TokenType.STRIKE, Pair.parse(SymbolType.STRIKE));
     rules.put(TokenType.STYLE, Style::parse);
+    rules.put(TokenType.TABLE, Table::parse);
     rules.put(TokenType.VARIABLE, parser -> Variable.parseGet(parser, variables));
     return rules;
   }

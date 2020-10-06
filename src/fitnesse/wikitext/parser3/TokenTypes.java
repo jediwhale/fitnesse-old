@@ -18,6 +18,8 @@ public class TokenTypes {
     TokenType.COMMENT,
     TokenType.CONTENTS,
     TokenType.DEFINE,
+    TokenType.EXPRESSION_START,
+    TokenType.EXPRESSION_END,
     TokenType.HASH_TABLE,
     TokenType.HEADER,
     TokenType.HEADINGS,
@@ -65,6 +67,8 @@ public class TokenTypes {
   }
 
   static final ArrayList<TokenType> LITERAL_TABLE_TYPES = new ArrayList<>(Arrays.asList(
+    TokenType.EXPRESSION_START,
+    TokenType.EXPRESSION_END,
     TokenType.LITERAL_START,
     TokenType.LITERAL_END,
     TokenType.VARIABLE,

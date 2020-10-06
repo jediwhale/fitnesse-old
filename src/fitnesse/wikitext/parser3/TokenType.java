@@ -36,6 +36,8 @@ public class TokenType {
   public static final TokenType CONTENTS = new TokenType("Contents").matches(word("!contents"));
   public static final TokenType DEFINE = new TokenType("Define")
     .matches(word("!define"));
+  public static final TokenType EXPRESSION_END = new TokenType("ExpressionStart", "=}");
+  public static final TokenType EXPRESSION_START = new TokenType("ExpressionStart", "${=");
   public static final TokenType END = new TokenType("End");
   public static final TokenType HASH_TABLE = new TokenType("HashTable", "!{")
     .useScan(HashTable::scan);
