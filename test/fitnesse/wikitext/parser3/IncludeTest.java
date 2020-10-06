@@ -17,7 +17,7 @@ public class IncludeTest {
 
   @Test public void translates() {
     external.pageContent = new Maybe<>("stuff");
-    assertTranslates("<span>MyPage</span>stuff", "!include MyPage");
-    assertTranslates("<span>MyPage</span>stuff", "!include -setup MyPage");
+    assertTranslates("<span>MyPage</span>\n<div class=\"collapsible closed\">stuff</div>\n", "!include MyPage");
+    assertTranslates("<span>MyPage</span>\n<div class=\"collapsible closed\">stuff</div>\n", "!include -setup MyPage");
   }
 }

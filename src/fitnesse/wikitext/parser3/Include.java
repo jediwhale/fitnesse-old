@@ -19,7 +19,9 @@ class Include {
   }
 
   static String translate(Symbol symbol, Translator translator) {
-    return HtmlTag.name("span").body(symbol.getContent(0)).htmlInline() +
-      translator.translate(symbol.getChild(1));
+    return
+      HtmlTag.name("span").body(symbol.getContent(0)).html() +
+      HtmlTag.name("div").attribute("class", "collapsible closed")
+        .body(translator.translate(symbol.getChild(1))).html();
   }
 }
