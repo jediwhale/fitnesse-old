@@ -13,10 +13,6 @@ public class Content {
     this.isStartLine = other.isStartLine;
   }
 
-  public void put(String input) {
-    content = content.substring(0, current) + input + content.substring(current);
-  }
-
   public void setStartLine() { isStartLine = true; }
 
   public void advance(int length) {

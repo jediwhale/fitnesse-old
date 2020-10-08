@@ -13,22 +13,33 @@ class Parser {
   }
 
   static Symbol parse(String input, List<TokenType> tokenTypes, Map<TokenType, ParseRule> rules) {
-    return new Parser(new Content(input), tokenTypes, rules)
-      .parseList(SymbolType.LIST, END_TERMINATOR, (list, error) -> {});
+    return new Parser(new Content(input), tokenTypes, rules).parseToEnd();
   }
 
-  Parser noWikiLinks() { return new Parser(this); }
+  Parser noWikiLinks() {
+    return new Parser(this.tokens, this.rules, content -> false, this.watchTokens);
+  }
+
+  Parser watchTokens(Consumer<Token> watchTokens) {
+    return new Parser(this.tokens, this.rules, this.isWikiLink, watchTokens);
+  }
+
+  Parser withContent(String content) {
+    return new Parser(new TokenSource(tokens, content), rules, isWikiLink, token -> {});
+  }
 
   Parser(Content content, List<TokenType> tokenTypes, Map<TokenType, ParseRule> rules) {
     this.tokens = new TokenSource(content, tokenTypes);
     this.rules = rules;
-    isWikiLink = WikiPath::isWikiWordPath;
+    isWikiLink = WikiPath::isWikiWordPath; //todo: could be a rule?
+    this.watchTokens = token -> {};
   }
 
-  private Parser(Parser parent) {
-    this.tokens = parent.tokens;
-    this.rules = parent.rules;
-    isWikiLink = content -> false;
+  private Parser(TokenSource tokens, Map<TokenType, ParseRule> rules, Predicate<String> isWikiLink, Consumer<Token> watchTokens) {
+    this.tokens = tokens;
+    this.rules = rules;
+    this.watchTokens = watchTokens;
+    this.isWikiLink = isWikiLink;
   }
 
   Symbol parse(String input) {
@@ -37,8 +48,12 @@ class Parser {
 
   Token peek(int offset) { return offset >= 0 ? tokens.peek(offset) : tokens.getPrevious(); }
   void putBack() { tokens.putBack(); }
-  void putInput(String input) { tokens.putContent(input); }
-  Token advance() { return tokens.take(); }
+
+  Token advance() {
+    Token result =  tokens.take();
+    watchTokens.accept(result);
+    return result;
+  }
 
   Symbol parseCurrent() {
     return rules.getOrDefault(peek(0).getType(), Parser::defaultRule).parse(this);
@@ -51,6 +66,10 @@ class Parser {
       advance();
     }
     return Symbol.error(contents + " " + message);
+  }
+
+  Symbol parseToEnd() {
+    return parseList(SymbolType.LIST, END_TERMINATOR, (list, error) -> {});
   }
 
   Symbol parseList(Token start) {
@@ -68,9 +87,8 @@ class Parser {
 
   String parseText(Token start) {
     StringBuilder result = new StringBuilder();
-    parseToTerminator(start.terminator(),
-      () -> appendCurrent(result),
-      result::append);
+    Parser child = watchTokens(token -> result.append(token.getContent()));
+    child.parseToTerminator(start.terminator(), child::parseCurrent, result::append);
     advance();
     return result.toString();
   }
@@ -91,11 +109,6 @@ class Parser {
     return Symbol.make(symbolType, symbols);
   }
 
-  private void appendCurrent(StringBuilder builder) {
-    builder.append(peek(0).getContent());
-    advance();
-  }
-
   private void parseToTerminator(Terminator terminator, Runnable action, Consumer<String> onError) {
     while (true) {
       Token token = peek(0);
@@ -113,4 +126,5 @@ class Parser {
   private final Predicate<String> isWikiLink;
   private final TokenSource tokens;
   private final Map<TokenType, ParseRule> rules;
+  private final Consumer<Token> watchTokens;
 }

@@ -10,8 +10,13 @@ class TokenSource {
     use(types, type -> false);
   }
 
+  TokenSource(TokenSource parent, String input) {
+    this.content = new Content(input);
+    results = new LinkedList<>();
+    scanTypes.push(parent.scanTypes.firstElement());
+  }
+
   void putBack() { results.addFirst(previous); }
-  void putContent(String input) { content.put(input); } //todo: doesn't let us combine with previous text
   Token getPrevious() { return previous; }
 
   void use(List<TokenType> types, Predicate<TokenType> terminator) {

@@ -34,8 +34,7 @@ public class Variable {
     parser.advance(); //check braceend
     Optional<String> value = variables.findVariable(name);
     if (!value.isPresent()) return Symbol.error("Undefined variable: " + name);
-    parser.putInput(value.get());
-    return new Symbol(SymbolType.TEXT, "");
+    return parser.withContent(value.get()).parseToEnd();
   }
 
   public static String translate(Symbol symbol, Translator translator) {

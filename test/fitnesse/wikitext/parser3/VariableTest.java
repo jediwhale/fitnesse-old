@@ -38,6 +38,7 @@ public class VariableTest {
   public void translatesPutNestedVariable() {
     external.putVariable("x", "b");
     assertTranslates(translateDefine("y=a${x}c") + " abc", "!define y (a${x}c) ${y}");
+    assertTranslates(translateDefine("y=a${x}c") + " abc", "!define y {a${x}c} ${y}");
   }
 
   @Test
@@ -48,19 +49,13 @@ public class VariableTest {
   @Test
   public void parsesGet() {
     external.putVariable("x", "y");
-    assertParses("TEXT,TEXT=y", "${x}");
+    assertParses("LIST(TEXT=y)", "${x}");
   }
 
   @Test
   public void translatesGet() {
     external.putVariable("x", "y");
     assertTranslates("y", "${x}");
-  }
-
-  @Test
-  public void translatesGetToken() {
-    external.putVariable("x", "''");
-    assertTranslates("<i>hi</i>", "${x}hi${x}");
   }
 
   @Test
