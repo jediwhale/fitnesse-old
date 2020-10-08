@@ -4,7 +4,7 @@ class Preformat {
 
   static Symbol parse(Parser parser) {
     Token start = parser.advance();
-    Symbol result = parser.parseList(start);
+    Symbol result = parser.noWikiLinks().parseList(start);
     if (result.hasError()) return result;
     result.addFirst(Symbol.source(TokenType.PREFORMAT_START));
     result.add(Symbol.source(TokenType.PREFORMAT_END));

@@ -25,6 +25,11 @@ public class FakeExternal implements External, VariableStore {
     return pageContent;
   }
 
+  @Override
+  public String getProperty(String name) {
+    return name + "Value";
+  }
+
   public Maybe<String> pageContent;
 
   private final HashMap<String, String> variables = new HashMap<>();

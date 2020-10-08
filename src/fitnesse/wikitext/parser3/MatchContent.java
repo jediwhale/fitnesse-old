@@ -55,6 +55,16 @@ interface MatchContent {
     };
   }
 
+  static MatchContent ignoreBlank() {
+    return content -> {
+      StringBuilder result = new StringBuilder();
+      while (content.isBlankSpace()) {
+        result.append(content.advance());
+      }
+      return Optional.of(result.toString());
+    };
+  }
+
   static MatchContent repeat(String repeat) {
     return content -> {
       StringBuilder result = new StringBuilder();
@@ -81,6 +91,6 @@ interface MatchContent {
   }
 
   static MatchContent word(String match) {
-    return matchAll(new MatchContent[] {text(match), blank()});
+    return matchAll(text(match), blank());
   }
 }

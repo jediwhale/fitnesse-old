@@ -15,6 +15,10 @@ public class TableTest {
     assertScans("Table=!|,Text=''a'',CellDelimiter=|","!|''a''|");
   }
 
+  @Test public void scansTrailingBlanks() {
+    assertScans("Table=|,Text=a,CellDelimiter=|  \n|,Text=b,CellDelimiter=|","|a|  \n|b|");
+  }
+
   @Test public void parses() {
     assertParses("TABLE(LIST(LIST(TEXT=a)))", "|a|");
     assertParses("TEXT=say,TEXT=\n,TABLE(LIST(LIST(TEXT=a)))", "say\n|a|");

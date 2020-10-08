@@ -10,6 +10,7 @@ public enum SymbolType {
   ERROR,
   INCLUDE,
   ITALIC,
+  LAST_MODIFIED,
   LINK,
   LIST,
   NESTING,

@@ -18,6 +18,7 @@ class ParseRules {
     rules.put(TokenType.EXPRESSION_START, Expression::parse);
     rules.put(TokenType.INCLUDE, parser -> Include.parse(parser, external));
     rules.put(TokenType.ITALIC, Pair.parse(SymbolType.ITALIC));
+    rules.put(TokenType.LAST_MODIFIED, LastModified::parse);
     rules.put(TokenType.LINK, Link::parse);
     rules.put(TokenType.LITERAL_START, Literal::parse);
     rules.put(TokenType.NESTING_START, Nesting::parse);

@@ -24,7 +24,7 @@ public class TokenType {
   public static final TokenType BRACKET_START = new TokenType("BracketStart", "[");
   public static final TokenType CELL_DELIMITER = new TokenType("CellDelimiter", "|")
     .matchOneOf(
-      matchAll(text("|"), matchOne(text("\r\n"), text("\n"), text("\r")), text("|")),
+      matchAll(text("|"), ignoreBlank(), matchOne(text("\r\n"), text("\n"), text("\r")), text("|")),
       text("|"));
   public static final TokenType CENTER_LINE = new TokenType("CenterLine").matches(word("!c"));
   public static final TokenType COLLAPSIBLE_END = new TokenType("CollapsibleEnd", "*!").matches(repeat("*"), text("!"));
@@ -50,7 +50,7 @@ public class TokenType {
   public static final TokenType INCLUDE = new TokenType("Include")
     .matches(word("!include"));
   public static final TokenType ITALIC = new TokenType("Italic", "''");
-  public static final TokenType LAST_MODIFIED = new TokenType("LastModified").matches(word("!lastmodified"));
+  public static final TokenType LAST_MODIFIED = new TokenType("LastModified","!lastmodified"); //todo: some kind of terminator
   public static final TokenType LINK = new TokenType("Link")
     .matchOneOf(text("http://"), text("https://"));
   public static final TokenType LITERAL_END = new TokenType("LiteralEnd", "-!");

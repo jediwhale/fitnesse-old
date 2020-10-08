@@ -45,7 +45,7 @@ public class Helper {
   public static FakeExternal external = new FakeExternal();
 
   private static String scan(String input) {
-    TokenSource source = new TokenSource(new Content(input), TokenTypes.WIKI_PAGE_TYPES);
+    TokenSource source = new TokenSource(input, TokenTypes.WIKI_PAGE_TYPES);
     StringBuilder result = new StringBuilder();
     do {
       Token token = source.take();

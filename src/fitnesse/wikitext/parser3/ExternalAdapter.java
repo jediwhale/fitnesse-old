@@ -22,5 +22,10 @@ class ExternalAdapter implements External {
     return new Maybe<>(includedPage.getValue().getContent());
   }
 
+  @Override
+  public String getProperty(String name) {
+    return page.getProperty(name);
+  }
+
   private final SourcePage page;
 }

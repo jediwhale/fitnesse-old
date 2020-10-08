@@ -34,7 +34,9 @@ public class Content {
   }
 
   public boolean isBlankSpace() {
-    return current  < content.length() && Character.isWhitespace(content.charAt(current));
+    if (!more()) return false;
+    char candidate = content.charAt(current);
+    return Character.isWhitespace(candidate) && candidate != '\n' && candidate != '\r';
   }
 
   public boolean isStartLine() {

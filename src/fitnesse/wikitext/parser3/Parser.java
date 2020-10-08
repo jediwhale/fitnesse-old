@@ -13,7 +13,7 @@ class Parser {
   }
 
   static Symbol parse(String input, List<TokenType> tokenTypes, Map<TokenType, ParseRule> rules) {
-    return new Parser(new Content(input), tokenTypes, rules).parseToEnd();
+    return new Parser(input, tokenTypes, rules).parseToEnd();
   }
 
   Parser noWikiLinks() {
@@ -28,8 +28,8 @@ class Parser {
     return new Parser(new TokenSource(tokens, content), rules, isWikiLink, token -> {});
   }
 
-  Parser(Content content, List<TokenType> tokenTypes, Map<TokenType, ParseRule> rules) {
-    this.tokens = new TokenSource(content, tokenTypes);
+  Parser(String input, List<TokenType> tokenTypes, Map<TokenType, ParseRule> rules) {
+    this.tokens = new TokenSource(input, tokenTypes);
     this.rules = rules;
     isWikiLink = WikiPath::isWikiWordPath; //todo: could be a rule?
     this.watchTokens = token -> {};

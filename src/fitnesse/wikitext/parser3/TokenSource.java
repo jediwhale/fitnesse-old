@@ -4,14 +4,14 @@ import java.util.*;
 import java.util.function.Predicate;
 
 class TokenSource {
-  TokenSource(Content content, List<TokenType> types) {
-    this.content = content;
+  TokenSource(String input, List<TokenType> types) {
+    content = new Content(input);
     results = new LinkedList<>();
     use(types, type -> false);
   }
 
   TokenSource(TokenSource parent, String input) {
-    this.content = new Content(input);
+    content = new Content(input);
     results = new LinkedList<>();
     scanTypes.push(parent.scanTypes.firstElement());
   }
