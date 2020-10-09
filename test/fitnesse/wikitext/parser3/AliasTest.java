@@ -24,6 +24,7 @@ public class AliasTest {
 
     assertTranslates(Html.anchor("#anchor", "tag"), "[[tag][#anchor]]");
     assertTranslates(Html.anchor("Fake.PageOne", "tag"), "[[tag][PageOne]]");
+    assertTranslates(Html.anchor("Fake.>PageOne", "tag"), "[[tag][>PageOne]]");
     assertTranslates(Html.anchor("Fake.PageOne", "<i>tag</i>"), "[[''tag''][PageOne]]");
     assertTranslates(Html.anchor("Fake.PageOne", "you're it"), "[[you're it][PageOne]]");
     assertTranslates(Html.anchor("Fake.PageOne", "PageOne"), "[[PageOne][IgnoredPage]]");

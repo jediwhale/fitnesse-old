@@ -2,8 +2,7 @@ package fitnesse.wikitext.parser3;
 
 import org.junit.Test;
 
-import static fitnesse.wikitext.parser3.Helper.assertParses;
-import static fitnesse.wikitext.parser3.Helper.assertScans;
+import static fitnesse.wikitext.parser3.Helper.*;
 
 public class LiteralTest {
   @Test
@@ -17,9 +16,13 @@ public class LiteralTest {
 
   @Test
   public void parses() {
-    assertParses("LIST(SOURCE=!-,TEXT=hi there,SOURCE=-!)", "!-hi there-!");
-    assertParses("LIST(SOURCE=!-,TEXT=HiThere,SOURCE=-!)", "!-HiThere-!");
-    assertParses("TEXT=some,LIST(SOURCE=!-,TEXT=stuff,SOURCE=-!),TEXT=here", "some!-stuff-!here");
-    assertParses("LIST(ERROR=!- Missing terminator: -!,TEXT=stuff)", "!-stuff");
+    assertParses("LIST(SOURCE=!-,LITERAL=hi there,SOURCE=-!)", "!-hi there-!");
+    assertParses("LIST(SOURCE=!-,LITERAL=HiThere,SOURCE=-!)", "!-HiThere-!");
+    assertParses("TEXT=some,LIST(SOURCE=!-,LITERAL=stuff,SOURCE=-!),TEXT=here", "some!-stuff-!here");
+    assertParses("LIST(ERROR=!- Missing terminator: -!,LITERAL=stuff)", "!-stuff");
+  }
+
+  @Test public void translates() {
+    assertTranslates("<i>hi</i>", "!-<i>hi</i>-!");
   }
 }

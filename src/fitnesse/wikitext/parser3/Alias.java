@@ -27,15 +27,15 @@ public class Alias {
       Symbol.source(TokenType.ALIAS_END));
   }
 
-  public static String translate(Symbol symbol, Translator translator) {
+  public static String translate(Symbol symbol, Translator translator) { //todo: this is pretty opaque
     if (symbol.getChild(1).getChild(0).getType() == SymbolType.WIKI_LINK) {
       return translator.translate(symbol.getChild(1));
     }
-    SymbolType substitute = symbol.getChild(3).getChild(0).getType() == SymbolType.LINK
-      ? SymbolType.LINK
-      : SymbolType.WIKI_LINK;
-    String link = translator.copy()
-      .substitute(substitute, SymbolType.TEXT)
+    String link = translator
+      .copy()
+      .substitute(
+        symbol.getChild(3).getChild(0).getType() == SymbolType.LINK ? SymbolType.LINK : SymbolType.WIKI_LINK,
+        SymbolType.LITERAL)
       .translate(symbol.getChild(3));
     String description = translator.translate(symbol.getChild(1));
     return WikiPath.makeLink(link,

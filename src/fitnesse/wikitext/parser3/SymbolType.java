@@ -12,6 +12,7 @@ public enum SymbolType {
   ITALIC,
   LAST_MODIFIED,
   LINK,
+  LITERAL,
   LIST,
   NESTING,
   PATH,

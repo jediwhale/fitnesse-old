@@ -23,7 +23,7 @@ public class TableTest {
     assertParses("TABLE(LIST(LIST(TEXT=a)))", "|a|");
     assertParses("TEXT=say,TEXT=\n,TABLE(LIST(LIST(TEXT=a)))", "say\n|a|");
     assertParses("TABLE(LIST(LIST(TEXT=a),LIST(TEXT=b)))", "|a|b|");
-    assertParses("TABLE(LIST(LIST(LIST(SOURCE=!-,TEXT=a,SOURCE=-!)),LIST(TEXT=b)))", "|!-a-!|b|");
+    assertParses("TABLE(LIST(LIST(LIST(SOURCE=!-,LITERAL=a,SOURCE=-!)),LIST(TEXT=b)))", "|!-a-!|b|");
     assertParses("TABLE(LIST(LIST(TEXT=a)),LIST(LIST(TEXT=b)))", "|a|\n|b|");
   }
 

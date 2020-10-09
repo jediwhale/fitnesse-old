@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
+import java.util.function.Function;
 
 class Parser {
   static Symbol parse(String input, Map<TokenType, ParseRule> rules) {
@@ -16,30 +16,30 @@ class Parser {
     return new Parser(input, tokenTypes, rules).parseToEnd();
   }
 
-  Parser noWikiLinks() {
-    return new Parser(this.tokens, this.rules, content -> false, this.watchTokens);
+  Parser textType(SymbolType type) {
+    return new Parser(this.tokens, this.rules, content -> type, this.watchTokens);
   }
 
   Parser watchTokens(Consumer<Token> watchTokens) {
-    return new Parser(this.tokens, this.rules, this.isWikiLink, watchTokens);
+    return new Parser(this.tokens, this.rules, this.textType, watchTokens);
   }
 
   Parser withContent(String content) {
-    return new Parser(new TokenSource(tokens, content), rules, isWikiLink, token -> {});
+    return new Parser(new TokenSource(tokens, content), rules, textType, token -> {});
   }
 
   Parser(String input, List<TokenType> tokenTypes, Map<TokenType, ParseRule> rules) {
     this.tokens = new TokenSource(input, tokenTypes);
     this.rules = rules;
-    isWikiLink = WikiPath::isWikiWordPath; //todo: could be a rule?
+    textType = text -> WikiPath.isWikiWordPath(text) ? SymbolType.WIKI_LINK : SymbolType.TEXT;
     this.watchTokens = token -> {};
   }
 
-  private Parser(TokenSource tokens, Map<TokenType, ParseRule> rules, Predicate<String> isWikiLink, Consumer<Token> watchTokens) {
+  private Parser(TokenSource tokens, Map<TokenType, ParseRule> rules, Function<String, SymbolType> textType, Consumer<Token> watchTokens) {
     this.tokens = tokens;
     this.rules = rules;
     this.watchTokens = watchTokens;
-    this.isWikiLink = isWikiLink;
+    this.textType = textType;
   }
 
   Symbol parse(String input) {
@@ -95,7 +95,7 @@ class Parser {
 
   private static Symbol defaultRule(Parser parser) {
     String content = parser.peek(0).getContent();
-    Symbol result = new Symbol(parser.isWikiLink.test(content) ? SymbolType.WIKI_LINK : SymbolType.TEXT, content);
+    Symbol result = new Symbol(parser.textType.apply(content), content);
     parser.advance();
     return result;
   }
@@ -123,7 +123,7 @@ class Parser {
 
   private static final Terminator END_TERMINATOR = new Terminator(TokenType.END);
 
-  private final Predicate<String> isWikiLink;
+  private final Function<String, SymbolType> textType;
   private final TokenSource tokens;
   private final Map<TokenType, ParseRule> rules;
   private final Consumer<Token> watchTokens;

@@ -1,6 +1,6 @@
 package fitnesse.wikitext.parser3;
 
-public class WikiPath {
+public class WikiPath { //todo: dry with V2
 
   @FunctionalInterface
   interface PagePath { String make(String path, String trailer); }
@@ -14,15 +14,19 @@ public class WikiPath {
     if (separator < 0) separator = input.length();
     String path = input.substring(0, separator);
     String trailer = input.substring(separator);
-    return new Text(path).matchAll(".", WikiPath::isPageName)
+    return new Text(path, nameOffset(path)).matchAll(".", WikiPath::isPageName)
       ? makePage.make(path, trailer)
       : makeOther.make(path); // path trailer is ignored when creating new page
   }
 
   public static boolean isWikiWordPath(String input) {
-    int offset = ("<>^.".contains(input.substring(0, 1))) ? 1 : 0;
+    int offset = nameOffset(input);
     if (offset >= input.length()) return false;
     return new Text(input, offset).matchAll(".", WikiPath::isWikiWord);
+  }
+
+  private static int nameOffset(String input) {
+    return ("<>^.".contains(input.substring(0, 1))) ? 1 : 0;
   }
 
   public static String translate(Symbol symbol, Translator translator) {

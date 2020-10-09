@@ -6,7 +6,7 @@ public class Link {
   public static Symbol parse(Parser parser) {
     Symbol result = parser.peek(0).asSymbol(SymbolType.LINK);
     parser.advance();
-    result.add(parser.noWikiLinks().parseCurrent());
+    result.add(parser.textType(SymbolType.TEXT).parseCurrent());
     return result;
   }
 
