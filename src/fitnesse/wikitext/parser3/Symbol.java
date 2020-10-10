@@ -86,7 +86,7 @@ class Symbol implements Tree<Symbol> {
   }
 
   String translateContent(TranslateSymbol<String> translator) {
-    return HtmlUtil.escapeHTML(content) + translateChildren(translator);
+    return HtmlUtil.escapeHTML(HtmlUtil.unescapeWiki(content)) + translateChildren(translator);
   }
 
   String translateChildren(TranslateSymbol<String> translator) {

@@ -48,7 +48,6 @@ public class TableTest {
     assertTranslates(table(row(cell("PageOne"))), "!|${hi}|");
   }
 
-  // not sure why this is needed since contents are literal already, but v2 parser does it
   @Test public void translatesLiteralInLiteralTable()  {
     assertTranslates(table(row(cell("abc"))), "!|a!-b-!c|");
   }
