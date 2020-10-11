@@ -85,10 +85,10 @@ class Parser {
       (list, error) -> list.add(0, Symbol.error(error)));
   }
 
-  String parseText(Token start) {
+  String parseText(Terminator terminator) {
     StringBuilder result = new StringBuilder();
     Parser child = watchTokens(token -> result.append(token.getContent()));
-    child.parseToTerminator(Terminator.make(start), child::parseCurrent, result::append); //todo: test what error looks like?
+    child.parseToTerminator(terminator, child::parseCurrent, result::append); //todo: test what error looks like?
     advance();
     return result.toString();
   }

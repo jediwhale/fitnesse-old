@@ -21,8 +21,7 @@ public class Variable {
     parser.advance();
     result.add(parser.parseCurrent());
     parser.advance();
-    Token start = parser.advance();
-    result.add(new Symbol(SymbolType.TEXT, parser.parseText(start)));
+    result.add(new Symbol(SymbolType.TEXT, parser.parseText(Terminator.make(parser.advance()))));
 
     variables.putVariable(result.getContent(0), result.getContent(1));
     return result;
