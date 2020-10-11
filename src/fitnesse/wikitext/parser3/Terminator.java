@@ -1,25 +1,54 @@
 package fitnesse.wikitext.parser3;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Predicate;
 
-public class Terminator {
-  public Terminator(TokenType tokenType) {
-    this(type -> type == tokenType, tokenType.getMatch());
+class Terminator {
+  static Terminator make(Token start) { return make(start, ""); }
+
+  static Terminator make(Token start, String prefix) {
+    TokenType startType = start.getType();
+    TokenType endType = endTypes.getOrDefault(startType, startType);
+    return new Terminator(candidate -> candidate == endType, endType.getMatch(), prefix + start.getContent());
   }
 
-  public Terminator(Predicate<TokenType> matcher, String name) {
+  Terminator(TokenType type) {
+    this(candidate -> candidate == type, type.getMatch(), "");
+  }
+
+  Terminator(Predicate<TokenType> matcher) {
+    this(matcher, "", "");
+  }
+
+  Terminator(Predicate<TokenType> matcher, String description, String prefix) {
+    this.description = description;
+    this.prefix = prefix;
     this.matcher = matcher;
-    this.name = name;
   }
 
-  public boolean matches(TokenType candidate) {
-    return matcher.test(candidate);
-  }
+  boolean matches(TokenType type) { return matcher.test(type); }
 
-  public String getName() {
-    return name;
-  }
+  String missing() { return prefix + (prefix.length() > 0 ? " " : "") + "Missing terminator: " + description; }
 
+  private final String description;
+  private final String prefix;
   private final Predicate<TokenType> matcher;
-  private final String name;
+
+  private static final Map<TokenType, TokenType> endTypes = makeEndTypes();
+
+  private static Map<TokenType, TokenType> makeEndTypes() {
+    Map<TokenType, TokenType> map = new HashMap<>();
+    map.put(TokenType.ALIAS_START, TokenType.ALIAS_MIDDLE);
+    map.put(TokenType.ALIAS_MIDDLE, TokenType.ALIAS_END);
+    map.put(TokenType.BRACE_START, TokenType.BRACE_END);
+    map.put(TokenType.BRACKET_START, TokenType.BRACKET_END);
+    map.put(TokenType.EXPRESSION_START, TokenType.EXPRESSION_END);
+    map.put(TokenType.LITERAL_START, TokenType.LITERAL_END);
+    map.put(TokenType.NESTING_START, TokenType.NESTING_END);
+    map.put(TokenType.PARENTHESIS_START, TokenType.PARENTHESIS_END);
+    map.put(TokenType.PREFORMAT_START, TokenType.PREFORMAT_END);
+    return Collections.unmodifiableMap(map);
+  }
 }

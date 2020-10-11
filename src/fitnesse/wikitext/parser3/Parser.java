@@ -73,31 +73,24 @@ class Parser {
   }
 
   Symbol parseList(Token start) {
-    return parseList(SymbolType.LIST, start, "");
+    return parseList(SymbolType.LIST, start);
   }
 
   Symbol parseList(SymbolType symbolType, Token start) {
-    return parseList(symbolType, start, "");
+    return parseList(symbolType, Terminator.make(start));
   }
 
-  Symbol parseList(SymbolType symbolType, Token start, String errorPrefix) {
-    return parseList(symbolType, start.terminator(),
-      (list, error) -> list.add(0, Symbol.error(errorPrefix + start.getContent() + " " + error)));
+  Symbol parseList(SymbolType symbolType, Terminator terminator) {
+    return parseList(symbolType, terminator,
+      (list, error) -> list.add(0, Symbol.error(error)));
   }
 
   String parseText(Token start) {
     StringBuilder result = new StringBuilder();
     Parser child = watchTokens(token -> result.append(token.getContent()));
-    child.parseToTerminator(start.terminator(), child::parseCurrent, result::append);
+    child.parseToTerminator(Terminator.make(start), child::parseCurrent, result::append); //todo: test what error looks like?
     advance();
     return result.toString();
-  }
-
-  private static Symbol defaultRule(Parser parser) {
-    String content = parser.peek(0).getContent();
-    Symbol result = new Symbol(parser.textType.apply(content), content);
-    parser.advance();
-    return result;
   }
 
   private Symbol parseList(SymbolType symbolType, Terminator terminator, BiConsumer<List<Symbol>, String> onError) {
@@ -114,11 +107,18 @@ class Parser {
       Token token = peek(0);
       if (terminator.matches(token.getType())) break;
       if (token.isType(TokenType.END)) {
-        onError.accept("Missing terminator: " + terminator.getName());
+        onError.accept(terminator.missing());
         break;
       }
       action.run();
     }
+  }
+
+  private static Symbol defaultRule(Parser parser) {
+    String content = parser.peek(0).getContent();
+    Symbol result = new Symbol(parser.textType.apply(content), content);
+    parser.advance();
+    return result;
   }
 
   private static final Terminator END_TERMINATOR = new Terminator(TokenType.END);

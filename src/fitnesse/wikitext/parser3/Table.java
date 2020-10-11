@@ -9,17 +9,34 @@ class Table {
     }
   }
 
-  static Symbol parse(Parser parser) {
-    return parseTable(parser.peek(0).getContent().contains("!") ? parser.textType(SymbolType.TEXT) : parser);
+  static Symbol parseStandard(Parser parser) {
+    return parseWithBarDelimiter(parser.peek(0).getContent().contains("!") ? parser.textType(SymbolType.TEXT) : parser);
   }
 
-  private static Symbol parseTable(Parser parser) {
+  static Symbol parsePlain(Parser parser) {
+    return parseWithCustomDelimiter(parser.textType(SymbolType.TEXT));
+  }
+
+  private static Symbol parseWithCustomDelimiter(Parser parser) {
+    Symbol result = new Symbol(SymbolType.TABLE);
+    parser.advance();
+    do {
+      Symbol row = new Symbol(SymbolType.LIST);
+      parser.advance(); //todo: check it's newline
+      Symbol cell = parser.parseList(DELIMITER);
+      result.add(row);
+    } while (!parser.peek(0).isType(TokenType.END) && !parser.peek(0).isType(TokenType.PLAIN_TEXT_TABLE_END));
+    parser.advance();
+    return result;
+  }
+
+  private static Symbol parseWithBarDelimiter(Parser parser) {
     Symbol result = new Symbol(SymbolType.TABLE);
     parser.advance();
     do {
       Symbol row = new Symbol(SymbolType.LIST);
       do {
-        Symbol cell = parser.parseList(DELIMITER);
+        Symbol cell = parser.parseList(SymbolType.LIST, new Terminator(TokenType.CELL_DELIMITER));
         row.add(cell);
       } while (parser.peek(-1).getContent().equals("|") && !parser.peek(0).isEndOfTable()); //todo: clean up
       result.add(row);

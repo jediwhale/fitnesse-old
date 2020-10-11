@@ -23,11 +23,12 @@ class ParseRules {
     rules.put(TokenType.LITERAL_START, Literal::parse);
     rules.put(TokenType.NESTING_START, Nesting::parse);
     rules.put(TokenType.PATH, Path::parse);
+    rules.put(TokenType.PLAIN_TEXT_TABLE_START, Table::parsePlain);
     rules.put(TokenType.PREFORMAT_START, Preformat::parse);
     rules.put(TokenType.SEE, Keyword.parse(SymbolType.SEE));
     rules.put(TokenType.STRIKE, Pair.parse(SymbolType.STRIKE));
     rules.put(TokenType.STYLE, Style::parse);
-    rules.put(TokenType.TABLE, Table::parse);
+    rules.put(TokenType.TABLE, Table::parseStandard);
     rules.put(TokenType.VARIABLE, parser -> Variable.parseGet(parser, variables));
     return rules;
   }

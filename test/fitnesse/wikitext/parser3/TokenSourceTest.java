@@ -92,8 +92,6 @@ public class TokenSourceTest {
 
   @Test public void scansCenterLine() { assertScansWord("!c", "CenterLine"); }
 
-  @Test public void scansDefine() { assertScansWord("!define", "Define"); }
-
   @Test public void scansHeader() {
     assertScansWord("!1", "Header");
     assertScansWord("!2", "Header");
@@ -106,8 +104,6 @@ public class TokenSourceTest {
   @Test public void scansHeadings() { assertScansWord("!headings", "Headings"); }
 
   @Test public void scansImage() { assertScansWord("!img", "Image"); }
-
-  @Test public void scansInclude() { assertScansWord("!include", "Include"); }
 
   @Test public void scansMeta() { assertScansWord("!meta", "Meta"); }
 
@@ -128,12 +124,6 @@ public class TokenSourceTest {
   public void scansHashTable() {
     assertScans("HashTable=!{,Text=key1,Colon=:,Text=value1,Comma=,,Text=key2,Colon=:,Text=value2,BraceEnd=}",
       "!{key1:value1,key2:value2}");
-  }
-
-  @Test
-  public void scansPlainTextTable() {
-    assertScans("PlainTextTableStart=![,NewLine=\n,Text=hi,NewLine=\n,Text=there,NewLine=\n,PlainTextTableEnd=]!",
-      "![\nhi\nthere\n]!");
   }
 
   @Test

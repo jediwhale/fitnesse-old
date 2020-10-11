@@ -6,7 +6,8 @@ class Path {
 
   static Symbol parse(Parser parser) {
     Symbol source = new Symbol(SymbolType.SOURCE, parser.peek(0).getContent());
-    Symbol result = parser.textType(SymbolType.TEXT).parseList(SymbolType.PATH, parser.advance());
+    parser.advance();
+    Symbol result = parser.textType(SymbolType.TEXT).parseList(SymbolType.PATH, PATH_TERMINATOR);
     result.addFirst(source);
     return result;
   }
@@ -24,4 +25,6 @@ class Path {
     });
     takePath.accept(path.toString());
   }
+
+  static final Terminator PATH_TERMINATOR = new Terminator(type -> type == TokenType.NEW_LINE || type == TokenType.END);
 }
