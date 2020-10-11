@@ -21,16 +21,25 @@ public class FakeExternal implements External, VariableStore {
   }
 
   @Override
-  public Maybe<String> findPageContent(String pageName) {
-    return pageContent;
-  }
-
-  @Override
   public String getProperty(String name) {
     return name + "Value";
   }
 
-  public Maybe<String> pageContent;
+  @Override
+  public Maybe<External> make(String pageName) {
+    FakeExternal result = new FakeExternal();
+    result.pageName = this.pageName + "." + pageName;
+    return pages.containsKey(result.pageName) ? new Maybe<>(result) : Maybe.nothingBecause("Page not found");
+  }
+
+  @Override
+  public String pageContent() {
+    return pages.get(pageName);
+  }
+
+  public String pageName = "root";
+
+  public static final HashMap<String, String> pages = new HashMap<>();
 
   private final HashMap<String, String> variables = new HashMap<>();
 }

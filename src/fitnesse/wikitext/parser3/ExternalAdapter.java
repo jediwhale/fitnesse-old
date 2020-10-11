@@ -1,13 +1,12 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.wikitext.ParsingPage;
 import fitnesse.wikitext.SourcePage;
 import fitnesse.wikitext.parser.Maybe;
 import fitnesse.wikitext.parser.WikiWordBuilder;
 
 class ExternalAdapter implements External {
-  ExternalAdapter(ParsingPage page) {
-    this.page = page.getPage();
+  ExternalAdapter(SourcePage page) {
+    this.page = page;
   }
 
   @Override
@@ -16,15 +15,20 @@ class ExternalAdapter implements External {
   }
 
   @Override
-  public Maybe<String> findPageContent(String pageName) {
-    Maybe<SourcePage> includedPage = page.findIncludedPage(pageName);
-    if (includedPage.isNothing()) return Maybe.nothingBecause(includedPage.because());
-    return new Maybe<>(includedPage.getValue().getContent());
+  public String getProperty(String name) {
+    return page.getProperty(name);
   }
 
   @Override
-  public String getProperty(String name) {
-    return page.getProperty(name);
+  public Maybe<External> make(String pageName) {
+    Maybe<SourcePage> includedPage = page.findIncludedPage(pageName);
+    if (includedPage.isNothing()) return Maybe.nothingBecause(includedPage.because());
+    return new Maybe<>(new ExternalAdapter(includedPage.getValue()));
+  }
+
+  @Override
+  public String pageContent() {
+    return page.getContent();
   }
 
   private final SourcePage page;

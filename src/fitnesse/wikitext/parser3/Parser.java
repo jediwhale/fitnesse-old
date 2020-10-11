@@ -42,10 +42,6 @@ class Parser {
     this.textType = textType;
   }
 
-  Symbol parse(String input) {
-    return parse(input, rules);
-  }
-
   Token peek(int offset) { return offset >= 0 ? tokens.peek(offset) : tokens.getPrevious(); }
   void putBack() { tokens.putBack(); }
 

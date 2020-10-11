@@ -16,7 +16,7 @@ class ParseRules {
     rules.put(TokenType.COMMENT, Comment::parse);
     rules.put(TokenType.DEFINE, parser -> Variable.parsePut(parser, variables));
     rules.put(TokenType.EXPRESSION_START, Expression::parse);
-    rules.put(TokenType.INCLUDE, parser -> Include.parse(parser, external));
+    rules.put(TokenType.INCLUDE, parser -> Include.parse(parser, external, variables));
     rules.put(TokenType.ITALIC, Pair.parse(SymbolType.ITALIC));
     rules.put(TokenType.LAST_MODIFIED, LastModified::parse);
     rules.put(TokenType.LINK, Link::parse);
