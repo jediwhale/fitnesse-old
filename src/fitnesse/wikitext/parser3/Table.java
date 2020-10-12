@@ -68,10 +68,14 @@ class Table {
       do {
         Symbol cell = parser.parseList(SymbolType.LIST, new Terminator(TokenType.CELL_DELIMITER));
         row.add(cell);
-      } while (parser.peek(-1).getContent().equals("|") && !parser.peek(0).isEndOfTable()); //todo: clean up
+      } while (!isEndOfRow(parser.peek(-1)) && !parser.peek(0).isEndOfTable()); //todo: clean up
       result.add(row);
     } while (!parser.peek(0).isEndOfTable());
     return result;
+  }
+
+  private static boolean isEndOfRow(Token token) {
+    return token.getContent().contains("\r") || token.getContent().contains("\n");
   }
 
   static String translate(Symbol table, TranslateSymbol<String> translator) {

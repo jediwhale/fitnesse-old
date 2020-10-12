@@ -25,7 +25,7 @@ public class TokenType {
   public static final TokenType CELL_DELIMITER = new TokenType("CellDelimiter", "|")
     .matchOneOf(
       matchAll(text("|"), ignoreBlank(), matchOne(text("\r\n"), text("\n"), text("\r")), text("|")),
-      text("|"));
+      matchAll(text("|"), ignoreBlank()));
   public static final TokenType CENTER_LINE = new TokenType("CenterLine").matches(word("!c"));
   public static final TokenType COLLAPSIBLE_END = new TokenType("CollapsibleEnd", "*!").matches(repeat("*"), text("!"));
   public static final TokenType COLLAPSIBLE_START = new TokenType("CollapsibleStart").matches(text("!"), repeat("*"));

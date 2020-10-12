@@ -17,12 +17,14 @@ public class TableTest {
 
   @Test public void scansTrailingBlanks() {
     assertScans("Table=|,Text=a,CellDelimiter=|  \n|,Text=b,CellDelimiter=|","|a|  \n|b|");
+    assertScans("Table=|,Text=a,CellDelimiter=|\n|,Text=b,CellDelimiter=|  ,NewLine=\n","|a|\n|b|  \n");
   }
 
   @Test public void parses() {
     assertParses("TABLE(LIST(LIST(TEXT=a)))", "|a|");
     assertParses("TEXT=say,TEXT=\n,TABLE(LIST(LIST(TEXT=a)))", "say\n|a|");
     assertParses("TABLE(LIST(LIST(TEXT=a),LIST(TEXT=b)))", "|a|b|");
+    assertParses("TABLE(LIST(LIST(TEXT=a),LIST(TEXT=b)),LIST(LIST(TEXT=c),LIST(TEXT=d)))", "|a|b|\n|c|d|");
     assertParses("TABLE(LIST(LIST(LIST(SOURCE=!-,LITERAL=a,SOURCE=-!)),LIST(TEXT=b)))", "|!-a-!|b|");
     assertParses("TABLE(LIST(LIST(TEXT=a)),LIST(LIST(TEXT=b)))", "|a|\n|b|");
   }
@@ -36,6 +38,7 @@ public class TableTest {
     assertTranslates(table(row(cell("a"))), "| a  |");
     assertTranslates(table(row(cell("a") + cell("b"))), "|a|b|");
     assertTranslates(table(row(cell("a") )+ row(cell("b"))), "|a|\n|b|");
+    assertTranslates(table(row(cell("a") )+ row(cell("b"))) + "\n", "|a|  \n|b|  \n");
   }
 
   @Test public void translatesVariableInLiteralTable() {
