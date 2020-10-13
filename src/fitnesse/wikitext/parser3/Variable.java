@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public class Variable {
   public static Symbol parsePut(Parser parser, VariableStore variables) {
-    Symbol result = new Symbol(SymbolType.DEFINE);
+    Symbol result = new SymbolBranch(SymbolType.DEFINE);
     if (!parser.peek(1).isWord()) {
       return parser.makeError("Name must be alphanumeric", 1);
     }
@@ -21,7 +21,7 @@ public class Variable {
     parser.advance();
     result.add(parser.parseCurrent());
     parser.advance();
-    result.add(new Symbol(SymbolType.TEXT, parser.parseText(Terminator.make(parser.advance()))));
+    result.add(new SymbolLeaf(SymbolType.TEXT, parser.parseText(Terminator.make(parser.advance()))));
 
     variables.putVariable(result.getContent(0), result.getContent(1));
     return result;

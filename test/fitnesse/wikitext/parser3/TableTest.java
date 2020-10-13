@@ -55,6 +55,10 @@ public class TableTest {
     assertTranslates(table(row(cell("abc"))), "!|a!-b-!c|");
   }
 
+  @Test public void translatesMarkupInLiteralTable()  {
+    assertTranslates(table(row(cell("&lt;hi&gt;"))), "!|<hi>|");
+  }
+
   private static String table(String row) {
     return "<table>" + HtmlElement.endl + row + "</table>" + HtmlElement.endl;
   }

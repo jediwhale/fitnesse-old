@@ -8,6 +8,6 @@ class Expression {
     String expression = parser.parseText(Terminator.make(parser.advance()));
     Maybe<String> result = new FormattedExpression(expression, Maybe.noString).evaluate();
     if (result.isNothing()) return Symbol.error(result.because());
-    return new Symbol(SymbolType.TEXT, result.getValue());
+    return new SymbolLeaf(SymbolType.TEXT, result.getValue());
   }
 }

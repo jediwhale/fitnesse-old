@@ -4,25 +4,37 @@ import fitnesse.html.HtmlTag;
 import fitnesse.wikitext.VariableStore;
 import fitnesse.wikitext.parser.Maybe;
 
+import java.util.Optional;
+
 class Include {
   static Symbol parse(Parser parser, External external, VariableStore variables) {
     parser.advance();
-    Token token;
-    do {
-      token = parser.advance();
-    } while (!token.isType(TokenType.TEXT) || token.getContent().startsWith("-"));
-    Maybe<External> included = external.make(token.getContent());
+    String option = "";
+    if (parser.peek(0).isType(TokenType.TEXT) && parser.peek(0).getContent().startsWith("-")) {
+      option = parser.advance().getContent();
+      parser.advance(); //todo: check blank
+    }
+
+    Token pagePath= parser.advance();;
+    Maybe<External> included = external.make(pagePath.getContent());
     return included.isNothing()
-      ? new Symbol(SymbolType.ERROR, included.because())
+      ? new SymbolLeaf(SymbolType.ERROR, included.because())
       : Symbol.make(SymbolType.INCLUDE,
-          new Symbol(SymbolType.TEXT, token.getContent()),
-          Parser.parse(included.getValue().pageContent(), ParseRules.make(variables, included.getValue())));
+          new SymbolLeaf(SymbolType.TEXT, pagePath.getContent()),
+          isSetupTeardown(option)
+            ? parser.withContent(included.getValue().pageContent()).parseToEnd() //todo: not sure this is correct, maybe bug in v2
+            : Parser.parse(included.getValue().pageContent(), ParseRules.make(variables, included.getValue())));
+  }
+
+  private static boolean isSetupTeardown(String option) {
+    return option.equals("-setup") || option.equals("-teardown");
   }
 
   static String translate(Symbol symbol, Translator translator) {
     return
       HtmlTag.name("span").body(symbol.getContent(0)).html() +
       HtmlTag.name("div").attribute("class", "collapsible closed")
-        .body(translator.translate(symbol.getChild(1))).html();
+        .body(HtmlTag.name("div").body(translator.translate(symbol.getChild(1))).html())
+        .html();
   }
 }

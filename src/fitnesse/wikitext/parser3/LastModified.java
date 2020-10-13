@@ -11,7 +11,7 @@ import java.util.Date;
 class LastModified {
   static Symbol parse(Parser parser) {
     parser.advance();
-    return new Symbol(SymbolType.LAST_MODIFIED);
+    return new SymbolLeaf(SymbolType.LAST_MODIFIED);
   }
 
   static String translate(Symbol symbol, Translator translator) { //todo: dry with v2

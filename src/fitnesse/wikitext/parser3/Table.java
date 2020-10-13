@@ -20,7 +20,7 @@ class Table {
   }
 
   private static Symbol parseWithCustomDelimiter(Parser parser) {
-    Symbol result = new Symbol(SymbolType.TABLE);
+    Symbol result = new SymbolBranch(SymbolType.TABLE);
     parser.advance();
     Optional<String> separator = Optional.empty();
     if (parser.peek(0).isType(TokenType.TEXT)) {
@@ -41,7 +41,7 @@ class Table {
   }
 
   private static Symbol makeRow(Parser parser, Optional<String> separator) {
-    Symbol row = new Symbol(SymbolType.LIST);
+    Symbol row = new SymbolBranch(SymbolType.LIST);
     String rowText = parser.parseText(new Terminator(TokenType.NEW_LINE));
     if (separator.isPresent()) {
       for (String cellText : rowText.split(separator.get())) {
@@ -55,16 +55,16 @@ class Table {
   }
 
   private static Symbol makeCell(String content) {
-    Symbol cell = new Symbol(SymbolType.LIST);
-    cell.add(new Symbol(SymbolType.TEXT, content));
+    Symbol cell = new SymbolBranch(SymbolType.LIST);
+    cell.add(new SymbolLeaf(SymbolType.TEXT, content));
     return cell;
   }
 
   private static Symbol parseWithBarDelimiter(Parser parser) {
-    Symbol result = new Symbol(SymbolType.TABLE);
+    Symbol result = new SymbolBranch(SymbolType.TABLE);
     parser.advance();
     do {
-      Symbol row = new Symbol(SymbolType.LIST);
+      Symbol row = new SymbolBranch(SymbolType.LIST);
       do {
         Symbol cell = parser.parseList(SymbolType.LIST, new Terminator(TokenType.CELL_DELIMITER));
         row.add(cell);
@@ -89,6 +89,4 @@ class Table {
   private static HtmlTag cell(Symbol cell, TranslateSymbol<String> translator) {
     return HtmlTag.name("td").body(translator.translate(cell).trim());
   }
-
-  private static final Token DELIMITER = new Token(TokenType.CELL_DELIMITER);
 }

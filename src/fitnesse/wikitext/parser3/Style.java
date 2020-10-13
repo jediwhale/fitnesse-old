@@ -11,7 +11,7 @@ public class Style {
       return parser.makeError("Expected { ( or [", 2);
     }
     String contents = parser.peek(0).getContent() + parser.peek(1).getContent();
-    Symbol result = new Symbol(SymbolType.STYLE);
+    Symbol result = new SymbolBranch(SymbolType.STYLE);
     parser.advance();
     result.add(parser.parseCurrent()); //todo: could be STYLE content?
     Token start = parser.peek(0);

@@ -3,7 +3,7 @@ package fitnesse.wikitext.parser3;
 public class Keyword {
   public static ParseRule parse(SymbolType type) {
     return parser -> {
-      Symbol result = new Symbol(type);
+      Symbol result = new SymbolBranch(type);
       parser.advance();
       result.add(parser.parseCurrent());
       return result;
@@ -17,7 +17,7 @@ public class Keyword {
       }
       parser.advance();
       Symbol argument = parser.parseCurrent();
-      return new Symbol(type, argument.getContent());
+      return new SymbolLeaf(type, argument.getContent());
     };
   }
 }

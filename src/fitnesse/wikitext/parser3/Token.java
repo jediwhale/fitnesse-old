@@ -19,8 +19,6 @@ public class Token {
     return isType(TokenType.BRACE_START) || isType(TokenType.BRACKET_START) || isType(TokenType.PARENTHESIS_START);
   }
 
-  public Symbol asSymbol(SymbolType type) { return new Symbol(type, content); }
-
   public boolean isEndOfTable() {
     return isType(TokenType.NEW_LINE) || isType(TokenType.END) || isType(TokenType.NESTING_END);
   }

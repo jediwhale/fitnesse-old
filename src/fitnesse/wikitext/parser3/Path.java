@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 class Path {
 
   static Symbol parse(Parser parser) {
-    Symbol source = new Symbol(SymbolType.SOURCE, parser.peek(0).getContent());
+    Symbol source = new SymbolLeaf(SymbolType.SOURCE, parser.peek(0).getContent());
     parser.advance();
     Symbol result = parser.textType(SymbolType.TEXT).parseList(SymbolType.PATH, PATH_TERMINATOR);
     result.addFirst(source);
