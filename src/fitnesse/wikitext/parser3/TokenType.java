@@ -32,7 +32,8 @@ public class TokenType {
   public static final TokenType COLON = new TokenType("Colon", ":");
   public static final TokenType COMMA = new TokenType("Comma", ",");
   public static final TokenType COMMENT = new TokenType("Comment")
-    .matches(startLine(), text("#"), endWith(matchOne(text("\r\n"), text("\n"), text("\r"))));
+    .matches(startLine(), text("#"), endWith(matchOne(text("\r\n"), text("\n"), text("\r"))))
+    .isStart();
   public static final TokenType CONTENTS = new TokenType("Contents").matches(word("!contents"));
   public static final TokenType DEFINE = new TokenType("Define")
     .matches(word("!define"));

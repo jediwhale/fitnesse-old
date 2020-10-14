@@ -32,7 +32,7 @@ public class Helper {
     assertEquals(input, result, parse(input).toString());
   }
 
-  public static void assertTranslates(String expected, String input) {
+  public static void assertTranslates(String expected, String input) { //todo: deal with newlines, could be platform-specific
     assertEquals(input, expected, new HtmlTranslator(external).translate(parse(input)));
   }
 
