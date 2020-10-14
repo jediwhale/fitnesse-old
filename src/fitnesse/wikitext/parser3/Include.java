@@ -1,6 +1,5 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.html.HtmlTag;
 import fitnesse.wikitext.VariableStore;
 import fitnesse.wikitext.parser.Collapsible;
 import fitnesse.wikitext.parser.Maybe;
@@ -29,8 +28,8 @@ class Include {
             ? parser.withContent(included.getValue().pageContent()).parseToEnd() //todo: not sure this is correct, maybe bug in v2
             : Parser.parse(included.getValue().pageContent(), ParseRules.make(variables, included.getValue())));
 
-    variables.findVariable(COLLAPSE_SETUP).ifPresent(value -> result.putTag(COLLAPSE_SETUP, value));
-    variables.findVariable(COLLAPSE_TEARDOWN).ifPresent(value -> result.putTag(COLLAPSE_TEARDOWN, value));
+    if (result.hasTag("-setup")) variables.findVariable(COLLAPSE_SETUP).ifPresent(value -> result.putTag(COLLAPSE_SETUP, value));
+    if (result.hasTag("-teardown")) variables.findVariable(COLLAPSE_TEARDOWN).ifPresent(value -> result.putTag(COLLAPSE_TEARDOWN, value));
     return result;
   }
 
@@ -38,7 +37,7 @@ class Include {
     String closeState = "";
     if ((symbol.hasTag("-setup") && symbol.findTag(COLLAPSE_SETUP).orElse("true").equals("true"))
 //      || (symbol.hasTag("-teardown") && symbol.findTag(COLLAPSE_TEARDOWN).orElse("true").equals("true"))
-      || (symbol.hasTag("-teardown") && symbol.findTag(COLLAPSE_SETUP).orElse("true").equals("true")) //todo: to make test pass, but seems like v2 bug
+      || symbol.hasTag("-teardown") //todo: to make test pass, but seems like v2 bug
       || symbol.hasTag("-c")) {
       closeState = Collapsible.CLOSED;
     }
