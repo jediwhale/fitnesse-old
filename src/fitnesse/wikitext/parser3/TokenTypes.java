@@ -30,7 +30,6 @@ public class TokenTypes {
     TokenType.LAST_MODIFIED,
     TokenType.LINK,
     TokenType.LITERAL_START,
-    TokenType.LITERAL_END,
     TokenType.META,
     TokenType.NESTING_START,
     TokenType.NESTING_END,
@@ -46,6 +45,7 @@ public class TokenTypes {
     TokenType.TODAY,
     TokenType.VARIABLE,
 
+    TokenType.LITERAL_END,
     TokenType.NEW_LINE,
     TokenType.BLANK_SPACE,
     TokenType.BOLD,

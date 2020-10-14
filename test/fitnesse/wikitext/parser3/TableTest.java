@@ -8,6 +8,9 @@ import static fitnesse.wikitext.parser3.Helper.*;
 public class TableTest {
   @Test public void scans() {
     assertScans("Table=|,Text=a,CellDelimiter=|","|a|");
+    assertScans("Table=!|,Text=a,CellDelimiter=|","!|a|");
+    assertScans("Table=-|,Text=a,CellDelimiter=|","-|a|");
+    assertScans("Table=-!|,Text=a,CellDelimiter=|","-!|a|");
     assertScans("Text=say,NewLine=\n,Table=|,Text=a,CellDelimiter=|","say\n|a|");
   }
 
