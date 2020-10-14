@@ -1,5 +1,7 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.html.HtmlTag;
+
 import java.util.EnumMap;
 
 public class HtmlTranslator implements Translator {
@@ -22,6 +24,7 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.LITERAL, Literal::translate);
     symbolTypes.put(SymbolType.LIST, Symbol::translateChildren);
     symbolTypes.put(SymbolType.NESTING, Symbol::translateChildren);
+    symbolTypes.put(SymbolType.NEW_LINE, inLine("br"));
     symbolTypes.put(SymbolType.PATH, Path::translate);
     symbolTypes.put(SymbolType.SEE, See::translate);
     symbolTypes.put(SymbolType.STRIKE, Pair.translate("strike"));
@@ -56,6 +59,10 @@ public class HtmlTranslator implements Translator {
 
   @Override
   public External getExternal() { return external; }
+
+  static TranslateRule inLine(String tag) {
+    return (symbol, translator) -> HtmlTag.name(tag).htmlInline();
+  }
 
   private final External external;
   private final EnumMap<SymbolType, TranslateRule> symbolTypes;

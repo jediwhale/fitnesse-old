@@ -19,7 +19,7 @@ public class CommentTest {
   @Test
   public void parses() {
     assertParses("SOURCE=#comment", "#comment");
-    assertParses("TEXT=hi,TEXT=\n,SOURCE=#comment\n,TEXT=there", "hi\n#comment\nthere");
+    assertParses("TEXT=hi,NEW_LINE=\n,SOURCE=#comment\n,TEXT=there", "hi\n#comment\nthere");
   }
 
   @Test public void parsesTableAfterComment() {

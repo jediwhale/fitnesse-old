@@ -9,11 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 class LastModified {
-  static Symbol parse(Parser parser) {
-    parser.advance();
-    return new LeafSymbol(SymbolType.LAST_MODIFIED);
-  }
-
   static String translate(Symbol symbol, Translator translator) { //todo: dry with v2
     String user = translator.getExternal().getProperty(WikiPageProperty.LAST_MODIFYING_USER);
     String date = translator.getExternal().getProperty(WikiPageProperty.LAST_MODIFIED);

@@ -15,6 +15,7 @@ public enum SymbolType {
   LITERAL,
   LIST,
   NESTING,
+  NEW_LINE,
   PATH,
   PREFORMAT,
   SEE,

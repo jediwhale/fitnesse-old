@@ -18,10 +18,11 @@ class ParseRules {
     rules.put(TokenType.EXPRESSION_START, Expression::parse);
     rules.put(TokenType.INCLUDE, parser -> Include.parse(parser, external, variables));
     rules.put(TokenType.ITALIC, Pair.parse(SymbolType.ITALIC));
-    rules.put(TokenType.LAST_MODIFIED, LastModified::parse);
+    rules.put(TokenType.LAST_MODIFIED, makeType(SymbolType.LAST_MODIFIED));
     rules.put(TokenType.LINK, Link::parse);
     rules.put(TokenType.LITERAL_START, Literal::parse);
     rules.put(TokenType.NESTING_START, Nesting::parse);
+    rules.put(TokenType.NEW_LINE, makeType(SymbolType.NEW_LINE));
     rules.put(TokenType.PATH, Path::parse);
     rules.put(TokenType.PLAIN_TEXT_TABLE_START, Table::parsePlain);
     rules.put(TokenType.PREFORMAT_START, Preformat::parse);
@@ -31,5 +32,11 @@ class ParseRules {
     rules.put(TokenType.TABLE, Table::parseStandard);
     rules.put(TokenType.VARIABLE, parser -> Variable.parseGet(parser, variables));
     return rules;
+  }
+
+  static ParseRule makeType(SymbolType symbolType) {
+    return parser -> {
+      return new LeafSymbol(symbolType, parser.advance().getContent());
+    };
   }
 }
