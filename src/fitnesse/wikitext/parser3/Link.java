@@ -4,7 +4,7 @@ import fitnesse.html.HtmlTag;
 
 public class Link {
   public static Symbol parse(Parser parser) {
-    Symbol result = new SymbolBranch(SymbolType.LINK, parser.peek(0).getContent());
+    Symbol result = new BranchSymbol(SymbolType.LINK, parser.peek(0).getContent());
     parser.advance();
     result.add(parser.textType(SymbolType.TEXT).parseCurrent());
     return result;

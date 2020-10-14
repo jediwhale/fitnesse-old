@@ -5,78 +5,111 @@ import fitnesse.util.Tree;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
-interface Symbol extends Tree<Symbol> {
-  SymbolType getType();
-  String getContent();
-  void setContent(String input);
-  List<Symbol> getChildren();
+abstract class Symbol implements Tree<Symbol> {
 
-  static Symbol error(String message) { return new SymbolLeaf(SymbolType.ERROR, message); }
+  static Symbol error(String message) { return new LeafSymbol(SymbolType.ERROR, message); }
 
-  static Symbol source(TokenType tokenType) { return new SymbolLeaf(SymbolType.SOURCE, tokenType.getMatch()); } //todo: should be from token?
+  static Symbol source(TokenType tokenType) { return new LeafSymbol(SymbolType.SOURCE, tokenType.getMatch()); } //todo: should be from token?
 
   static Symbol makeList(Symbol ...children) { return make(SymbolType.LIST, children); }
 
   static Symbol make(SymbolType type, Symbol ...children) {
-    Symbol result = new SymbolBranch(type);
+    Symbol result = new BranchSymbol(type);
     for (Symbol child: children) result.add(child);
     return result;
   }
 
   static Symbol make(SymbolType type, List<Symbol> children) {
-    return new SymbolBranch(
+    return new BranchSymbol(
       children.size() > 0 && children.get(0).getType() == SymbolType.ERROR ? SymbolType.LIST : type,
       children);
   }
 
-  default boolean hasError() {
+  @Override
+  public Symbol getNode() { return this; }
+
+  @Override
+  public Collection<? extends Tree<Symbol>> getBranches() { return getChildren(); }
+
+  SymbolType getType() { return symbolType; }
+
+  String getContent() { return content; }
+
+  void setContent(String content) { this.content = content; }
+
+  void add(Symbol child) { getChildren().add(child); }
+
+  void addFirst(Symbol child) { getChildren().add(0, child); }
+
+  boolean hasChildren() { return getChildren().size() > 0; }
+
+  String getContent(int child) { return getChildren().get(child).getContent(); }
+
+  Symbol getChild(int child) { return getChildren().get(child); }
+
+  Symbol getLastChild() { return getChildren().get(getChildren().size() - 1); }
+
+  boolean hasError() {
     return
       (getType() == SymbolType.ERROR) ||
         (hasChildren() && getChild(0).getType() == SymbolType.ERROR);
   }
 
-  default void add(Symbol child) {
-    getChildren().add(child);
-  }
-
-  default void addFirst(Symbol child) {
-    getChildren().add(0, child);
-  }
-
-  default boolean hasChildren() {
-    return getChildren().size() > 0;
-  }
-
-  default String getContent(int child) {
-    return getChildren().get(child).getContent();
-  }
-
-  default Symbol getChild(int child) {
-    return getChildren().get(child);
-  }
-
-  default Symbol getLastChild() {
-    return getChildren().get(getChildren().size() - 1);
-  }
-
-  default String translateContent(TranslateSymbol<String> translator) {
+  String translateContent(TranslateSymbol<String> translator) {
     return HtmlUtil.escapeHTML(HtmlUtil.unescapeWiki(getContent())) + translateChildren(translator);
   }
 
-  default String translateChildren(TranslateSymbol<String> translator) {
+  String translateChildren(TranslateSymbol<String> translator) {
     return collectChildren(translator, new StringBuilder(), StringBuilder::append).toString();
   }
 
-  default <T, U> U collectChildren(TranslateSymbol<T> translator, U initial, BiConsumer<U, ? super T> accumulator) {
+  <T, U> U collectChildren(TranslateSymbol<T> translator, U initial, BiConsumer<U, ? super T> accumulator) {
     getChildren().stream().map(translator::translate).forEachOrdered(item -> accumulator.accept(initial, item));
     return initial;
   }
 
-  @Override
-  default Symbol getNode() { return this; }
+  Optional<String> findTag(String key) {
+    String value = getTags().get(key);
+    return value != null ? Optional.of(value) : Optional.empty();
+  }
 
-  @Override
-  default Collection<? extends Tree<Symbol>> getBranches() { return getChildren(); }
+  void putTag(String key, Optional<String> value) {
+    if (value.isPresent()) putTag(key, value.get());
+  }
+
+  void putTag(String key, String value) { getTags().put(key, value);}
+
+  boolean hasTag(String key) { return getTags().containsKey(key); }
+
+  public String toString() {
+    StringBuilder result = new StringBuilder();
+    result.append(symbolType.toString());
+    if (content.length() > 0) result.append("=").append(content);
+    if (getChildren().size() > 0) {
+      result.append("(");
+      for (int i = 0; i < getChildren().size(); i++) {
+        if (i > 0) result.append(",");
+        result.append(getChildren().get(i).toString());
+      }
+      result.append(")");
+    }
+    return result.toString();
+  }
+
+  protected abstract List<Symbol> getChildren();
+  protected abstract Map<String, String> getTags();
+
+  protected Symbol(SymbolType symbolType) { this(symbolType, ""); }
+
+  protected Symbol(SymbolType symbolType, String content) {
+    this.symbolType = symbolType;
+    this.content = content;
+  }
+
+  private String content;
+  private final SymbolType symbolType;
 }

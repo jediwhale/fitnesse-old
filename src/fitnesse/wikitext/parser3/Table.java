@@ -20,7 +20,7 @@ class Table {
   }
 
   private static Symbol parseWithCustomDelimiter(Parser parser) {
-    Symbol result = new SymbolBranch(SymbolType.TABLE);
+    Symbol result = new BranchSymbol(SymbolType.TABLE);
     parser.advance();
     Optional<String> separator = Optional.empty();
     if (parser.peek(0).isType(TokenType.TEXT)) {
@@ -41,7 +41,7 @@ class Table {
   }
 
   private static Symbol makeRow(Parser parser, Optional<String> separator) {
-    Symbol row = new SymbolBranch(SymbolType.LIST);
+    Symbol row = new BranchSymbol(SymbolType.LIST);
     String rowText = parser.parseText(new Terminator(TokenType.NEW_LINE));
     if (separator.isPresent()) {
       for (String cellText : rowText.split(separator.get())) {
@@ -55,16 +55,16 @@ class Table {
   }
 
   private static Symbol makeCell(String content) {
-    Symbol cell = new SymbolBranch(SymbolType.LIST);
-    cell.add(new SymbolLeaf(SymbolType.TEXT, content));
+    Symbol cell = new BranchSymbol(SymbolType.LIST);
+    cell.add(new LeafSymbol(SymbolType.TEXT, content));
     return cell;
   }
 
   private static Symbol parseWithBarDelimiter(Parser parser) {
-    Symbol result = new SymbolBranch(SymbolType.TABLE);
+    Symbol result = new BranchSymbol(SymbolType.TABLE);
     parser.advance();
     do {
-      Symbol row = new SymbolBranch(SymbolType.LIST);
+      Symbol row = new BranchSymbol(SymbolType.LIST);
       do {
         Symbol cell = parser.parseList(SymbolType.LIST, new Terminator(TokenType.CELL_DELIMITER));
         row.add(cell);
