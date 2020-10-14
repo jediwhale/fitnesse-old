@@ -2,7 +2,11 @@ package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlTag;
 import fitnesse.wikitext.VariableStore;
+import fitnesse.wikitext.parser.Collapsible;
 import fitnesse.wikitext.parser.Maybe;
+
+import java.util.Collection;
+import java.util.Collections;
 
 class Include {
 
@@ -14,12 +18,12 @@ class Include {
       parser.advance(); //todo: check blank
     }
 
-    Token pagePath= parser.advance();;
+    Symbol pagePath = parser.parseCurrent();
     Maybe<External> included = external.make(pagePath.getContent());
     if (included.isNothing()) {
       return new LeafSymbol(SymbolType.ERROR, included.because());
     }
-    result.add(new LeafSymbol(SymbolType.TEXT, pagePath.getContent()));
+    result.add(pagePath);
     result.add(
           result.hasTag("-setup") || result.hasTag("-teardown")
             ? parser.withContent(included.getValue().pageContent()).parseToEnd() //todo: not sure this is correct, maybe bug in v2
@@ -31,19 +35,17 @@ class Include {
   }
 
   static String translate(Symbol symbol, Translator translator) {
-    String cssClass = "collapsible";
+    String closeState = "";
     if ((symbol.hasTag("-setup") && symbol.findTag(COLLAPSE_SETUP).orElse("true").equals("true"))
 //      || (symbol.hasTag("-teardown") && symbol.findTag(COLLAPSE_TEARDOWN).orElse("true").equals("true"))
       || (symbol.hasTag("-teardown") && symbol.findTag(COLLAPSE_SETUP).orElse("true").equals("true")) //todo: to make test pass, but seems like v2 bug
       || symbol.hasTag("-c")) {
-      cssClass += " closed";
+      closeState = Collapsible.CLOSED;
     }
-    if (symbol.hasTag("-teardown")) cssClass += " teardown"; //todo: but not for setup??
-    return
-      HtmlTag.name("span").body("Included page: " + symbol.getContent(0)).html() +
-      HtmlTag.name("div").attribute("class", cssClass)
-        .body(HtmlTag.name("div").body(translator.translate(symbol.getChild(1))).html())
-        .html();
+    Collection<String> extraCollapsibleClass =
+      symbol.hasTag("-teardown") ? Collections.singleton("teardown") : Collections.emptySet();//todo: but not for setup??
+    String title = "Included page: " + translator.translate(symbol.getChild(0));
+    return Collapsible.generateHtml(closeState, title, translator.translate(symbol.getChild(1)), extraCollapsibleClass);
   }
 
   private static final String COLLAPSE_SETUP = "COLLAPSE_SETUP";
