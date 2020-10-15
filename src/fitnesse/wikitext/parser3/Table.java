@@ -7,7 +7,7 @@ import java.util.Optional;
 class Table {
   static void scan(Token token, TokenSource source) {
     if (token.getContent().contains("!")) {
-      source.use(TokenTypes.LITERAL_TABLE_TYPES, type -> type == TokenType.NEW_LINE);
+      source.use(TokenTypes.LITERAL_TABLE_TYPES, type -> type == TokenType.TABLE_END);
     }
   }
 
@@ -66,16 +66,16 @@ class Table {
     do {
       Symbol row = new BranchSymbol(SymbolType.LIST);
       do {
-        Symbol cell = parser.parseList(SymbolType.LIST, new Terminator(TokenType.CELL_DELIMITER));
+        Symbol cell = parser.parseList(SymbolType.LIST, new Terminator(type -> type == TokenType.CELL_DELIMITER || type == TokenType.TABLE_END));
         row.add(cell);
-      } while (!isEndOfRow(parser.peek(-1)) && !parser.peek(0).isEndOfTable()); //todo: clean up
+      } while (!isEndOfRow(parser.peek(-1)));
       result.add(row);
-    } while (!parser.peek(0).isEndOfTable());
+    } while (!parser.peek(-1).isType(TokenType.TABLE_END));
     return result;
   }
 
   private static boolean isEndOfRow(Token token) {
-    return token.getContent().contains("\r") || token.getContent().contains("\n");
+    return token.getContent().contains("\r") || token.getContent().contains("\n") || token.isType(TokenType.TABLE_END);
   }
 
   static String translate(Symbol table, TranslateSymbol<String> translator) {

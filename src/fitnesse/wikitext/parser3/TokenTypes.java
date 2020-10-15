@@ -41,7 +41,8 @@ public class TokenTypes {
     TokenType.PREFORMAT_END,
     TokenType.SEE,
     TokenType.STYLE,
-    TokenType.TABLE,
+    TokenType.TABLE_START,
+    TokenType.TABLE_END,
     TokenType.TODAY,
     TokenType.VARIABLE,
 
@@ -74,6 +75,7 @@ public class TokenTypes {
     TokenType.VARIABLE,
     TokenType.BRACE_END,
     TokenType.NEW_LINE,
+    TokenType.TABLE_END,
     TokenType.CELL_DELIMITER
   ));
 

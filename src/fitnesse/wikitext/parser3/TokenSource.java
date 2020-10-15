@@ -13,7 +13,7 @@ class TokenSource {
   TokenSource(TokenSource parent, String input) {
     content = new Content(input);
     results = new LinkedList<>();
-    scanTypes.push(parent.scanTypes.firstElement());
+    use(parent.scanTypes.lastElement().types, type -> false);
   }
 
   void putBack() { results.addFirst(previous); }
@@ -84,7 +84,7 @@ class TokenSource {
 
     boolean isTerminated(TokenType type) { return terminator.test(type);}
 
-    private final List<TokenType> types;
+    final List<TokenType> types;
     private final Predicate<TokenType> terminator;
   }
 }

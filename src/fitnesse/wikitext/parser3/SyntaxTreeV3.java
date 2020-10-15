@@ -1,10 +1,7 @@
 package fitnesse.wikitext.parser3;
 
 import fitnesse.wikitext.ParsingPage;
-import fitnesse.wikitext.SourcePage;
 import fitnesse.wikitext.SyntaxTree;
-import fitnesse.wikitext.parser.Maybe;
-import fitnesse.wikitext.parser.WikiWordBuilder;
 
 import java.util.Optional;
 import java.util.function.Consumer;

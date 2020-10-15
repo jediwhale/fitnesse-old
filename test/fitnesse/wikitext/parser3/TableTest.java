@@ -7,25 +7,28 @@ import static fitnesse.wikitext.parser3.Helper.*;
 
 public class TableTest {
   @Test public void scans() {
-    assertScans("Table=|,Text=a,CellDelimiter=|","|a|");
-    assertScans("Table=!|,Text=a,CellDelimiter=|","!|a|");
-    assertScans("Table=-|,Text=a,CellDelimiter=|","-|a|");
-    assertScans("Table=-!|,Text=a,CellDelimiter=|","-!|a|");
-    assertScans("Text=say,NewLine=\n,Table=|,Text=a,CellDelimiter=|","say\n|a|");
+    assertScans("TableStart=|,Text=a,TableEnd=|","|a|");
+    assertScans("TableStart=|,Text=a,CellDelimiter=|,Text=b,TableEnd=|","|a|b|");
+    assertScans("TableStart=!|,Text=a,TableEnd=|","!|a|");
+    assertScans("TableStart=-|,Text=a,TableEnd=|","-|a|");
+    assertScans("TableStart=-!|,Text=a,TableEnd=|","-!|a|");
+    assertScans("Text=say,NewLine=\n,TableStart=|,Text=a,TableEnd=|","say\n|a|");
+    assertScans("TableStart=|,Text=a,TableEnd=|\n,Text=there","|a|\nthere");
   }
 
   @Test public void scansLiteral() {
-    assertScans("Table=!|,Text=''a'',CellDelimiter=|","!|''a''|");
+    assertScans("TableStart=!|,Text=''a'',TableEnd=|","!|''a''|");
   }
 
   @Test public void scansTrailingBlanks() {
-    assertScans("Table=|,Text=a,CellDelimiter=|  \n|,Text=b,CellDelimiter=|","|a|  \n|b|");
-    assertScans("Table=|,Text=a,CellDelimiter=|\n|,Text=b,CellDelimiter=|  ,NewLine=\n","|a|\n|b|  \n");
+    assertScans("TableStart=|,Text=a,CellDelimiter=|  \n|,Text=b,TableEnd=|","|a|  \n|b|");
+    assertScans("TableStart=|,Text=a,CellDelimiter=|\n|,Text=b,TableEnd=|  \n","|a|\n|b|  \n");
   }
 
   @Test public void parses() {
     assertParses("TABLE(LIST(LIST(TEXT=a)))", "|a|");
     assertParses("TEXT=say,NEW_LINE=\n,TABLE(LIST(LIST(TEXT=a)))", "say\n|a|");
+    assertParses("TABLE(LIST(LIST(TEXT=a))),TEXT=there", "|a|\nthere");
     assertParses("TABLE(LIST(LIST(TEXT=a),LIST(TEXT=b)))", "|a|b|");
     assertParses("TABLE(LIST(LIST(TEXT=a),LIST(TEXT=b)),LIST(LIST(TEXT=c),LIST(TEXT=d)))", "|a|b|\n|c|d|");
     assertParses("TABLE(LIST(LIST(LIST(SOURCE=!-,LITERAL=a,SOURCE=-!)),LIST(TEXT=b)))", "|!-a-!|b|");
@@ -34,6 +37,12 @@ public class TableTest {
 
   @Test public void parsesLiteral() {
     assertParses("TABLE(LIST(LIST(TEXT=PageOne)))","!|PageOne|");
+    assertParses("TABLE(LIST(LIST(TEXT=''a'')))","!|''a''|");
+  }
+
+  @Test public void parsesVariableInLiteral() {
+    external.putVariable("x", "|a|\n''b''\n");
+    assertParses("TABLE(LIST(LIST(LIST(TEXT=|,TEXT=a,TEXT=|\n,TEXT=''b'',NEW_LINE=\n))))","!|${x}|");
   }
 
   @Test public void translates() {
@@ -41,7 +50,7 @@ public class TableTest {
     assertTranslates(table(row(cell("a"))), "| a  |");
     assertTranslates(table(row(cell("a") + cell("b"))), "|a|b|");
     assertTranslates(table(row(cell("a") )+ row(cell("b"))), "|a|\n|b|");
-    assertTranslates(table(row(cell("a") )+ row(cell("b"))) + "<br/>", "|a|  \n|b|  \n");
+    assertTranslates(table(row(cell("a") )+ row(cell("b"))), "|a|  \n|b|  \n");
   }
 
   @Test public void translatesVariableInLiteralTable() {

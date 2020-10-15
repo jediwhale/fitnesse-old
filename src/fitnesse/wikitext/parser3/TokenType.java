@@ -24,7 +24,7 @@ public class TokenType {
   public static final TokenType BRACKET_START = new TokenType("BracketStart", "[");
   public static final TokenType CELL_DELIMITER = new TokenType("CellDelimiter", "|")
     .matchOneOf(
-      matchAll(text("|"), ignoreBlank(), matchOne(text("\r\n"), text("\n"), text("\r")), text("|")),
+      matchAll(text("|"), ignoreBlank(), newLine(), text("|")),
       matchAll(text("|"), ignoreBlank()));
   public static final TokenType CENTER_LINE = new TokenType("CenterLine").matches(word("!c"));
   public static final TokenType COLLAPSIBLE_END = new TokenType("CollapsibleEnd", "*!").matches(repeat("*"), text("!"));
@@ -32,7 +32,7 @@ public class TokenType {
   public static final TokenType COLON = new TokenType("Colon", ":");
   public static final TokenType COMMA = new TokenType("Comma", ",");
   public static final TokenType COMMENT = new TokenType("Comment")
-    .matches(startLine(), text("#"), endWith(matchOne(text("\r\n"), text("\n"), text("\r"))))
+    .matches(startLine(), text("#"), endWith(newLine()))
     .isStart();
   public static final TokenType CONTENTS = new TokenType("Contents").matches(word("!contents"));
   public static final TokenType DEFINE = new TokenType("Define")
@@ -62,7 +62,7 @@ public class TokenType {
     .isStart();
   public static final TokenType NESTING_END = new TokenType("NestingEnd", ")!");
   public static final TokenType NEW_LINE = new TokenType("NewLine")
-    .matchOneOf(text("\r\n"), text("\n"), text("\r"))
+    .matches(newLine())
     .isStart();
   public static final TokenType NOTE = new TokenType("Note").matches(word("!note"));
   public static final TokenType PARENTHESIS_END = new TokenType("ParenthesisEnd", ")");
@@ -78,9 +78,11 @@ public class TokenType {
     .matches(word("!see"));
   public static final TokenType STRIKE = new TokenType("Strike", "--");
   public static final TokenType STYLE = new TokenType("Style", "!style_");
-  public static final TokenType TABLE = new TokenType("Table")
+  public static final TokenType TABLE_START = new TokenType("TableStart")
     .matches(startLine(), matchOne(text("-!|"), text("!|"), text("-|"), text("|")))
     .useScan(Table::scan);
+  public static final TokenType TABLE_END = new TokenType("TableEnd")
+    .matches(text("|"), ignoreBlank(),  matchOne(end(), matchAll(newLine(), notText("|"))));
   public static final TokenType TEXT = new TokenType("Text");
   public static final TokenType TODAY = new TokenType("Today").matches(word("!today"));
   public static final TokenType VARIABLE = new TokenType("Variable", "${");

@@ -40,6 +40,13 @@ interface MatchContent {
     };
   }
 
+  static MatchContent end() {
+    return content ->
+      (!content.more() || content.startsWith(TokenType.NESTING_END.getMatch()))
+        ? Optional.of("")
+        : Optional.empty();
+  }
+
   static MatchContent endWith(MatchContent end) {
     return content -> {
       StringBuilder result = new StringBuilder();
@@ -63,6 +70,14 @@ interface MatchContent {
       }
       return Optional.of(result.toString());
     };
+  }
+
+  static MatchContent newLine() {
+    return matchOne(text("\r\n"), text("\n"), text("\r"));
+  }
+
+  static MatchContent notText(String text) {
+    return content -> content.startsWith(text) ? Optional.empty() : Optional.of("");
   }
 
   static MatchContent repeat(String repeat) {

@@ -29,7 +29,7 @@ class ParseRules {
     rules.put(TokenType.SEE, Keyword.parse(SymbolType.SEE));
     rules.put(TokenType.STRIKE, Pair.parse(SymbolType.STRIKE));
     rules.put(TokenType.STYLE, Style::parse);
-    rules.put(TokenType.TABLE, Table::parseStandard);
+    rules.put(TokenType.TABLE_START, Table::parseStandard);
     rules.put(TokenType.VARIABLE, parser -> Variable.parseGet(parser, variables));
     return rules;
   }
