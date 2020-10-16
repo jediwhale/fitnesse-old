@@ -34,7 +34,7 @@ public class TokenType {
   public static final TokenType COMMENT = new TokenType("Comment")
     .matches(startLine(), text("#"), endWith(newLine()))
     .isStart();
-  public static final TokenType CONTENTS = new TokenType("Contents").matches(word("!contents"));
+  public static final TokenType CONTENTS = new TokenType("Contents", "!contents");
   public static final TokenType DEFINE = new TokenType("Define")
     .matches(word("!define"));
   public static final TokenType EXPRESSION_END = new TokenType("ExpressionStart", "=}");

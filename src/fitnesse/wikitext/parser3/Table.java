@@ -22,10 +22,9 @@ class Table {
   private static Symbol parseWithCustomDelimiter(Parser parser) {
     Symbol result = new BranchSymbol(SymbolType.TABLE);
     parser.advance();
-    Optional<String> separator = Optional.empty();
-    if (parser.peek(0).isType(TokenType.TEXT)) {
-      separator = Optional.of(parser.advance().getContent());
-    }
+    Optional<String> separator = parser.peek(0).isType(TokenType.TEXT)
+      ? Optional.of(parser.advance().getContent())
+      : Optional.empty();
     if (parser.peek(0).isType(TokenType.BLANK_SPACE)) {
       parser.advance();
       result.add(makeRow(parser, separator));
@@ -66,7 +65,8 @@ class Table {
     do {
       Symbol row = new BranchSymbol(SymbolType.LIST);
       do {
-        Symbol cell = parser.parseList(SymbolType.LIST, new Terminator(type -> type == TokenType.CELL_DELIMITER || type == TokenType.TABLE_END));
+        Symbol cell = parser.parseList(SymbolType.LIST,
+          new Terminator(type -> type == TokenType.CELL_DELIMITER || type == TokenType.TABLE_END, "|", ""));
         row.add(cell);
       } while (!isEndOfRow(parser.peek(-1)));
       result.add(row);

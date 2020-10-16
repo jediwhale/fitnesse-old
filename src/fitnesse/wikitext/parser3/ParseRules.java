@@ -14,6 +14,7 @@ class ParseRules {
     rules.put(TokenType.BOLD, Pair.parse(SymbolType.BOLD));
     rules.put(TokenType.BOLD_ITALIC, Pair.parse(SymbolType.BOLD_ITALIC));
     rules.put(TokenType.COMMENT, Comment::parse);
+    rules.put(TokenType.CONTENTS, parser -> Contents.parse(parser, variables));
     rules.put(TokenType.DEFINE, parser -> Variable.parsePut(parser, variables));
     rules.put(TokenType.EXPRESSION_START, Expression::parse);
     rules.put(TokenType.INCLUDE, parser -> Include.parse(parser, external, variables));

@@ -6,6 +6,7 @@ public enum SymbolType {
   ANCHOR_REFERENCE,
   BOLD,
   BOLD_ITALIC,
+  CONTENTS,
   DEFINE,
   ERROR,
   INCLUDE,

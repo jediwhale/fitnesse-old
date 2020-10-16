@@ -109,8 +109,6 @@ public class TokenSourceTest {
 
   @Test public void scansNote() { assertScansWord("!note", "Note"); }
 
-  @Test public void scansSee() { assertScansWord("!see", "See"); }
-
   @Test
   public void scansHorizontalRule() {
     assertScans("Strike=--,Text=-", "---");
@@ -130,11 +128,6 @@ public class TokenSourceTest {
   public void scansCollapsible() {
     assertScans("CollapsibleStart=!*,Text=stuff,CollapsibleEnd=*!", "!*stuff*!");
     assertScans("CollapsibleStart=!**,Text=stuff,CollapsibleEnd=**!", "!**stuff**!");
-  }
-
-  @Test
-  public void scansContents() {
-    assertScansWord("!contents", "Contents");
   }
 
   @Test
