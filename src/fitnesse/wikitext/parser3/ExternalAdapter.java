@@ -10,6 +10,11 @@ class ExternalAdapter implements External {
   }
 
   @Override
+  public SourcePage getSourcePage() {
+    return page;
+  }
+
+  @Override
   public String buildLink(String path, String description, String trailer) {
     return new WikiWordBuilder(page, path, description).buildLink(trailer, path);
   }

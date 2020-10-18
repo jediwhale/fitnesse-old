@@ -1,6 +1,7 @@
 package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlTag;
+import fitnesse.wikitext.SourcePage;
 import fitnesse.wikitext.VariableStore;
 import fitnesse.wikitext.parser.Maybe;
 
@@ -14,6 +15,11 @@ public class FakeExternal implements External, VariableStore {
 
   @Override
   public Optional<String> findVariable(String name) { return Optional.ofNullable(variables.get(name)); }
+
+  @Override
+  public SourcePage getSourcePage() {
+    return sourcePage;
+  }
 
   @Override
   public String buildLink(String path, String description, String trailer) {
@@ -38,6 +44,7 @@ public class FakeExternal implements External, VariableStore {
   }
 
   public String pageName = "root";
+  public SourcePage sourcePage;
 
   public static final HashMap<String, String> pages = new HashMap<>();
 

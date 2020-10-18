@@ -2,6 +2,7 @@ package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlUtil;
 import fitnesse.util.Tree;
+import fitnesse.wikitext.shared.PropertyStore;
 
 import java.util.Collection;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-abstract class Symbol implements Tree<Symbol> {
+abstract class Symbol implements Tree<Symbol>, PropertyStore {
 
   static Symbol error(String message) { return new LeafSymbol(SymbolType.ERROR, message); }
 
@@ -34,6 +35,18 @@ abstract class Symbol implements Tree<Symbol> {
 
   @Override
   public Collection<? extends Tree<Symbol>> getBranches() { return getChildren(); }
+
+  @Override
+  public Optional<String> findProperty(String key) {
+    String value = getProperties().get(key);
+    return value != null ? Optional.of(value) : Optional.empty();
+  }
+
+  @Override
+  public boolean hasProperty(String key) { return getProperties().containsKey(key); }
+
+  @Override
+  public void putProperty(String key, String value) { getProperties().put(key, value);}
 
   SymbolType getType() { return symbolType; }
 
@@ -72,19 +85,6 @@ abstract class Symbol implements Tree<Symbol> {
     return initial;
   }
 
-  Optional<String> findTag(String key) {
-    String value = getTags().get(key);
-    return value != null ? Optional.of(value) : Optional.empty();
-  }
-
-  void putTag(String key, Optional<String> value) {
-    if (value.isPresent()) putTag(key, value.get());
-  }
-
-  void putTag(String key, String value) { getTags().put(key, value);}
-
-  boolean hasTag(String key) { return getTags().containsKey(key); }
-
   public String toString() {
     StringBuilder result = new StringBuilder();
     result.append(symbolType.toString());
@@ -97,11 +97,21 @@ abstract class Symbol implements Tree<Symbol> {
       }
       result.append(")");
     }
+    if (getProperties().size() > 0) {
+      result.append("[");
+      int j = 0;
+      for (String key : getProperties().keySet()) {
+        if (j > 0) result.append(",");
+        result.append(key).append("=").append(getProperties().get(key));
+        j++;
+      }
+      result.append("]");
+    }
     return result.toString();
   }
 
   protected abstract List<Symbol> getChildren();
-  protected abstract Map<String, String> getTags();
+  protected abstract Map<String, String> getProperties();
 
   protected Symbol(SymbolType symbolType) { this(symbolType, ""); }
 

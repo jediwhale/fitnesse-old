@@ -9,7 +9,7 @@ class TaggedSymbol extends BranchSymbol {
   }
 
   @Override
-  protected Map<String, String> getTags() { return tags; }
+  protected Map<String, String> getProperties() { return properties; }
 
-  private Map<String, String> tags = new HashMap<>();
+  private final Map<String, String> properties = new HashMap<>();
 }

@@ -19,7 +19,7 @@ public class Token {
     return isType(TokenType.BRACE_START) || isType(TokenType.BRACKET_START) || isType(TokenType.PARENTHESIS_START);
   }
 
-  public boolean isEndOfTable() {
+  public boolean isEndOfLine() {
     return isType(TokenType.NEW_LINE) || isType(TokenType.END) || isType(TokenType.NESTING_END);
   }
 
@@ -33,4 +33,5 @@ public class Token {
 
   private final TokenType type;
   private final String content;
+
 }

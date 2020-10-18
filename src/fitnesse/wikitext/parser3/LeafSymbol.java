@@ -17,5 +17,5 @@ class LeafSymbol extends Symbol {
   protected List<Symbol> getChildren() { return Collections.emptyList(); }
 
   @Override
-  protected Map<String, String> getTags() { return Collections.emptyMap(); }
+  protected Map<String, String> getProperties() { return Collections.emptyMap(); }
 }

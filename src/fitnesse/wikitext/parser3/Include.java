@@ -13,7 +13,7 @@ class Include {
     parser.advance();
     Symbol result = new TaggedSymbol(SymbolType.INCLUDE);
     if (parser.peek(0).isType(TokenType.TEXT) && parser.peek(0).getContent().startsWith("-")) {
-      result.putTag(parser.advance().getContent(), "");
+      result.putProperty(parser.advance().getContent(), "");
       parser.advance(); //todo: check blank
     }
 
@@ -24,25 +24,25 @@ class Include {
     }
     result.add(pagePath);
     result.add(
-          result.hasTag("-setup") || result.hasTag("-teardown")
+          result.hasProperty("-setup") || result.hasProperty("-teardown")
             ? parser.withContent(included.getValue().pageContent()).parseToEnd() //todo: not sure this is correct, maybe bug in v2
             : Parser.parse(included.getValue().pageContent(), ParseRules.make(variables, included.getValue())));
 
-    if (result.hasTag("-setup")) variables.findVariable(COLLAPSE_SETUP).ifPresent(value -> result.putTag(COLLAPSE_SETUP, value));
-    if (result.hasTag("-teardown")) variables.findVariable(COLLAPSE_TEARDOWN).ifPresent(value -> result.putTag(COLLAPSE_TEARDOWN, value));
+    if (result.hasProperty("-setup")) variables.findVariable(COLLAPSE_SETUP).ifPresent(value -> result.putProperty(COLLAPSE_SETUP, value));
+    if (result.hasProperty("-teardown")) variables.findVariable(COLLAPSE_TEARDOWN).ifPresent(value -> result.putProperty(COLLAPSE_TEARDOWN, value));
     return result;
   }
 
   static String translate(Symbol symbol, Translator translator) {
     String closeState = "";
-    if ((symbol.hasTag("-setup") && symbol.findTag(COLLAPSE_SETUP).orElse("true").equals("true"))
+    if ((symbol.hasProperty("-setup") && symbol.findProperty(COLLAPSE_SETUP).orElse("true").equals("true"))
 //      || (symbol.hasTag("-teardown") && symbol.findTag(COLLAPSE_TEARDOWN).orElse("true").equals("true"))
-      || symbol.hasTag("-teardown") //todo: to make test pass, but seems like v2 bug
-      || symbol.hasTag("-c")) {
+      || symbol.hasProperty("-teardown") //todo: to make test pass, but seems like v2 bug
+      || symbol.hasProperty("-c")) {
       closeState = Collapsible.CLOSED;
     }
     Collection<String> extraCollapsibleClass =
-      symbol.hasTag("-teardown") ? Collections.singleton("teardown") : Collections.emptySet();//todo: but not for setup??
+      symbol.hasProperty("-teardown") ? Collections.singleton("teardown") : Collections.emptySet();//todo: but not for setup??
     String title = "Included page: " + translator.translate(symbol.getChild(0));
     return Collapsible.generateHtml(closeState, title, translator.translate(symbol.getChild(1)), extraCollapsibleClass);
   }
