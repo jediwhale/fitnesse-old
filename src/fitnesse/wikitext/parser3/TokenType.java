@@ -22,6 +22,8 @@ public class TokenType {
   public static final TokenType BRACE_START = new TokenType("BraceStart", "{");
   public static final TokenType BRACKET_END = new TokenType("BracketEnd", "]");
   public static final TokenType BRACKET_START = new TokenType("BracketStart", "[");
+  public static final TokenType BULLET_LIST = new TokenType("BulletList")
+    .matches(startLine(), blank(), text("*"));
   public static final TokenType CELL_DELIMITER = new TokenType("CellDelimiter", "|")
     .matchOneOf(
       matchAll(text("|"), ignoreBlank(), newLine(), text("|")),

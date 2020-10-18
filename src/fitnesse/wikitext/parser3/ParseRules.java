@@ -13,6 +13,7 @@ class ParseRules {
     rules.put(TokenType.ANCHOR_REFERENCE, Keyword.parseWord(SymbolType.ANCHOR_REFERENCE));
     rules.put(TokenType.BOLD, Pair.parse(SymbolType.BOLD));
     rules.put(TokenType.BOLD_ITALIC, Pair.parse(SymbolType.BOLD_ITALIC));
+    rules.put(TokenType.BULLET_LIST, WikiList::parse);
     rules.put(TokenType.COMMENT, Comment::parse);
     rules.put(TokenType.CONTENTS, parser -> Contents.parse(parser, variables));
     rules.put(TokenType.DEFINE, parser -> Variable.parsePut(parser, variables));
@@ -36,8 +37,6 @@ class ParseRules {
   }
 
   static ParseRule makeType(SymbolType symbolType) {
-    return parser -> {
-      return new LeafSymbol(symbolType, parser.advance().getContent());
-    };
+    return parser -> new LeafSymbol(symbolType, parser.advance().getContent());
   }
 }

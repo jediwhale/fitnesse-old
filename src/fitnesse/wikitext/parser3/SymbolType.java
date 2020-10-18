@@ -25,5 +25,6 @@ public enum SymbolType {
   STYLE,
   TABLE,
   TEXT,
-  WIKI_LINK
+  WIKI_LINK,
+  WIKI_LIST
 }
