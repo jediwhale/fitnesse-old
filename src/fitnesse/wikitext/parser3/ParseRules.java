@@ -25,6 +25,7 @@ class ParseRules {
     rules.put(TokenType.LITERAL_START, Literal::parse);
     rules.put(TokenType.NESTING_START, Nesting::parse);
     rules.put(TokenType.NEW_LINE, makeType(SymbolType.NEW_LINE));
+    rules.put(TokenType.NUMBERED_LIST, WikiList::parse);
     rules.put(TokenType.PATH, Path::parse);
     rules.put(TokenType.PLAIN_TEXT_TABLE_START, Table::parsePlain);
     rules.put(TokenType.PREFORMAT_START, Preformat::parse);

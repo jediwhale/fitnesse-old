@@ -40,6 +40,10 @@ interface MatchContent {
     };
   }
 
+  static MatchContent digit() {
+    return content -> content.isDigit() ? Optional.of(Character.toString(content.advance())): Optional.empty();
+  }
+
   static MatchContent end() {
     return content ->
       (!content.more() || content.startsWith(TokenType.NESTING_END.getMatch()))

@@ -66,6 +66,8 @@ public class TokenType {
   public static final TokenType NEW_LINE = new TokenType("NewLine")
     .matches(newLine())
     .isStart();
+  public static final TokenType NUMBERED_LIST = new TokenType("NumberedList")
+    .matches(startLine(), blank(), digit());
   public static final TokenType NOTE = new TokenType("Note").matches(word("!note"));
   public static final TokenType PARENTHESIS_END = new TokenType("ParenthesisEnd", ")");
   public static final TokenType PARENTHESIS_START = new TokenType("ParenthesisStart", "(");

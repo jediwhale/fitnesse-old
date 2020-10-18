@@ -29,6 +29,10 @@ public class Content {
     return content.startsWith(match, current);
   }
 
+  public boolean isDigit() {
+    return Character.isDigit(content.charAt(current));
+  }
+
   public boolean more() {
     return current < content.length();
   }

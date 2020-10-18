@@ -35,6 +35,7 @@ public class TokenTypes {
     TokenType.NESTING_START,
     TokenType.NESTING_END,
     TokenType.NOTE,
+    TokenType.NUMBERED_LIST,
     TokenType.PATH,
     TokenType.PLAIN_TEXT_TABLE_START,
     TokenType.PLAIN_TEXT_TABLE_END,

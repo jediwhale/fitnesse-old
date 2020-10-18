@@ -5,7 +5,8 @@ import fitnesse.html.HtmlTag;
 class WikiList {
   static Symbol parse(Parser parser) {
     Symbol result = new BranchSymbol(SymbolType.WIKI_LIST, parser.peek(0).getContent());
-    while(parser.peek(0).isType(TokenType.BULLET_LIST)) {
+    TokenType listType = parser.peek(0).getType();
+    while(parser.peek(0).isType(listType)) {
       parser.advance();
       if (parser.peek(0).isType(TokenType.BLANK_SPACE)) parser.advance();
       Symbol item = new BranchSymbol(SymbolType.LIST);
@@ -17,8 +18,9 @@ class WikiList {
   }
 
   static String translate(Symbol symbol, Translator translator) {
+    String listType = symbol.getContent().contains("*") ? "ul" : "ol";
     return symbol.collectChildren(
-      child -> new HtmlTag("li", translator.translate(child)), new HtmlTag("ul"), HtmlTag::add)
+      child -> new HtmlTag("li", translator.translate(child)), new HtmlTag(listType), HtmlTag::add)
       .html();
   }
 }
