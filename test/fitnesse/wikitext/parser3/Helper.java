@@ -40,7 +40,7 @@ public class Helper {
     return Parser.parse(input, ParseRules.make(external, external));
   }
 
-  public static String toError(String message) { return " <span class=\"error\">" + message + "</span> "; }
+  public static String toError(String message) { return " <span class=\"fail\">" + message + "</span> "; }
 
   public static FakeExternal external = new FakeExternal();
 

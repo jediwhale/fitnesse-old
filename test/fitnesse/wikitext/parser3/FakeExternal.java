@@ -39,6 +39,11 @@ public class FakeExternal implements External, VariableStore {
   }
 
   @Override
+  public int nextId() {
+    return id++;
+  }
+
+  @Override
   public String pageContent() {
     return pages.get(pageName);
   }
@@ -47,6 +52,6 @@ public class FakeExternal implements External, VariableStore {
   public SourcePage sourcePage;
 
   public static final HashMap<String, String> pages = new HashMap<>();
-
+  public int id;
   private final HashMap<String, String> variables = new HashMap<>();
 }

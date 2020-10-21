@@ -9,6 +9,7 @@ public enum SymbolType {
   CONTENTS,
   DEFINE,
   ERROR,
+  HEADER,
   INCLUDE,
   ITALIC,
   LAST_MODIFIED,

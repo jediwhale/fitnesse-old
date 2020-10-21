@@ -29,9 +29,9 @@ public class WikiPath { //todo: dry with V2
     return ("<>^.".contains(input.substring(0, 1))) ? 1 : 0;
   }
 
-  public static String translate(Symbol symbol, Translator translator) {
+  public static String translate(Symbol symbol, Translator translator, External external) {
     final String content = symbol.translateContent(translator);
-    return Link.makeWikiLink(translator.getExternal(), symbol.getContent(), "", content);
+    return Link.makeWikiLink(external, symbol.getContent(), "", content);
   }
 
   private static boolean isPageName(Text text) {

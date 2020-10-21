@@ -27,7 +27,7 @@ public class Alias {
       Symbol.source(TokenType.ALIAS_END));
   }
 
-  public static String translate(Symbol symbol, Translator translator) { //todo: this is pretty opaque
+  public static String translate(Symbol symbol, Translator translator, External external) { //todo: this is pretty opaque
     if (symbol.getChild(1).getChild(0).getType() == SymbolType.WIKI_LINK) {
       return translator.translate(symbol.getChild(1));
     }
@@ -39,7 +39,7 @@ public class Alias {
       .translate(symbol.getChild(3));
     String description = translator.translate(symbol.getChild(1));
     return WikiPath.makeLink(link,
-      (path, trailer) -> Link.makeWikiLink(translator.getExternal(), path, trailer, description),
+      (path, trailer) -> Link.makeWikiLink(external, path, trailer, description),
       path -> Link.makeLink(description, path, ""));
   }
 }

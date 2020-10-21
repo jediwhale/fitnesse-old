@@ -37,11 +37,11 @@ class Contents {
     return result;
   }
 
-  static String translate(Symbol symbol, Translator translator) {
+  static String translate(Symbol symbol, External external) {
     HtmlTag contents = new HtmlTag("div").attribute("class", "contents"); //todo: dry
     contents.add(HtmlUtil.makeBold("Contents:"));
-    ContentsItemBuilder itemBuilder = new ContentsItemBuilder(symbol, 1, translator.getExternal().getSourcePage());
-    contents.add(itemBuilder.buildLevel(translator.getExternal().getSourcePage()));
+    ContentsItemBuilder itemBuilder = new ContentsItemBuilder(symbol, 1, external.getSourcePage());
+    contents.add(itemBuilder.buildLevel(external.getSourcePage()));
     return contents.html();
   }
 }

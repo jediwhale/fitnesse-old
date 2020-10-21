@@ -45,7 +45,7 @@ public class TokenType {
   public static final TokenType HASH_TABLE = new TokenType("HashTable", "!{")
     .useScan(HashTable::scan);
   public static final TokenType HEADER = new TokenType("Header")
-    .matchOneOf(word("!1"), word("!2"), word("!3"), word("!4"), word("!5"), word("!6"));
+    .matches(startLine(), matchOne(word("!1"), word("!2"), word("!3"), word("!4"), word("!5"), word("!6")));
   public static final TokenType HORIZONTAL_RULE = new TokenType("HorizontalRule").matches(text("---"), repeat("-"));
   public static final TokenType HEADINGS = new TokenType("Headings").matches(word("!headings"));
   public static final TokenType HELP = new TokenType("Help").matches(word("!help"));

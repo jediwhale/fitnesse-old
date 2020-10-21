@@ -9,9 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 class LastModified {
-  static String translate(Symbol symbol, Translator translator) { //todo: dry with v2
-    String user = translator.getExternal().getProperty(WikiPageProperty.LAST_MODIFYING_USER);
-    String date = translator.getExternal().getProperty(WikiPageProperty.LAST_MODIFIED);
+  static String translate(External external) { //todo: dry with v2
+    String user = external.getProperty(WikiPageProperty.LAST_MODIFYING_USER);
+    String date = external.getProperty(WikiPageProperty.LAST_MODIFIED);
     return HtmlTag.name("span").attribute("class", "meta").body(
       "Last modified " +
         (!user.isEmpty() ? "by " + user : "anonymously") +

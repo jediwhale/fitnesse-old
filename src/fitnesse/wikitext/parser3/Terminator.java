@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 class Terminator {
+  static final Terminator END_LINE = new Terminator(type -> type == TokenType.NEW_LINE || type == TokenType.END);
+
   static Terminator make(Token start) { return make(start, ""); }
 
   static Terminator make(Token start, String prefix) {
