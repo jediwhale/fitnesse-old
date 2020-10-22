@@ -23,6 +23,6 @@ public class Style {
   }
 
   public static String translate(Symbol symbol, Translator translator) {
-    return HtmlTag.name("span").attribute("class", symbol.getContent(0)).body(translator.translate(symbol.getChild(1))).htmlInline();
+    return HtmlTag.name("span").attribute("class", symbol.getContent(0)).body(translator.translate(symbol.getBranch(1))).htmlInline();
   }
 }

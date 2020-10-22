@@ -4,13 +4,11 @@ import fitnesse.html.HtmlUtil;
 import fitnesse.util.Tree;
 import fitnesse.wikitext.shared.PropertyStore;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 
-abstract class Symbol implements Tree<Symbol>, PropertyStore {
+abstract class Symbol extends Tree<Symbol> implements PropertyStore {
 
   static Symbol error(String message) { return new LeafSymbol(SymbolType.ERROR, message); }
 
@@ -30,11 +28,7 @@ abstract class Symbol implements Tree<Symbol>, PropertyStore {
       children);
   }
 
-  @Override
-  public Symbol getNode() { return this; }
-
-  @Override
-  public Collection<? extends Tree<Symbol>> getBranches() { return getChildren(); }
+  @Override protected Symbol getNode() { return this; }
 
   @Override
   public Optional<String> findProperty(String key) {
@@ -54,22 +48,16 @@ abstract class Symbol implements Tree<Symbol>, PropertyStore {
 
   void setContent(String content) { this.content = content; }
 
-  void add(Symbol child) { getChildren().add(child); }
+  void add(Symbol child) { getBranches().add(child); }
 
-  void addFirst(Symbol child) { getChildren().add(0, child); }
+  void addFirst(Symbol child) { getBranches().add(0, child); }
 
-  boolean hasChildren() { return getChildren().size() > 0; }
-
-  String getContent(int child) { return getChildren().get(child).getContent(); }
-
-  Symbol getChild(int child) { return getChildren().get(child); }
-
-  Symbol getLastChild() { return getChildren().get(getChildren().size() - 1); }
+  String getContent(int child) { return getBranches().get(child).getContent(); }
 
   boolean hasError() {
     return
       (getType() == SymbolType.ERROR) ||
-        (hasChildren() && getChild(0).getType() == SymbolType.ERROR);
+        (!isLeaf() && getBranch(0).getType() == SymbolType.ERROR);
   }
 
   String translateContent(Translator translator) {
@@ -77,23 +65,18 @@ abstract class Symbol implements Tree<Symbol>, PropertyStore {
   }
 
   String translateChildren(Translator translator) {
-    return collectChildren(translator, new StringBuilder(), StringBuilder::append).toString();
-  }
-
-  <T, U> U collectChildren(TranslateSymbol<T> translator, U initial, BiConsumer<U, ? super T> accumulator) {
-    getChildren().stream().map(translator::translate).forEachOrdered(item -> accumulator.accept(initial, item));
-    return initial;
+    return collectBranches(translator::translate, new StringBuilder(), StringBuilder::append).toString();
   }
 
   public String toString() {
     StringBuilder result = new StringBuilder();
     result.append(symbolType.toString());
     if (content.length() > 0) result.append("=").append(content);
-    if (getChildren().size() > 0) {
+    if (getBranches().size() > 0) {
       result.append("(");
-      for (int i = 0; i < getChildren().size(); i++) {
+      for (int i = 0; i < getBranches().size(); i++) {
         if (i > 0) result.append(",");
-        result.append(getChildren().get(i).toString());
+        result.append(getBranches().get(i).toString());
       }
       result.append(")");
     }
@@ -110,7 +93,6 @@ abstract class Symbol implements Tree<Symbol>, PropertyStore {
     return result.toString();
   }
 
-  protected abstract List<Symbol> getChildren();
   protected abstract Map<String, String> getProperties();
 
   protected Symbol(SymbolType symbolType) { this(symbolType, ""); }

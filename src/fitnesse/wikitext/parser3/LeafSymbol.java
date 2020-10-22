@@ -5,16 +5,12 @@ import java.util.List;
 import java.util.Map;
 
 class LeafSymbol extends Symbol {
-  LeafSymbol(SymbolType symbolType) {
-    super(symbolType);
-  }
-
   LeafSymbol(SymbolType symbolType, String content) {
     super(symbolType, content);
   }
 
   @Override
-  protected List<Symbol> getChildren() { return Collections.emptyList(); }
+  protected List<Symbol> getBranches() { return Collections.emptyList(); }
 
   @Override
   protected Map<String, String> getProperties() { return Collections.emptyMap(); }

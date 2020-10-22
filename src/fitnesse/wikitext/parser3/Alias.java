@@ -5,7 +5,7 @@ public class Alias {
     Token start = parser.advance();
     final Symbol description = parser.parseList(start);
     if (description.hasError()) return description;
-    if (!description.hasChildren()) {
+    if (description.isLeaf()) {
       parser.putBack();
       return Symbol.error(start.getContent() + " Empty description");
     }
@@ -15,7 +15,7 @@ public class Alias {
     if (link.hasError()) {
       return Symbol.makeList(Symbol.error(start.getContent()), description, link);
     }
-    if (!link.hasChildren()) {
+    if (link.isLeaf()) {
       parser.putBack();
       return Symbol.makeList(Symbol.error(start.getContent()), description, Symbol.error(middle.getContent() + " Empty link"));
     }
@@ -28,15 +28,15 @@ public class Alias {
   }
 
   public static String translate(Symbol symbol, HtmlTranslator translator, External external) { //todo: this is pretty opaque
-    if (symbol.getChild(1).getChild(0).getType() == SymbolType.WIKI_LINK) {
-      return translator.translate(symbol.getChild(1));
+    if (symbol.getBranch(1).getBranch(0).getType() == SymbolType.WIKI_LINK) {
+      return translator.translate(symbol.getBranch(1));
     }
     String link = translator
       .substitute(
-        symbol.getChild(3).getChild(0).getType() == SymbolType.LINK ? SymbolType.LINK : SymbolType.WIKI_LINK,
+        symbol.getBranch(3).getBranch(0).getType() == SymbolType.LINK ? SymbolType.LINK : SymbolType.WIKI_LINK,
         SymbolType.LITERAL)
-      .translate(symbol.getChild(3));
-    String description = translator.translate(symbol.getChild(1));
+      .translate(symbol.getBranch(3));
+    String description = translator.translate(symbol.getBranch(1));
     return WikiPath.makeLink(link,
       (path, trailer) -> Link.makeWikiLink(external, path, trailer, description),
       path -> Link.makeLink(description, path, ""));

@@ -43,8 +43,8 @@ class Include {
     }
     Collection<String> extraCollapsibleClass =
       symbol.hasProperty("-teardown") ? Collections.singleton("teardown") : Collections.emptySet();//todo: but not for setup??
-    String title = "Included page: " + translator.translate(symbol.getChild(0));
-    return Collapsible.generateHtml(closeState, title, translator.translate(symbol.getChild(1)), extraCollapsibleClass);
+    String title = "Included page: " + translator.translate(symbol.getBranch(0));
+    return Collapsible.generateHtml(closeState, title, translator.translate(symbol.getBranch(1)), extraCollapsibleClass);
   }
 
   private static final String COLLAPSE_SETUP = "COLLAPSE_SETUP";

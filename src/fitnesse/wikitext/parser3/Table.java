@@ -79,11 +79,11 @@ class Table {
   }
 
   static String translate(Symbol table, Translator translator) {
-    return table.collectChildren(child -> row(child, translator), HtmlTag.name("table"), HtmlTag::add).html();
+    return table.collectBranches(child -> row(child, translator), HtmlTag.name("table"), HtmlTag::add).html();
   }
 
   private static HtmlTag row(Symbol row, Translator translator) {
-    return row.collectChildren(child -> cell(child, translator), HtmlTag.name("tr"), HtmlTag::add);
+    return row.collectBranches(child -> cell(child, translator), HtmlTag.name("tr"), HtmlTag::add);
   }
 
   private static HtmlTag cell(Symbol cell, Translator translator) {

@@ -17,7 +17,7 @@ class Path {
   static String translate(Symbol symbol, Translator translator) {
     return new HtmlTag("span")
       .attribute("class", "meta")
-      .body("classpath: " + translator.translate(symbol.getChild(1)))
+      .body("classpath: " + translator.translate(symbol.getBranch(1)))
       .htmlInline();
   }
 

@@ -19,7 +19,7 @@ class WikiList {
 
   static String translate(Symbol symbol, Translator translator) {
     String listType = symbol.getContent().contains("*") ? "ul" : "ol";
-    return symbol.collectChildren(
+    return symbol.collectBranches(
       child -> new HtmlTag("li", translator.translate(child)), new HtmlTag(listType), HtmlTag::add)
       .html();
   }

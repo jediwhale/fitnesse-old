@@ -1,3 +1,5 @@
 package fitnesse.wikitext.parser3;
 
-public interface Translator extends TranslateSymbol<String> {}
+public interface Translator {
+  String translate(Symbol symbol);
+}

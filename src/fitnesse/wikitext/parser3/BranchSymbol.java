@@ -24,7 +24,7 @@ class BranchSymbol extends Symbol {
   }
 
   @Override
-  protected List<Symbol> getChildren() { return children; }
+  protected List<Symbol> getBranches() { return children; }
 
   @Override
   protected Map<String, String> getProperties() { return Collections.emptyMap(); }

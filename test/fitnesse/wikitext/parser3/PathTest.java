@@ -19,7 +19,7 @@ public class PathTest {
 
   @Test public void providesPaths() {
     StringBuilder paths = new StringBuilder();
-    Path.providePaths(parse("!path stuff").getChild(0), paths::append);
+    Path.providePaths(parse("!path stuff").getBranch(0), paths::append);
     Assert.assertEquals("stuff", paths.toString());
   }
 }
