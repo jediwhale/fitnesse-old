@@ -9,7 +9,7 @@ public class HtmlTranslator implements Translator {
     this.external = external;
 
     symbolTypes = new EnumMap<>(SymbolType.class);
-    symbolTypes.put(SymbolType.ALIAS, (s, t) -> Alias.translate(s, t, external));
+    symbolTypes.put(SymbolType.ALIAS, (s, t) -> Alias.translate(s, this, external));
     symbolTypes.put(SymbolType.ANCHOR_NAME, AnchorName::translate);
     symbolTypes.put(SymbolType.ANCHOR_REFERENCE, AnchorReference::translate);
     symbolTypes.put(SymbolType.BOLD, Pair.translate("b"));
@@ -42,10 +42,10 @@ public class HtmlTranslator implements Translator {
     symbolTypes = original.symbolTypes;
   }
 
-  @Override
-  public Translator substitute(SymbolType original, SymbolType substitute) {
-    substitutes.put(original,  substitute);
-    return this;
+  public Translator substitute(SymbolType originalType, SymbolType substituteType) {
+    HtmlTranslator substitute = new HtmlTranslator(this);
+    substitute.substitutes.put(originalType,  substituteType);
+    return substitute;
   }
 
   @Override
@@ -55,12 +55,7 @@ public class HtmlTranslator implements Translator {
     return symbolTypes.get(type).translate(symbol, this);
   }
 
-  @Override
-  public Translator copy() {
-    return new HtmlTranslator(this);
-  }
-
-  static TranslateRule inLine(String tag) {
+  private static TranslateRule inLine(String tag) {
     return (symbol, translator) -> HtmlTag.name(tag).htmlInline();
   }
 

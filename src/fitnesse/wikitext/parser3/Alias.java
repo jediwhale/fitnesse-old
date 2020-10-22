@@ -27,12 +27,11 @@ public class Alias {
       Symbol.source(TokenType.ALIAS_END));
   }
 
-  public static String translate(Symbol symbol, Translator translator, External external) { //todo: this is pretty opaque
+  public static String translate(Symbol symbol, HtmlTranslator translator, External external) { //todo: this is pretty opaque
     if (symbol.getChild(1).getChild(0).getType() == SymbolType.WIKI_LINK) {
       return translator.translate(symbol.getChild(1));
     }
     String link = translator
-      .copy()
       .substitute(
         symbol.getChild(3).getChild(0).getType() == SymbolType.LINK ? SymbolType.LINK : SymbolType.WIKI_LINK,
         SymbolType.LITERAL)

@@ -72,11 +72,11 @@ abstract class Symbol implements Tree<Symbol>, PropertyStore {
         (hasChildren() && getChild(0).getType() == SymbolType.ERROR);
   }
 
-  String translateContent(TranslateSymbol<String> translator) {
+  String translateContent(Translator translator) {
     return HtmlUtil.escapeHTML(HtmlUtil.unescapeWiki(getContent())) + translateChildren(translator);
   }
 
-  String translateChildren(TranslateSymbol<String> translator) {
+  String translateChildren(Translator translator) {
     return collectChildren(translator, new StringBuilder(), StringBuilder::append).toString();
   }
 

@@ -78,15 +78,15 @@ class Table {
     return token.getContent().contains("\r") || token.getContent().contains("\n") || token.isType(TokenType.TABLE_END);
   }
 
-  static String translate(Symbol table, TranslateSymbol<String> translator) {
+  static String translate(Symbol table, Translator translator) {
     return table.collectChildren(child -> row(child, translator), HtmlTag.name("table"), HtmlTag::add).html();
   }
 
-  private static HtmlTag row(Symbol row, TranslateSymbol<String> translator) {
+  private static HtmlTag row(Symbol row, Translator translator) {
     return row.collectChildren(child -> cell(child, translator), HtmlTag.name("tr"), HtmlTag::add);
   }
 
-  private static HtmlTag cell(Symbol cell, TranslateSymbol<String> translator) {
+  private static HtmlTag cell(Symbol cell, Translator translator) {
     return HtmlTag.name("td").body(translator.translate(cell).trim());
   }
 }
