@@ -19,9 +19,13 @@ public class AnchorReferenceTest {
 
   @Test
   public void translates() {
-    assertTranslates(Html.anchor("#anchorname", ".#anchorname"), ".#anchorname");
-    assertTranslates("say" + Html.anchor("#anchorname", ".#anchorname") + " now", "say.#anchorname now");
+    assertTranslates(anchor("#anchorname"), ".#anchorname");
+    assertTranslates("say" + anchor("#anchorname") + " now", "say.#anchorname now");
     assertTranslates(toError(".# Name must be alphanumeric") + " anchorname", ".# anchorname");
     assertTranslates(toError(".# Name must be alphanumeric") + "n@me", ".#n@me");
+  }
+
+  public static String anchor(String reference) {
+    return Html.anchor(reference, "." + reference) + "\n";
   }
 }
