@@ -27,11 +27,6 @@ public class FakeExternal implements External, VariableStore {
   }
 
   @Override
-  public String getProperty(String name) {
-    return name + "Value";
-  }
-
-  @Override
   public Maybe<External> make(String pageName) {
     FakeExternal result = new FakeExternal();
     result.pageName = this.pageName + "." + pageName;

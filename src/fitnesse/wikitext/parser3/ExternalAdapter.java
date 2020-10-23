@@ -20,11 +20,6 @@ class ExternalAdapter implements External {
   }
 
   @Override
-  public String getProperty(String name) {
-    return page.getProperty(name);
-  }
-
-  @Override
   public Maybe<External> make(String pageName) {
     Maybe<SourcePage> includedPage = page.findIncludedPage(pageName);
     if (includedPage.isNothing()) return Maybe.nothingBecause(includedPage.because());

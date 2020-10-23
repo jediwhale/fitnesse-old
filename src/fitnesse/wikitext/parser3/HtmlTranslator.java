@@ -1,6 +1,7 @@
 package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlTag;
+import fitnesse.wikitext.shared.LastModifiedHtml;
 
 import java.util.EnumMap;
 
@@ -21,7 +22,7 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.HEADER, Header::translate);
     symbolTypes.put(SymbolType.INCLUDE, Include::translate);
     symbolTypes.put(SymbolType.ITALIC, Pair.translate("i"));
-    symbolTypes.put(SymbolType.LAST_MODIFIED, (s, t) ->LastModified.translate(external));
+    symbolTypes.put(SymbolType.LAST_MODIFIED, (s, t) -> LastModifiedHtml.write(external.getSourcePage()));
     symbolTypes.put(SymbolType.LINK, Link::translate);
     symbolTypes.put(SymbolType.WIKI_LIST, WikiList::translate);
     symbolTypes.put(SymbolType.LITERAL, Literal::translate);
