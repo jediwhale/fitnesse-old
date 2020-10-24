@@ -3,7 +3,7 @@ package fitnesse.wikitext.parser3;
 import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiSourcePage;
 import fitnesse.wikitext.parser.TestRoot;
-import fitnesse.wikitext.shared.VariableName;
+import fitnesse.wikitext.shared.Names;
 import org.junit.Test;
 
 import static fitnesse.wikitext.parser3.Helper.*;
@@ -19,7 +19,7 @@ public class ContentsTest {
 
   @Test public void parsesWithProperties() {
     assertParses("CONTENTS[-R=2147483647,-f=,-g=]", "!contents -f -g -R");
-    external.putVariable(VariableName.REGRACE_TOC, "true");
+    external.putVariable(Names.REGRACE_TOC, "true");
     assertParses("CONTENTS[REGRACE_TOC=true,-R=2]", "!contents -R2");
   }
 
