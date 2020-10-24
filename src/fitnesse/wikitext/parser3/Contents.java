@@ -4,7 +4,7 @@ import fitnesse.html.HtmlTag;
 import fitnesse.html.HtmlUtil;
 import fitnesse.wikitext.VariableStore;
 import fitnesse.wikitext.shared.ContentsItemBuilder;
-import fitnesse.wikitext.shared.VariableName;
+import fitnesse.wikitext.shared.Names;
 
 class Contents {
   static Symbol parse(Parser parser, VariableStore variables) {
@@ -26,13 +26,13 @@ class Contents {
     }
     while (!parser.peek(-1).isEndOfLine());
     result.copyVariables(new String[] {
-        VariableName.HELP_TOC,
-        VariableName.HELP_INSTEAD_OF_TITLE_TOC,
-        VariableName.REGRACE_TOC,
-        VariableName.PROPERTY_TOC,
-        VariableName.FILTER_TOC,
-        VariableName.MORE_SUFFIX_TOC,
-        VariableName.PROPERTY_CHARACTERS},
+        Names.HELP_TOC,
+        Names.HELP_INSTEAD_OF_TITLE_TOC,
+        Names.REGRACE_TOC,
+        Names.PROPERTY_TOC,
+        Names.FILTER_TOC,
+        Names.MORE_SUFFIX_TOC,
+        Names.PROPERTY_CHARACTERS},
       variables);
     return result;
   }

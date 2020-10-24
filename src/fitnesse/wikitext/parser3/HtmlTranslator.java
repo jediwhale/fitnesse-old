@@ -20,7 +20,7 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.DEFINE, Variable::translate);
     symbolTypes.put(SymbolType.ERROR, Error::translate);
     symbolTypes.put(SymbolType.SOURCE, (s, t) -> "");
-    symbolTypes.put(SymbolType.HEADER, Header::translate);
+    symbolTypes.put(SymbolType.HEADER, Translate.with(ToHtml::header).children());
     symbolTypes.put(SymbolType.INCLUDE, Include::translate);
     symbolTypes.put(SymbolType.ITALIC, Translate.with(ToHtml::pair).text("i").content());
     symbolTypes.put(SymbolType.LAST_MODIFIED, (s, t) -> LastModifiedHtml.write(external.getSourcePage()));
@@ -29,7 +29,7 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.LITERAL, Literal::translate);
     symbolTypes.put(SymbolType.LIST, Symbol::translateChildren);
     symbolTypes.put(SymbolType.NESTING, Symbol::translateChildren);
-    symbolTypes.put(SymbolType.NEW_LINE, inLine("br"));
+    symbolTypes.put(SymbolType.NEW_LINE, Translate.with(ToHtml::newLine));
     symbolTypes.put(SymbolType.PATH, Path::translate);
     symbolTypes.put(SymbolType.SEE, See::translate);
     symbolTypes.put(SymbolType.STRIKE, Translate.with(ToHtml::pair).text("strike").content());
@@ -55,10 +55,6 @@ public class HtmlTranslator implements Translator {
     SymbolType type = symbol.getType();
     if (substitutes.containsKey(type)) type = substitutes.get(type);
     return symbolTypes.get(type).translate(symbol, this);
-  }
-
-  private static TranslateRule inLine(String tag) {
-    return (symbol, translator) -> HtmlTag.name(tag).htmlInline();
   }
 
   private final External external;
