@@ -6,7 +6,9 @@ import org.junit.Test;
 import static fitnesse.wikitext.parser3.Helper.*;
 
 public class PathTest {
-  @Test public void scansPath() { assertScansWordAtStart("!path", "Path"); }
+  @Test public void scansPath() {
+    assertScansWordAtStart("!path", "Path");
+  }
 
   @Test public void parses() {
     assertParses("PATH(SOURCE=!path ,TEXT=stuff)", "!path stuff\n");
@@ -17,9 +19,26 @@ public class PathTest {
     assertTranslates("<span class=\"meta\">classpath: stuff</span>", "!path stuff");
   }
 
+  @Test public void translatesWithVariable() {
+    external.putVariable("x", "more");
+    assertTranslates("<span class=\"meta\">classpath: morestuff</span>", "!path ${x}stuff\n");
+  }
+
   @Test public void providesPaths() {
-    StringBuilder paths = new StringBuilder();
-    Path.providePaths(parse("!path stuff").getBranch(0), paths::append);
+    StringBuilder paths = buildPath("!path stuff");
     Assert.assertEquals("stuff", paths.toString());
   }
+
+  @Test public void providesPathsWithVariable() {
+    external.putVariable("x", "more");
+    StringBuilder paths = buildPath("!path ${x}stuff");
+    Assert.assertEquals("morestuff", paths.toString());
+  }
+
+  private StringBuilder buildPath(String input) {
+    StringBuilder paths = new StringBuilder();
+    Path.providePaths(parse(input), paths::append);
+    return paths;
+  }
 }
+

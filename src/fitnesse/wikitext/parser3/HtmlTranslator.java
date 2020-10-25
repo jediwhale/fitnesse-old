@@ -33,7 +33,7 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.NESTING, Symbol::translateChildren);
     symbolTypes.put(SymbolType.NEW_LINE, Translate.with(ToHtml::newLine));
     symbolTypes.put(SymbolType.NOTE, Translate.with(ToHtml::note).content());
-    symbolTypes.put(SymbolType.PATH, Path::translate);
+    symbolTypes.put(SymbolType.PATH, Translate.with(ToHtml::path).content());
     symbolTypes.put(SymbolType.PREFORMAT, Translate.with(ToHtml::pair).text("pre").content());
     symbolTypes.put(SymbolType.SEE, See::translate);
     symbolTypes.put(SymbolType.STRIKE, Translate.with(ToHtml::pair).text("strike").content());

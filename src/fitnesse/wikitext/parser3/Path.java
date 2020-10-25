@@ -1,7 +1,5 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.html.HtmlTag;
-
 import java.util.function.Consumer;
 
 class Path {
@@ -12,13 +10,6 @@ class Path {
     Symbol result = parser.textType(SymbolType.TEXT).parseList(SymbolType.PATH, Terminator.END_LINE);
     result.addFirst(source);
     return result;
-  }
-
-  static String translate(Symbol symbol, Translator translator) {
-    return new HtmlTag("span")
-      .attribute("class", "meta")
-      .body("classpath: " + translator.translate(symbol.getBranch(1)))
-      .htmlInline();
   }
 
   static void providePaths(Symbol node, Consumer<String> takePath) {
