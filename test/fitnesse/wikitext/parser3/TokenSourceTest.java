@@ -79,26 +79,15 @@ public class TokenSourceTest {
   }
 
   @Test
-  public void scansPreformat() {
-    assertScans("PreformatStart={{{,Text=hi,PreformatEnd=}}}", "{{{hi}}}");
-  }
-
-  @Test
   public void scansLeadingAndTrailingText() {
     assertScans("Text=hi,Bold=''',Text=there", "hi'''there");
   }
-
-  @Test public void scansAnchorName() { assertScansWord("!anchor", "AnchorName"); }
-
-  @Test public void scansCenterLine() { assertScansWord("!c", "CenterLine"); }
 
   @Test public void scansHeadings() { assertScansWord("!headings", "Headings"); }
 
   @Test public void scansImage() { assertScansWord("!img", "Image"); }
 
   @Test public void scansMeta() { assertScansWord("!meta", "Meta"); }
-
-  @Test public void scansNote() { assertScansWord("!note", "Note"); }
 
   @Test
   public void scansHorizontalRule() {

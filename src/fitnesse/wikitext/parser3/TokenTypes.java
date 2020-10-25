@@ -13,7 +13,7 @@ public class TokenTypes {
     TokenType.ANCHOR_REFERENCE,
     TokenType.BOLD_ITALIC,
     TokenType.BULLET_LIST,
-    TokenType.CENTER_LINE,
+    TokenType.CENTER,
     TokenType.COLLAPSIBLE_END,
     TokenType.COLLAPSIBLE_START,
     TokenType.COMMENT,

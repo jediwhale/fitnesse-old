@@ -12,11 +12,6 @@ public class ParserTest {
   }
 
   @Test
-  public void parsesPreformat() {
-    assertParses("LIST(SOURCE={{{,TEXT=stuff,SOURCE=}}})", "{{{stuff}}}");
-  }
-
-  @Test
   public void parsesText() {
     assertParses("TEXT=hi", "hi");
   }

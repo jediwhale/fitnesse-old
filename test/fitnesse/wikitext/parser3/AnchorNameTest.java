@@ -6,13 +6,15 @@ import static fitnesse.wikitext.parser3.Helper.*;
 
 public class AnchorNameTest {
 
-  @Test
-  public void parses() {
+  @Test public void scans() {
+    assertScansWord("!anchor", "AnchorName");
+  }
+
+  @Test public void parses() {
     assertParses("ANCHOR_NAME=name", "!anchor name");
   }
 
-  @Test
-  public void translates() {
+  @Test public void translates() {
     assertTranslates(html("name"), "!anchor name");
     assertTranslates("say" + html("no") + " more", "say!anchor no more");
     assertTranslates("say " + html("no") + " more", "say !anchor no more");

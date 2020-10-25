@@ -28,7 +28,8 @@ public class TokenType {
     .matchOneOf(
       matchAll(text("|"), ignoreBlank(), newLine(), text("|")),
       matchAll(text("|"), ignoreBlank()));
-  public static final TokenType CENTER_LINE = new TokenType("CenterLine").matches(word("!c"));
+  public static final TokenType CENTER = new TokenType("Center")
+    .matches(startLine(), word("!c"));
   public static final TokenType COLLAPSIBLE_END = new TokenType("CollapsibleEnd", "*!").matches(repeat("*"), text("!"));
   public static final TokenType COLLAPSIBLE_START = new TokenType("CollapsibleStart").matches(text("!"), repeat("*"));
   public static final TokenType COLON = new TokenType("Colon", ":");
@@ -68,7 +69,7 @@ public class TokenType {
     .isStart();
   public static final TokenType NUMBERED_LIST = new TokenType("NumberedList")
     .matches(startLine(), blank(), digit());
-  public static final TokenType NOTE = new TokenType("Note").matches(word("!note"));
+  public static final TokenType NOTE = new TokenType("Note").matches(startLine(), word("!note"));
   public static final TokenType PARENTHESIS_END = new TokenType("ParenthesisEnd", ")");
   public static final TokenType PARENTHESIS_START = new TokenType("ParenthesisStart", "(");
   public static final TokenType PATH = new TokenType("Path")

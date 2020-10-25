@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 
 class Parser {
   static Symbol parse(String input, Map<TokenType, ParseRule> rules) {
@@ -31,7 +32,7 @@ class Parser {
   Parser(String input, List<TokenType> tokenTypes, Map<TokenType, ParseRule> rules) {
     this.tokens = new TokenSource(input, tokenTypes);
     this.rules = rules;
-    textType = text -> WikiPath.isWikiWordPath(text) ? SymbolType.WIKI_LINK : SymbolType.TEXT;
+    textType = this::determineTextType;
     this.watchTokens = token -> {};
   }
 
@@ -117,7 +118,17 @@ class Parser {
     return result;
   }
 
+  private SymbolType determineTextType(String text) {
+    return WikiPath.isWikiWordPath(text) ? SymbolType.WIKI_LINK :
+      isEMail(text) ? SymbolType.EMAIL : SymbolType.TEXT;
+  }
+
+  private boolean isEMail(String text) {
+    return text.indexOf("@") > 0 && Pattern.matches(eMailPattern, text);
+  }
+
   private static final Terminator END_TERMINATOR = new Terminator(TokenType.END);
+  private static final String eMailPattern = "[\\w-_.]+@[\\w-_.]+\\.[\\w-_.]+";
 
   private final Function<String, SymbolType> textType;
   private final TokenSource tokens;

@@ -16,8 +16,10 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.ANCHOR_REFERENCE, Translate.with(ToHtml::anchorReference).content());
     symbolTypes.put(SymbolType.BOLD, Translate.with(ToHtml::pair).text("b").content());
     symbolTypes.put(SymbolType.BOLD_ITALIC, Translate.with(ToHtml::nestedPair).text("b").text("i").content());
+    symbolTypes.put(SymbolType.CENTER, Translate.with(ToHtml::pair).text("center").content());
     symbolTypes.put(SymbolType.CONTENTS, (s, t) -> Contents.translate(s, external));
     symbolTypes.put(SymbolType.DEFINE, Variable::translate);
+    symbolTypes.put(SymbolType.EMAIL, Translate.with(ToHtml::email).content());
     symbolTypes.put(SymbolType.ERROR, Error::translate);
     symbolTypes.put(SymbolType.SOURCE, (s, t) -> "");
     symbolTypes.put(SymbolType.HEADER, Translate.with(ToHtml::header).children());
@@ -30,7 +32,9 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.LIST, Symbol::translateChildren);
     symbolTypes.put(SymbolType.NESTING, Symbol::translateChildren);
     symbolTypes.put(SymbolType.NEW_LINE, Translate.with(ToHtml::newLine));
+    symbolTypes.put(SymbolType.NOTE, Translate.with(ToHtml::note).content());
     symbolTypes.put(SymbolType.PATH, Path::translate);
+    symbolTypes.put(SymbolType.PREFORMAT, Translate.with(ToHtml::pair).text("pre").content());
     symbolTypes.put(SymbolType.SEE, See::translate);
     symbolTypes.put(SymbolType.STRIKE, Translate.with(ToHtml::pair).text("strike").content());
     symbolTypes.put(SymbolType.STYLE, Style::translate);

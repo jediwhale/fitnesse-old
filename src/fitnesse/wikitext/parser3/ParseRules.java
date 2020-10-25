@@ -14,6 +14,7 @@ class ParseRules {
     rules.put(TokenType.BOLD, Pair.parse(SymbolType.BOLD));
     rules.put(TokenType.BOLD_ITALIC, Pair.parse(SymbolType.BOLD_ITALIC));
     rules.put(TokenType.BULLET_LIST, WikiList::parse);
+    rules.put(TokenType.CENTER, Line.parse(SymbolType.CENTER));
     rules.put(TokenType.COMMENT, Comment::parse);
     rules.put(TokenType.CONTENTS, parser -> Contents.parse(parser, variables));
     rules.put(TokenType.DEFINE, parser -> Variable.parsePut(parser, variables));
@@ -26,6 +27,7 @@ class ParseRules {
     rules.put(TokenType.LITERAL_START, Literal::parse);
     rules.put(TokenType.NESTING_START, Nesting::parse);
     rules.put(TokenType.NEW_LINE, makeType(SymbolType.NEW_LINE));
+    rules.put(TokenType.NOTE, Line.parse(SymbolType.NOTE));
     rules.put(TokenType.NUMBERED_LIST, WikiList::parse);
     rules.put(TokenType.PATH, Path::parse);
     rules.put(TokenType.PLAIN_TEXT_TABLE_START, Table::parsePlain);
