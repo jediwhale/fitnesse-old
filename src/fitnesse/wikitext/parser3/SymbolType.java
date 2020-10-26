@@ -11,6 +11,7 @@ public enum SymbolType {
   DEFINE,
   EMAIL,
   ERROR,
+  EXPRESSION,
   HEADER,
   INCLUDE,
   ITALIC,

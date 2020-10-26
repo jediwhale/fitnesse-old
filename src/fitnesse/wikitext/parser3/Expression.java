@@ -1,13 +1,13 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.wikitext.parser.FormattedExpression;
-import fitnesse.wikitext.parser.Maybe;
+import fitnesse.wikitext.VariableStore;
+import fitnesse.wikitext.shared.Names;
 
 class Expression {
-  static Symbol parse(Parser parser) {
-    String expression = parser.parseText(Terminator.make(parser.advance()));
-    Maybe<String> result = new FormattedExpression(expression, Maybe.noString).evaluate();
-    if (result.isNothing()) return Symbol.error(result.because());
-    return new LeafSymbol(SymbolType.TEXT, result.getValue());
+  static Symbol parse(Parser parser, VariableStore variables) {
+    Symbol result = new TaggedSymbol(SymbolType.EXPRESSION);
+    result.add(parser.parseList(parser.advance()));
+    result.copyVariables(new String[] {Names.FORMAT_LOCALE}, variables);
+    return result;
   }
 }

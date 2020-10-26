@@ -18,7 +18,7 @@ class ParseRules {
     rules.put(TokenType.COMMENT, Comment::parse);
     rules.put(TokenType.CONTENTS, parser -> Contents.parse(parser, variables));
     rules.put(TokenType.DEFINE, parser -> Variable.parsePut(parser, variables));
-    rules.put(TokenType.EXPRESSION_START, Expression::parse);
+    rules.put(TokenType.EXPRESSION_START, parser -> Expression.parse(parser, variables));
     rules.put(TokenType.HEADER, parser -> Header.parse(parser, variables));
     rules.put(TokenType.INCLUDE, parser -> Include.parse(parser, external, variables));
     rules.put(TokenType.ITALIC, Pair.parse(SymbolType.ITALIC));

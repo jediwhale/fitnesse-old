@@ -1,6 +1,5 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.html.HtmlTag;
 import fitnesse.wikitext.shared.LastModifiedHtml;
 import fitnesse.wikitext.shared.ToHtml;
 
@@ -20,7 +19,8 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.CONTENTS, (s, t) -> Contents.translate(s, external));
     symbolTypes.put(SymbolType.DEFINE, Variable::translate);
     symbolTypes.put(SymbolType.EMAIL, Translate.with(ToHtml::email).content());
-    symbolTypes.put(SymbolType.ERROR, Error::translate);
+    symbolTypes.put(SymbolType.ERROR, Translate.with(ToHtml::error).content());
+    symbolTypes.put(SymbolType.EXPRESSION, Translate.with(ToHtml::expression).content());
     symbolTypes.put(SymbolType.SOURCE, (s, t) -> "");
     symbolTypes.put(SymbolType.HEADER, Translate.with(ToHtml::header).children());
     symbolTypes.put(SymbolType.INCLUDE, Include::translate);
