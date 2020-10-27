@@ -13,6 +13,7 @@ public enum SymbolType {
   ERROR,
   EXPRESSION,
   HEADER,
+  IMAGE,
   INCLUDE,
   ITALIC,
   LAST_MODIFIED,

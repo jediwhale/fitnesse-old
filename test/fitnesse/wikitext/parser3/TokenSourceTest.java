@@ -85,7 +85,6 @@ public class TokenSourceTest {
 
   @Test public void scansHeadings() { assertScansWord("!headings", "Headings"); }
 
-  @Test public void scansImage() { assertScansWord("!img", "Image"); }
 
   @Test public void scansMeta() { assertScansWord("!meta", "Meta"); }
 

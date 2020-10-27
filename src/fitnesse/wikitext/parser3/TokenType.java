@@ -50,7 +50,8 @@ public class TokenType {
   public static final TokenType HORIZONTAL_RULE = new TokenType("HorizontalRule").matches(text("---"), repeat("-"));
   public static final TokenType HEADINGS = new TokenType("Headings").matches(word("!headings"));
   public static final TokenType HELP = new TokenType("Help").matches(word("!help"));
-  public static final TokenType IMAGE = new TokenType("Image").matches(word("!img"));
+  public static final TokenType IMAGE = new TokenType("Image")
+    .matchOneOf(word("!img"), word("!img-l"), word("!img-r"));
   public static final TokenType INCLUDE = new TokenType("Include")
     .matches(word("!include"));
   public static final TokenType ITALIC = new TokenType("Italic", "''");
