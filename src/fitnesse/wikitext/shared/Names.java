@@ -16,7 +16,13 @@ public class Names {
   // variable for the expression widget
   public static final String FORMAT_LOCALE = "FORMAT_LOCALE";
 
-  //properties for the header widgets
+  // properties for the header widgets
   public static final String LEVEL = "level";
   public static final String ID = "id";
+
+  // property for the !img widgets
+  public static final String IMAGE_CLASS = "image";
+  // values for the image class
+  public static final String LEFT = "left";
+  public static final String RIGHT = "right";
 }

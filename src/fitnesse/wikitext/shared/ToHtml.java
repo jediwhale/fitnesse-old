@@ -37,6 +37,12 @@ public class ToHtml {
     return result.html();
   }
 
+  public static String image(String[] strings, PropertySource source) {
+    HtmlTag result =  HtmlTag.name("img").attribute("src", strings[0]);
+    source.findProperty(Names.IMAGE_CLASS).ifPresent(value -> result.addAttribute("class", value));
+    return result.htmlInline();
+  }
+
   public static String nestedPair(String[] strings) {
     return HtmlTag.name(strings[0]).child(HtmlTag.name(strings[1]).body(strings[2])).htmlInline();
   }
