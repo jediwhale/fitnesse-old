@@ -40,6 +40,7 @@ public class ToHtml {
   public static String image(String[] strings, PropertySource source) {
     HtmlTag result =  HtmlTag.name("img").attribute("src", strings[0]);
     source.findProperty(Names.IMAGE_CLASS).ifPresent(value -> result.addAttribute("class", value));
+    source.findProperty(Names.IMAGE_WIDTH).ifPresent(value -> result.addAttribute("width", value));
     return result.htmlInline();
   }
 

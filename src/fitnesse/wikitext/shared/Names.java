@@ -20,7 +20,10 @@ public class Names {
   public static final String LEVEL = "level";
   public static final String ID = "id";
 
-  // property for the !img widgets
+  // properties for the !img widget
+  public static final String IMAGE_BORDER= "-b";
+  public static final String IMAGE_MARGIN = "-m";
+  public static final String IMAGE_WIDTH = "-w";
   public static final String IMAGE_CLASS = "image";
   // values for the image class
   public static final String LEFT = "left";
