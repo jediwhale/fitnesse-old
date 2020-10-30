@@ -9,6 +9,10 @@ class LeafSymbol extends Symbol {
     super(symbolType, content);
   }
 
+  LeafSymbol(SymbolType symbolType, String content, int offset) {
+    super(symbolType, content, offset);
+  }
+
   @Override
   protected List<Symbol> getBranches() { return Collections.emptyList(); }
 

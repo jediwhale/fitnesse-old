@@ -13,8 +13,9 @@ public class AliasTest {
 
   @Test
   public void parsesAlias() {
-    assertParses("ALIAS(SOURCE=[[,LIST(TEXT=hi),SOURCE=][,LIST(TEXT=there),SOURCE=]])", "[[hi][there]]");
-    assertParses("ALIAS(SOURCE=[[,LIST(TEXT=hi),SOURCE=][,LIST(WIKI_LINK=ThereBob),SOURCE=]])", "[[hi][ThereBob]]");
+    assertParses("ALIAS(LIST(TEXT=hi),LIST(TEXT=there))", "[[hi][there]]");
+    assertParses("ALIAS(LIST(TEXT=hi),LIST(WIKI_LINK=ThereBob))", "[[hi][ThereBob]]");
+    assertParses("ALIAS(LIST(TEXT=tag),LIST(LINK=http://(TEXT=files/myfile)))", "[[tag][http://files/myfile]]");
   }
 
   @Test

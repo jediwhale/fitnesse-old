@@ -113,7 +113,7 @@ class Parser {
 
   private static Symbol defaultRule(Parser parser) {
     String content = parser.peek(0).getContent();
-    Symbol result = new LeafSymbol(parser.textType.apply(content), content);
+    Symbol result = new LeafSymbol(parser.textType.apply(content), content, parser.peek(0).getOffset());
     parser.advance();
     return result;
   }

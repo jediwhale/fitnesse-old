@@ -12,8 +12,6 @@ abstract class Symbol extends Tree<Symbol> implements PropertyStore {
 
   static Symbol error(String message) { return new LeafSymbol(SymbolType.ERROR, message); }
 
-  static Symbol source(TokenType tokenType) { return new LeafSymbol(SymbolType.SOURCE, tokenType.getMatch()); } //todo: should be from token?
-
   static Symbol makeList(Symbol ...children) { return make(SymbolType.LIST, children); }
 
   static Symbol make(SymbolType type, Symbol ...children) {
@@ -46,11 +44,9 @@ abstract class Symbol extends Tree<Symbol> implements PropertyStore {
 
   String getContent() { return content; }
 
-  void setContent(String content) { this.content = content; }
+  int getOffset() { return offset; }
 
   void add(Symbol child) { getBranches().add(child); }
-
-  void addFirst(Symbol child) { getBranches().add(0, child); }
 
   String getContent(int child) { return getBranches().get(child).getContent(); }
 
@@ -98,10 +94,16 @@ abstract class Symbol extends Tree<Symbol> implements PropertyStore {
   protected Symbol(SymbolType symbolType) { this(symbolType, ""); }
 
   protected Symbol(SymbolType symbolType, String content) {
-    this.symbolType = symbolType;
-    this.content = content;
+    this(symbolType, content, -1);
   }
 
-  private String content;
+  protected Symbol(SymbolType symbolType, String content, int offset) {
+    this.symbolType = symbolType;
+    this.content = content;
+    this.offset = offset;
+  }
+
+  private final String content;
   private final SymbolType symbolType;
+  private final int offset;
 }

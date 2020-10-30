@@ -11,8 +11,8 @@ public class PathTest {
   }
 
   @Test public void parses() {
-    assertParses("PATH(SOURCE=!path ,TEXT=stuff)", "!path stuff\n");
-    assertParses("PATH(SOURCE=!path ,TEXT=more,TEXT= ,TEXT=stuff)", "!path more stuff\n");
+    assertParses("PATH(TEXT=stuff)", "!path stuff\n");
+    assertParses("PATH(TEXT=more,TEXT= ,TEXT=stuff)", "!path more stuff\n");
   }
 
   @Test public void translates() {

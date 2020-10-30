@@ -5,11 +5,8 @@ import java.util.function.Consumer;
 class Path {
 
   static Symbol parse(Parser parser) {
-    Symbol source = new LeafSymbol(SymbolType.SOURCE, parser.peek(0).getContent());
     parser.advance();
-    Symbol result = parser.textType(SymbolType.TEXT).parseList(SymbolType.PATH, Terminator.END_LINE);
-    result.addFirst(source);
-    return result;
+    return parser.textType(SymbolType.TEXT).parseList(SymbolType.PATH, Terminator.END_LINE);
   }
 
   static void providePaths(Symbol node, Consumer<String> takePath) {

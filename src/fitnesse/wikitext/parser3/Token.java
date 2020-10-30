@@ -4,14 +4,22 @@ public class Token {
   public Token(TokenType type, String content) {
     this.type = type;
     this.content = content;
+    this.offset = -1;
   }
 
   public Token(TokenType type) {
     this(type, "");
   }
 
+  public Token(String content, int offset) {
+    this.type = TokenType.TEXT;
+    this.content = content;
+    this.offset = offset;
+  }
+
   public TokenType getType() { return type; }
   public String getContent() { return content; }
+  public int getOffset() { return offset; }
 
   public boolean isType(TokenType type) { return this.type == type; }
 
@@ -33,5 +41,6 @@ public class Token {
 
   private final TokenType type;
   private final String content;
+  private final int offset;
 
 }

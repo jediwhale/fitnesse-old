@@ -10,11 +10,12 @@ public class PreformatTest {
   }
 
   @Test  public void parses() {
-    assertParses("LIST(SOURCE={{{,PREFORMAT=stuff,SOURCE=}}})", "{{{stuff}}}");
+    assertParses("LIST(PREFORMAT=stuff)", "{{{stuff}}}");
+    assertParses("LIST(PREFORMAT=some stuff)", "{{{some stuff}}}");
   }
 
   @Test public void parsesNoWikiLink() {
-    assertParses("LIST(SOURCE={{{,PREFORMAT=HiThere,SOURCE=}}})", "{{{HiThere}}}");
+    assertParses("LIST(PREFORMAT=HiThere)", "{{{HiThere}}}");
   }
 
   @Test public void translates() {

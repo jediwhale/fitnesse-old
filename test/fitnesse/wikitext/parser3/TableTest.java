@@ -31,7 +31,7 @@ public class TableTest {
     assertParses("TABLE(LIST(LIST(TEXT=a))),TEXT=there", "|a|\nthere");
     assertParses("TABLE(LIST(LIST(TEXT=a),LIST(TEXT=b)))", "|a|b|");
     assertParses("TABLE(LIST(LIST(TEXT=a),LIST(TEXT=b)),LIST(LIST(TEXT=c),LIST(TEXT=d)))", "|a|b|\n|c|d|");
-    assertParses("TABLE(LIST(LIST(LIST(SOURCE=!-,LITERAL=a,SOURCE=-!)),LIST(TEXT=b)))", "|!-a-!|b|");
+    assertParses("TABLE(LIST(LIST(LIST(LITERAL=a)),LIST(TEXT=b)))", "|!-a-!|b|");
     assertParses("TABLE(LIST(LIST(TEXT=a)),LIST(LIST(TEXT=b)))", "|a|\n|b|");
   }
 

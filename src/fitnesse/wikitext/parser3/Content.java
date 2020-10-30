@@ -13,6 +13,7 @@ public class Content {
     this.isStartLine = other.isStartLine;
   }
 
+  public int getCurrent() { return current; }
   public void setStartLine() { isStartLine = true; }
 
   public void advance(int length) {
@@ -47,7 +48,7 @@ public class Content {
     return isStartLine;
   }
 
-  private String content;
+  private final String content;
   private int current;
   private boolean isStartLine;
 }

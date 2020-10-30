@@ -12,15 +12,23 @@ public class ImageTest {
   }
 
   @Test public void parses() {
-    assertParses("IMAGE(SOURCE=!img ,TEXT=url)", "!img url");
-    assertParses("IMAGE(SOURCE=!img ,TEXT=PageOne)", "!img PageOne");
-    assertParses("IMAGE(SOURCE=!img-l ,TEXT=url)[image=left]", "!img-l url");
-    assertParses("IMAGE(SOURCE=!img-r ,TEXT=url)[image=right]", "!img-r url");
+    assertParses("IMAGE(TEXT=url)", "!img url");
+    assertParses("IMAGE(TEXT=PageOne)", "!img PageOne");
+    assertParses("IMAGE(TEXT=url)[image=left]", "!img-l url");
+    assertParses("IMAGE(TEXT=url)[image=right]", "!img-r url");
+  }
+
+  @Test public void parsesOptions() {
+    assertParses("IMAGE(TEXT=name)[-w=640]", "!img -w 640 name");
   }
 
   @Test public void translates() {
     assertTranslates("<img src=\"url\"/>", "!img url");
     assertTranslates("<img src=\"url\" class=\"left\"/>", "!img-l url");
     assertTranslates("<img src=\"url\" class=\"right\"/>", "!img-r url");
+  }
+
+  @Test public void TranslatesOptions() {
+    assertTranslates("<img src=\"name\" width=\"640\"/>", "!img -w 640 name");
   }
 }

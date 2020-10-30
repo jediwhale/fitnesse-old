@@ -26,7 +26,6 @@ public enum SymbolType {
   PATH,
   PREFORMAT,
   SEE,
-  SOURCE,
   STRIKE,
   STYLE,
   TABLE,

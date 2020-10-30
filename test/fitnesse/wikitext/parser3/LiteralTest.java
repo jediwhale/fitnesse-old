@@ -16,9 +16,9 @@ public class LiteralTest {
 
   @Test
   public void parses() {
-    assertParses("LIST(SOURCE=!-,LITERAL=hi there,SOURCE=-!)", "!-hi there-!");
-    assertParses("LIST(SOURCE=!-,LITERAL=HiThere,SOURCE=-!)", "!-HiThere-!");
-    assertParses("TEXT=some,LIST(SOURCE=!-,LITERAL=stuff,SOURCE=-!),TEXT=here", "some!-stuff-!here");
+    assertParses("LIST(LITERAL=hi there)", "!-hi there-!");
+    assertParses("LIST(LITERAL=HiThere)", "!-HiThere-!");
+    assertParses("TEXT=some,LIST(LITERAL=stuff),TEXT=here", "some!-stuff-!here");
     assertParses("LIST(ERROR=!- Missing terminator: -!,LITERAL=stuff)", "!-stuff");
   }
 

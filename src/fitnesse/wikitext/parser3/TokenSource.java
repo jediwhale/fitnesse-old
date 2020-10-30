@@ -45,6 +45,7 @@ class TokenSource {
         }
       }
       else {
+        if (textOffset < 0) textOffset = content.getCurrent();
         text.append(content.advance());
       }
     } else {
@@ -54,8 +55,9 @@ class TokenSource {
 
   private void addResult(Token token) {
     if (text.length() > 0) {
-      results.add(new Token(TokenType.TEXT, text.toString()));
+      results.add(new Token(text.toString(), textOffset));
       text.setLength(0);
+      textOffset = -1;
     }
     results.add(token);
   }
@@ -65,6 +67,7 @@ class TokenSource {
   private final LinkedList<Token> results;
   private final Content content;
   private final StringBuilder text = new StringBuilder();
+  private int textOffset = -1;
 
   private static class ScanTypes {
     ScanTypes(List<TokenType> types, Predicate<TokenType> terminator) {
@@ -74,10 +77,8 @@ class TokenSource {
 
     Optional<Token> findMatch(Content content) {
       for (TokenType matchType : types) {
-        Optional<String> matchString = matchType.read(content);
-        if (matchString.isPresent()) {
-          return Optional.of(matchType.asToken(matchString.get()));
-        }
+        Optional<Token> matchToken = matchType.read(content);
+        if (matchToken.isPresent()) return matchToken;
       }
       return Optional.empty();
     }

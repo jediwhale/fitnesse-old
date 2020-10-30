@@ -11,7 +11,12 @@ class Image {
     } else if (content.startsWith("!img-r")) {
       result.putProperty(Names.IMAGE_CLASS, Names.RIGHT);
     }
-    result.add(new LeafSymbol(SymbolType.SOURCE, content));
+    if (parser.peek(0).getContent().equals(Names.IMAGE_WIDTH)) {
+      parser.advance();
+      parser.advance(); // check blankspace
+      result.putProperty(Names.IMAGE_WIDTH, parser.advance().getContent());
+      parser.advance(); //check blankspace
+    }
     result.add(parser.textType(SymbolType.TEXT).parseCurrent());
     return result;
   }

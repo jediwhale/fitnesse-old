@@ -119,14 +119,13 @@ public class TokenType {
     return this;
   }
 
-  public Token asToken(String content) { return new Token(this, content); }
   public String getMatch() { return match; }
   public String toString() { return name; }
 
-  public Optional<String> read(Content content) {
+  public Optional<Token> read(Content content) {
     Optional<String> result = matcher.check(content);
     if (result.isPresent() && isStart) content.setStartLine();
-    return result;
+    return result.map(s -> new Token(this, s));
   }
 
   public void useScan(Token token, TokenSource source) { useScan.accept(token, source); }

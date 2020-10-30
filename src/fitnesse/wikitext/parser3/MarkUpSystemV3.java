@@ -1,10 +1,9 @@
 package fitnesse.wikitext.parser3;
 
 import fitnesse.wiki.PathParser;
-import fitnesse.wiki.WikiPage;
-import fitnesse.wiki.WikiSourcePage;
 import fitnesse.wikitext.MarkUpSystem;
 import fitnesse.wikitext.ParsingPage;
+import fitnesse.wikitext.SourcePage;
 import fitnesse.wikitext.SyntaxTree;
 
 import java.util.*;
@@ -24,41 +23,62 @@ public class MarkUpSystemV3 implements MarkUpSystem {
   }
 
   @Override
-  public void findWhereUsed(WikiPage page, Consumer<String> takeWhereUsed) {
-    final ParsingPage parsingPage = new ParsingPage(new WikiSourcePage(page));
-    Symbol symbol = Parser.parse(page.getData().getContent(), TokenTypes.REFACTORING_TYPES, makeParseRules(parsingPage));
+  public void findWhereUsed(SourcePage page, Consumer<String> takeWhereUsed) {
+    final ParsingPage parsingPage = new ParsingPage(page);
+    Symbol symbol = Parser.parse(page.getContent(), TokenTypes.REFACTORING_TYPES, makeParseRules(parsingPage));
     SyntaxTreeV3 syntaxTree = new SyntaxTreeV3(symbol, parsingPage);
     syntaxTree.findWhereUsed(takeWhereUsed);
   }
 
   @Override
-  public String changeReferences(WikiPage page, Function<String, Optional<String>> changeReference) {
-    final ParsingPage parsingPage = new ParsingPage(new WikiSourcePage(page));
-    Symbol symbol = Parser.parse(
-      page.getData().getContent(),
-      TokenTypes.REFACTORING_TYPES,
-      makeParseRules(parsingPage));
-    SyntaxTreeV3 syntaxTree = new SyntaxTreeV3(symbol, parsingPage);
-    findReferences(symbol, changeReference);
-    return syntaxTree.translateToMarkUp();
+  public String changeReferences(SourcePage page, Function<String, Optional<String>> changeReference) {
+    ParsingPage parsingPage = new ParsingPage(page);
+    String original = page.getContent();
+    Symbol symbol = Parser.parse(original, TokenTypes.REFACTORING_TYPES, makeParseRules(parsingPage));
+    Replacement replacement = new Replacement(original);
+    symbol.walkPreOrder(node -> {
+        if (node.getType() == SymbolType.WIKI_LINK) {
+          changeReference.apply(node.getContent()).ifPresent(change -> replacement.replace(node, change));
+        } else if (node.getType() == SymbolType.ALIAS) {
+          Symbol wikiWord = node.getBranch(1).getBranch(0);
+          String aliasReference = wikiWord.getContent();
+          if (PathParser.isWikiPath(aliasReference)) {
+            changeReference.apply(aliasReference).ifPresent(change -> replacement.replace(wikiWord, change));
+          }
+        }
+      },
+      node -> node.getType() != SymbolType.ALIAS);
+    return replacement.makeResult();
   }
 
   private Map<TokenType, ParseRule> makeParseRules(ParsingPage page) {
     return ParseRules.make(page, new ExternalAdapter(page.getPage()));
   }
 
-  private void findReferences(Symbol tree, Function<String, Optional<String>> changeReference) {
-    tree.walkPreOrder(node -> {
-      if (node.getType() == SymbolType.WIKI_LINK) {
-        changeReference.apply(node.getContent()).ifPresent(node::setContent);
-      } else if (node.getType() == SymbolType.ALIAS) {
-        Symbol wikiWord = node.getBranch(3).getBranch(0);
-        String aliasReference = wikiWord.getContent();
-        if (PathParser.isWikiPath(aliasReference)) {
-          changeReference.apply(aliasReference).ifPresent(wikiWord::setContent);
-        }
+  private static class Replacement {
+    Replacement(String original) {
+      this.original = original;
+    }
+
+    void replace(Symbol before, String after) {
+      changed.append(original, originalOffset, before.getOffset());
+      changed.append(after);
+      originalOffset = before.getOffset() + before.getContent().length();
+    }
+
+    String makeResult() {
+      if (changed.length() > 0) {
+        changed.append(original.substring(originalOffset));
+        return changed.toString();
       }
-    },
-    node -> node.getType() != SymbolType.ALIAS);
+      else {
+        return original;
+      }
+    }
+
+    private int originalOffset = 0;
+
+    private final StringBuilder changed = new StringBuilder();
+    private final String original;
   }
 }

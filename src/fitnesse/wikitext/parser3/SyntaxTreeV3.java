@@ -12,12 +12,6 @@ public class SyntaxTreeV3 implements SyntaxTree {
     this.page = page;
   }
 
-  public String translateToMarkUp() { //todo: if errors in tree??
-    StringBuilder result = new StringBuilder();
-    tree.walkPreOrder(node -> result.append(node.getContent()));
-    return result.toString();
-  }
-
   @Override
   public String translateToHtml() {
     return new HtmlTranslator(new ExternalAdapter(page.getPage())).translate(tree);
@@ -42,7 +36,7 @@ public class SyntaxTreeV3 implements SyntaxTree {
     tree.walkPreOrder(node -> {
       if (node.getType() == SymbolType.SEE) { //todo: maybe just search SEE descendants for WIKI_LINK?
         if (node.getBranch(0).getType() == SymbolType.ALIAS) {
-          takeXref.accept(node.getBranch(0).getBranch(3).getLastBranch().getContent()); //todo: this kind of thing should be in Alias class
+          takeXref.accept(node.getBranch(0).getBranch(1).getLastBranch().getContent()); //todo: this kind of thing should be in Alias class
         } else if (node.getBranch(0).getType() == SymbolType.WIKI_LINK) {
           takeXref.accept(node.getBranch(0).getContent());
         }
@@ -56,7 +50,7 @@ public class SyntaxTreeV3 implements SyntaxTree {
         takeWhere.accept(node.getContent());
       }
       else if (node.getType() == SymbolType.ALIAS) {
-        String linkText = node.getBranch(3).getBranch(0).getContent(); //todo: this kind of thing should be in Alias class
+        String linkText = node.getBranch(1).getBranch(0).getContent(); //todo: this kind of thing should be in Alias class
         if (linkText.contains("?")) {
           linkText = linkText.substring(0, linkText.indexOf('?'));
         }
