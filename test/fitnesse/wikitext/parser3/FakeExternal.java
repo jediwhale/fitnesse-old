@@ -9,6 +9,9 @@ import java.util.HashMap;
 import java.util.Optional;
 
 public class FakeExternal implements External, VariableStore {
+  public FakeExternal(SourcePage sourcePage) {
+    this.sourcePage = sourcePage;
+  }
 
   @Override
   public void putVariable(String name, String value) { variables.put(name, value); }
@@ -28,7 +31,7 @@ public class FakeExternal implements External, VariableStore {
 
   @Override
   public Maybe<External> make(String pageName) {
-    FakeExternal result = new FakeExternal();
+    FakeExternal result = new FakeExternal(new FakeSourcePage());
     result.pageName = this.pageName + "." + pageName;
     return pages.containsKey(result.pageName) ? new Maybe<>(result) : Maybe.nothingBecause("Page not found");
   }

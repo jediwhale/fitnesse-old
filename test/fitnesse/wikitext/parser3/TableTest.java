@@ -1,6 +1,7 @@
 package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlElement;
+import org.junit.Before;
 import org.junit.Test;
 
 import static fitnesse.wikitext.parser3.Helper.*;
@@ -42,7 +43,7 @@ public class TableTest {
 
   @Test public void parsesVariableInLiteral() {
     external.putVariable("x", "|a|\n''b''\n");
-    assertParses("TABLE(LIST(LIST(LIST(TEXT=|,TEXT=a,TEXT=|\n,TEXT=''b'',NEW_LINE=\n))))","!|${x}|");
+    assertParses("TABLE(LIST(LIST(LIST(TEXT=|,TEXT=a,TEXT=|\n,TEXT=''b'',NEW_LINE=\n))))","!|${x}|", external);
   }
 
   @Test public void translates() {
@@ -55,12 +56,12 @@ public class TableTest {
 
   @Test public void translatesVariableInLiteralTable() {
     external.putVariable("hi", "there");
-    assertTranslates(table(row(cell("there"))), "!|${hi}|");
+    assertTranslates(table(row(cell("there"))), "!|${hi}|", external);
   }
 
   @Test public void translatesPageNameInLiteralTable() {
     external.putVariable("hi", "PageOne");
-    assertTranslates(table(row(cell("PageOne"))), "!|${hi}|");
+    assertTranslates(table(row(cell("PageOne"))), "!|${hi}|", external);
   }
 
   @Test public void translatesLiteralInLiteralTable()  {
@@ -82,4 +83,11 @@ public class TableTest {
   private static String cell(String content) {
     return "\t\t<td>" + content + "</td>" + HtmlElement.endl;
   }
+
+  @Before
+  public void SetUp() {
+    external = makeExternal();
+  }
+
+  private FakeExternal external;
 }

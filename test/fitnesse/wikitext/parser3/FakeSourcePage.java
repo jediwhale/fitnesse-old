@@ -8,7 +8,7 @@ import java.util.Collection;
 public class FakeSourcePage implements SourcePage {
   @Override
   public String getName() {
-    return null;
+    return "FakeName";
   }
 
   @Override
@@ -33,12 +33,12 @@ public class FakeSourcePage implements SourcePage {
 
   @Override
   public boolean targetExists(String wikiWordPath) {
-    return false;
+    return true;
   }
 
   @Override
   public String makeFullPathOfTarget(String wikiWordPath) {
-    return null;
+    return "Fake." + wikiWordPath;
   }
 
   @Override

@@ -1,6 +1,7 @@
 package fitnesse.wikitext.parser3;
 
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import static fitnesse.wikitext.parser3.Helper.*;
@@ -21,7 +22,7 @@ public class PathTest {
 
   @Test public void translatesWithVariable() {
     external.putVariable("x", "more");
-    assertTranslates("<span class=\"meta\">classpath: morestuff</span>", "!path ${x}stuff\n");
+    assertTranslates("<span class=\"meta\">classpath: morestuff</span>", "!path ${x}stuff\n", external);
   }
 
   @Test public void providesPaths() {
@@ -37,8 +38,15 @@ public class PathTest {
 
   private StringBuilder buildPath(String input) {
     StringBuilder paths = new StringBuilder();
-    Path.providePaths(parse(input), paths::append);
+    Path.providePaths(parse(input, external), paths::append);
     return paths;
   }
+
+  @Before
+  public void SetUp() {
+    external = makeExternal();
+  }
+
+  private FakeExternal external;
 }
 

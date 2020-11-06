@@ -4,6 +4,7 @@ import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiSourcePage;
 import fitnesse.wikitext.parser.TestRoot;
 import fitnesse.wikitext.shared.Names;
+import org.junit.Before;
 import org.junit.Test;
 
 import static fitnesse.wikitext.parser3.Helper.*;
@@ -19,8 +20,9 @@ public class ContentsTest {
 
   @Test public void parsesWithProperties() {
     assertParses("CONTENTS[-R=2147483647,-f=,-g=]", "!contents -f -g -R");
+    FakeExternal external = makeExternal();
     external.putVariable(Names.REGRACE_TOC, "true");
-    assertParses("CONTENTS[REGRACE_TOC=true,-R=2]", "!contents -R2");
+    assertParses("CONTENTS[-R=2,REGRACE_TOC=true]", "!contents -R2", external);
   }
 
   @Test public void translates() {
@@ -41,6 +43,13 @@ public class ContentsTest {
       "\t\t</li>\n" +
       "\t</ul>\n" +
       "</div>\n",
-      "!contents");
+      "!contents", external);
   }
+
+  @Before
+  public void SetUp() {
+    external = makeExternal();
+  }
+
+  private FakeExternal external;
 }

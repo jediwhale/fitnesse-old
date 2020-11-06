@@ -30,15 +30,15 @@ public class VariableTest {
 
   @Test
   public void putsVariables() {
-    parse("!define x {y}");
+    parse("!define x {y}", external);
     assertEquals("y", external.findVariable("x").orElse(""));
   }
 
   @Test
   public void translatesPutNestedVariable() {
     external.putVariable("x", "b");
-    assertTranslates(translateDefine("y=a${x}c") + " abc", "!define y (a${x}c) ${y}");
-    assertTranslates(translateDefine("y=a${x}c") + " abc", "!define y {a${x}c} ${y}");
+    assertTranslates(translateDefine("y=a${x}c") + " abc", "!define y (a${x}c) ${y}", external);
+    assertTranslates(translateDefine("y=a${x}c") + " abc", "!define y {a${x}c} ${y}", external);
   }
 
   @Test
@@ -49,13 +49,13 @@ public class VariableTest {
   @Test
   public void parsesGet() {
     external.putVariable("x", "y");
-    assertParses("LIST(TEXT=y)", "${x}");
+    assertParses("LIST(TEXT=y)", "${x}", external);
   }
 
   @Test
   public void translatesGet() {
     external.putVariable("x", "y");
-    assertTranslates("y", "${x}");
+    assertTranslates("y", "${x}", external);
   }
 
   @Test
@@ -65,7 +65,7 @@ public class VariableTest {
 
   @Before
   public void setUp() {
-    external = new FakeExternal();
+    external = makeExternal();
   }
 
   private void assertTranslatesDefine(String expected, String input) {
@@ -75,4 +75,6 @@ public class VariableTest {
   private String translateDefine(String expected) {
     return "<span class=\"meta\">variable defined: " + expected + "</span>";
   }
+
+  private FakeExternal external;
 }

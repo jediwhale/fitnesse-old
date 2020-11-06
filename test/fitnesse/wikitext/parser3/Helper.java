@@ -28,21 +28,33 @@ public class Helper {
   }
 
   public static void assertParses(String expected, String input) {
-    String result = "LIST" + (expected.length() > 0 ? "(" + expected + ")" : expected);
-    assertEquals(input, result, parse(input).toString());
+    assertParses(expected, input, makeExternal());
   }
 
-  public static void assertTranslates(String expected, String input) { //todo: deal with newlines, could be platform-specific
-    assertEquals(input, expected, new HtmlTranslator(external).translate(parse(input)));
+  public static void assertParses(String expected, String input, FakeExternal external) {
+    String result = "LIST" + (expected.length() > 0 ? "(" + expected + ")" : expected);
+    assertEquals(input, result, parse(input, external).toString());
+  }
+
+  public static void assertTranslates(String expected, String input) {
+    assertTranslates(expected, input, makeExternal());
+  }
+
+  public static void assertTranslates(String expected, String input, FakeExternal external) { //todo: deal with newlines, could be platform-specific
+    assertEquals(input, expected, new HtmlTranslator(external).translate(parse(input, external)));
   }
 
   public static Symbol parse(String input) {
+    return parse(input, makeExternal());
+  }
+
+  public static Symbol parse(String input, FakeExternal external) {
     return Parser.parse(input, ParseRules.make(external, external));
   }
 
-  public static String toError(String message) { return " <span class=\"fail\">" + message + "</span> "; }
+  public static FakeExternal makeExternal() { return new FakeExternal(new FakeSourcePage());}
 
-  public static FakeExternal external = new FakeExternal();
+  public static String toError(String message) { return " <span class=\"fail\">" + message + "</span> "; }
 
   private static String scan(String input) {
     TokenSource source = new TokenSource(input, TokenTypes.WIKI_PAGE_TYPES);
