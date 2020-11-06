@@ -30,6 +30,10 @@ public class Content {
     return content.startsWith(match, current);
   }
 
+  public boolean isNonTokenStart() { //todo: refine this
+    return more() && content.charAt(current) != 'h' && Character.isLetterOrDigit(content.charAt(current));
+  }
+
   public boolean isDigit() {
     return Character.isDigit(content.charAt(current));
   }

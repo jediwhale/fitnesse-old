@@ -76,7 +76,8 @@ class TokenSource {
     }
 
     Optional<Token> findMatch(Content content) {
-      for (TokenType matchType : types) {
+      if (content.isNonTokenStart()) return Optional.empty();
+      for (TokenType matchType : types) { //todo: do quicker than linear search
         Optional<Token> matchToken = matchType.read(content);
         if (matchToken.isPresent()) return matchToken;
       }

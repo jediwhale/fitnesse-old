@@ -82,7 +82,7 @@ class Parser {
       (list, error) -> list.add(0, Symbol.error(error)));
   }
 
-  String parseText(Terminator terminator) {
+  String parseText(Terminator terminator) { //todo: can replace this with token source use scans?
     StringBuilder result = new StringBuilder();
     Parser child = watchTokens(token -> result.append(token.getContent()));
     child.parseToTerminator(terminator, child::parseCurrent, result::append); //todo: test what error looks like?
