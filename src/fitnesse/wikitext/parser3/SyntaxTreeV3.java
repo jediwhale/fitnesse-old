@@ -35,9 +35,7 @@ public class SyntaxTreeV3 implements SyntaxTree {
   public void findXrefs(Consumer<String> takeXref) {
     tree.walkPreOrder(node -> {
       if (node.getType() == SymbolType.SEE) { //todo: maybe just search SEE descendants for WIKI_LINK?
-        if (node.getBranch(0).getType() == SymbolType.ALIAS) {
-          takeXref.accept(node.getBranch(0).getBranch(1).getLastBranch().getContent()); //todo: this kind of thing should be in Alias class
-        } else if (node.getBranch(0).getType() == SymbolType.WIKI_LINK) {
+        if (node.getBranch(0).isWikiReference()) {
           takeXref.accept(node.getBranch(0).getContent());
         }
       }
@@ -46,15 +44,8 @@ public class SyntaxTreeV3 implements SyntaxTree {
 
   public void findWhereUsed(Consumer<String> takeWhere) {
     tree.walkPreOrder(node -> {
-      if (node.getType() == SymbolType.WIKI_LINK) {
+      if (node.isWikiReference()) {
         takeWhere.accept(node.getContent());
-      }
-      else if (node.getType() == SymbolType.ALIAS) {
-        String linkText = node.getBranch(1).getBranch(0).getContent(); //todo: this kind of thing should be in Alias class
-        if (linkText.contains("?")) {
-          linkText = linkText.substring(0, linkText.indexOf('?'));
-        }
-        takeWhere.accept(linkText);
       }
     });
   }

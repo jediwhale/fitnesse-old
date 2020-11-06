@@ -10,7 +10,8 @@ import static fitnesse.wikitext.parser3.MatchContent.*;
 public class TokenType {
 
   public static final TokenType ALIAS_END = new TokenType("AliasEnd", "]]");
-  public static final TokenType ALIAS_MIDDLE = new TokenType("AliasMiddle", "][");
+  public static final TokenType ALIAS_MIDDLE = new TokenType("AliasMiddle", "][")
+    .useScan(Alias::scan);
   public static final TokenType ALIAS_START = new TokenType("AliasStart", "[[");
   public static final TokenType ANCHOR_NAME = new TokenType("AnchorName")
     .matches(word("!anchor"));

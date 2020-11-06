@@ -21,7 +21,7 @@ public class Variable {
     parser.advance();
     result.add(parser.parseCurrent());
     parser.advance();
-    result.add(new LeafSymbol(SymbolType.TEXT, parser.parseText(Terminator.make(parser.advance()))));
+    result.add(Symbol.text(parser.parseText(Terminator.make(parser.advance()))));
 
     variables.putVariable(result.getContent(0), result.getContent(1));
     return result;

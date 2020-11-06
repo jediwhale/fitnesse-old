@@ -45,6 +45,16 @@ class Translate implements TranslateRule {
     return this;
   }
 
+  Translate branch(int index) {
+    arguments.add((s,t) -> s.translateBranch(t, index));
+    return this;
+  }
+
+  Translate leaf() {
+    arguments.add((s,t) -> s.getContent());
+    return this;
+  }
+
   private final BiFunction<String[], PropertySource, String> method;
   private final List<TranslateRule> arguments = new ArrayList<>();
 }

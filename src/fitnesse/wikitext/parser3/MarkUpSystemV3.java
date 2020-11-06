@@ -1,6 +1,5 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.wiki.PathParser;
 import fitnesse.wikitext.MarkUpSystem;
 import fitnesse.wikitext.ParsingPage;
 import fitnesse.wikitext.SourcePage;
@@ -37,17 +36,10 @@ public class MarkUpSystemV3 implements MarkUpSystem {
     Symbol symbol = Parser.parse(original, TokenTypes.REFACTORING_TYPES, makeParseRules(parsingPage));
     Replacement replacement = new Replacement(original);
     symbol.walkPreOrder(node -> {
-        if (node.getType() == SymbolType.WIKI_LINK) {
+        if (node.isWikiReference()) {
           changeReference.apply(node.getContent()).ifPresent(change -> replacement.replace(node, change));
-        } else if (node.getType() == SymbolType.ALIAS) {
-          Symbol wikiWord = node.getBranch(1).getBranch(0);
-          String aliasReference = wikiWord.getContent();
-          if (PathParser.isWikiPath(aliasReference)) {
-            changeReference.apply(aliasReference).ifPresent(change -> replacement.replace(wikiWord, change));
-          }
         }
-      },
-      node -> node.getType() != SymbolType.ALIAS);
+      });
     return replacement.makeResult();
   }
 

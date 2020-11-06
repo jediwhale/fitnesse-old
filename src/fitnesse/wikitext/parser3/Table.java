@@ -55,7 +55,7 @@ class Table {
 
   private static Symbol makeCell(String content) {
     Symbol cell = new BranchSymbol(SymbolType.LIST);
-    cell.add(new LeafSymbol(SymbolType.TEXT, content));
+    cell.add(Symbol.text(content));
     return cell;
   }
 

@@ -13,9 +13,11 @@ public class AliasTest {
 
   @Test
   public void parsesAlias() {
-    assertParses("ALIAS(LIST(TEXT=hi),LIST(TEXT=there))", "[[hi][there]]");
-    assertParses("ALIAS(LIST(TEXT=hi),LIST(WIKI_LINK=ThereBob))", "[[hi][ThereBob]]");
-    assertParses("ALIAS(LIST(TEXT=tag),LIST(LINK=http://(TEXT=files/myfile)))", "[[tag][http://files/myfile]]");
+    assertParses("WIKI_LINK=there(TEXT,LIST(TEXT=hi))", "[[hi][there]]");
+    assertParses("WIKI_LINK=ThereBob(TEXT,LIST(TEXT=hi))", "[[hi][ThereBob]]");
+    assertParses("WIKI_LINK=HiThere", "[[HiThere][ignored]]");
+    assertParses("WIKI_LINK=HiThere.HowAreYou", "[[HiThere.HowAreYou][ignored]]");
+    assertParses("LINK(LIST(TEXT=http://files/myfile),LIST(TEXT=tag))", "[[tag][http://files/myfile]]");
   }
 
   @Test
@@ -25,7 +27,7 @@ public class AliasTest {
 
     assertTranslates(Html.anchor("#anchor", "tag"), "[[tag][#anchor]]");
     assertTranslates(Html.anchor("Fake.PageOne", "tag"), "[[tag][PageOne]]");
-    assertTranslates(Html.anchor("Fake.>PageOne", "tag"), "[[tag][>PageOne]]");
+    assertTranslates(Html.anchor("Fake.FakeName.PageOne", "tag"), "[[tag][>PageOne]]");
     assertTranslates(Html.anchor("Fake.PageOne", "<i>tag</i>"), "[[''tag''][PageOne]]");
     assertTranslates(Html.anchor("Fake.PageOne", "you're it"), "[[you're it][PageOne]]");
     assertTranslates(Html.anchor("Fake.PageOne", "PageOne"), "[[PageOne][IgnoredPage]]");
@@ -49,7 +51,10 @@ public class AliasTest {
 
   @Test
   public void translatesWithVariableLink() {
+    FakeExternal external = makeExternal();
     external.putVariable("x", "3");
-    assertTranslates(Html.anchor("Fake.PageTwo3", "tag"), "[[tag][PageTwo${x}]]");
+    external.putVariable("y", "Three");
+    assertTranslates(Html.anchor("Fake.PageThree", "tag"), "[[tag][Page${y}]]", external);
+    assertTranslates(Html.anchor("Fake.PageTwo3", "tag"), "[[tag][PageTwo${x}]]", external);
   }
 }

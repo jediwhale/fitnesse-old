@@ -7,10 +7,7 @@ import java.util.EnumMap;
 
 public class HtmlTranslator implements Translator {
   public HtmlTranslator(External external) {
-    this.external = external;
-
     symbolTypes = new EnumMap<>(SymbolType.class);
-    symbolTypes.put(SymbolType.ALIAS, (s, t) -> Alias.translate(s, this, external));
     symbolTypes.put(SymbolType.ANCHOR_NAME, Translate.with(ToHtml::anchorName).content());
     symbolTypes.put(SymbolType.ANCHOR_REFERENCE, Translate.with(ToHtml::anchorReference).content());
     symbolTypes.put(SymbolType.BOLD, Translate.with(ToHtml::pair).text("b").content());
@@ -26,7 +23,7 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.INCLUDE, Include::translate);
     symbolTypes.put(SymbolType.ITALIC, Translate.with(ToHtml::pair).text("i").content());
     symbolTypes.put(SymbolType.LAST_MODIFIED, (s, t) -> LastModifiedHtml.write(external.getSourcePage()));
-    symbolTypes.put(SymbolType.LINK, Link::translate);
+    symbolTypes.put(SymbolType.LINK, Translate.with(ToHtml::link).leaf().branch(0).branch(1));
     symbolTypes.put(SymbolType.WIKI_LIST, WikiList::translate);
     symbolTypes.put(SymbolType.LITERAL, Literal::translate);
     symbolTypes.put(SymbolType.LIST, Symbol::translateChildren);
@@ -40,28 +37,13 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.STYLE, Style::translate);
     symbolTypes.put(SymbolType.TABLE, Table::translate);
     symbolTypes.put(SymbolType.TEXT, Symbol::translateContent);
-    symbolTypes.put(SymbolType.WIKI_LINK, (s, t) -> WikiPath.translate(s, t, external));
-  }
-
-  public HtmlTranslator(HtmlTranslator original) {
-    external = original.external;
-    symbolTypes = original.symbolTypes;
-  }
-
-  public Translator substitute(SymbolType originalType, SymbolType substituteType) {
-    HtmlTranslator substitute = new HtmlTranslator(this);
-    substitute.substitutes.put(originalType,  substituteType);
-    return substitute;
+    symbolTypes.put(SymbolType.WIKI_LINK, Translate.with(s -> WikiPath.toHtml(s, external)).leaf().branch(0).branch(1).branch(2));
   }
 
   @Override
   public String translate(Symbol symbol) {
-    SymbolType type = symbol.getType();
-    if (substitutes.containsKey(type)) type = substitutes.get(type);
-    return symbolTypes.get(type).translate(symbol, this);
+    return symbolTypes.get(symbol.getType()).translate(symbol, this);
   }
 
-  private final External external;
   private final EnumMap<SymbolType, TranslateRule> symbolTypes;
-  private final EnumMap<SymbolType, SymbolType> substitutes = new EnumMap<>(SymbolType.class);
 }

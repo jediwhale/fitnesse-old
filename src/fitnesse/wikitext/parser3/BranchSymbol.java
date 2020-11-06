@@ -11,15 +11,19 @@ class BranchSymbol extends Symbol {
   }
 
   BranchSymbol(SymbolType symbolType, String content) {
-    this(symbolType, content, new ArrayList<>());
+    this(symbolType, content, -1, new ArrayList<>());
+  }
+
+  BranchSymbol(SymbolType symbolType, String content, int offset) {
+    this(symbolType, content, offset, new ArrayList<>());
   }
 
   BranchSymbol(SymbolType symbolType, List<Symbol> children) {
-    this(symbolType, "", children);
+    this(symbolType, "", -1, children);
   }
 
-  BranchSymbol(SymbolType symbolType, String content, List<Symbol> children) {
-    super(symbolType, content);
+  BranchSymbol(SymbolType symbolType, String content, int offset, List<Symbol> children) {
+    super(symbolType, content, offset);
     this.children = children;
   }
 

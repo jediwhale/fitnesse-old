@@ -4,13 +4,12 @@ import fitnesse.html.HtmlUtil;
 import fitnesse.util.Tree;
 import fitnesse.wikitext.shared.PropertyStore;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 abstract class Symbol extends Tree<Symbol> implements PropertyStore {
 
   static Symbol error(String message) { return new LeafSymbol(SymbolType.ERROR, message); }
+  static Symbol text(String message) { return new LeafSymbol(SymbolType.TEXT, message); }
 
   static Symbol makeList(Symbol ...children) { return make(SymbolType.LIST, children); }
 
@@ -44,11 +43,17 @@ abstract class Symbol extends Tree<Symbol> implements PropertyStore {
 
   String getContent() { return content; }
 
+  String getContent(int child) { return getBranches().get(child).getContent(); }
+
+  String allContents() {
+    StringBuilder contents = new StringBuilder();
+    walkPreOrder(branch -> contents.append(branch.getContent()));
+    return contents.toString();
+  }
+
   int getOffset() { return offset; }
 
   void add(Symbol child) { getBranches().add(child); }
-
-  String getContent(int child) { return getBranches().get(child).getContent(); }
 
   boolean hasError() {
     return
@@ -56,8 +61,14 @@ abstract class Symbol extends Tree<Symbol> implements PropertyStore {
         (!isLeaf() && getBranch(0).getType() == SymbolType.ERROR);
   }
 
+  boolean isWikiReference() { return symbolType == SymbolType.WIKI_LINK && offset >= 0; }
+
   String translateContent(Translator translator) {
     return HtmlUtil.escapeHTML(HtmlUtil.unescapeWiki(getContent())) + translateChildren(translator);
+  }
+
+  String translateBranch(Translator translator, int branch) {
+    return branch < getBranches().size() ?  translator.translate(getBranch(branch)): "";
   }
 
   String translateChildren(Translator translator) {
@@ -78,12 +89,9 @@ abstract class Symbol extends Tree<Symbol> implements PropertyStore {
     }
     if (getProperties().size() > 0) {
       result.append("[");
-      int j = 0;
-      for (String key : getProperties().keySet()) {
-        if (j > 0) result.append(",");
-        result.append(key).append("=").append(getProperties().get(key));
-        j++;
-      }
+      getProperties().keySet().stream().sorted()
+        .forEach(key -> result.append(key).append("=").append(getProperties().get(key)).append(","));
+      result.setLength(result.length() - 1);
       result.append("]");
     }
     return result.toString();

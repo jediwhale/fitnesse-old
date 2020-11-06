@@ -23,14 +23,19 @@ public class WikiPathTest {
     assertParses("TEXT=Hi,TEXT= ,TEXT=There", "Hi There");
     assertParses("WIKI_LINK=HiThere", "HiThere");
     assertParses("WIKI_LINK=HiThere.BoB", "HiThere.BoB");
+    assertParses("WIKI_LINK=^HiThere", "^HiThere");
+    assertParses("WIKI_LINK=>HiThere", ">HiThere");
+    assertParses("WIKI_LINK=<HiThere", "<HiThere");
+    assertParses("WIKI_LINK=.HiThere", ".HiThere");
   }
 
   @Test
   public void translates() {
     assertTranslates(Html.anchor("Fake.HiThere", "HiThere"), "HiThere");
+    assertTranslates(Html.anchor("Fake.FakeName.HiThere", "&gt;HiThere"), ">HiThere");
   }
 
   private void assertWikiWord(boolean expected, String input) {
-    Assert.assertEquals(input, expected, WikiPath.isWikiWord(new Text(input)));
+    Assert.assertEquals(input, expected, WikiPath.isWikiWordPath(input));
   }
 }
