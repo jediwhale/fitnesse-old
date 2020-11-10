@@ -1,8 +1,7 @@
 package fitnesse.wikitext.parser;
 
-import fitnesse.html.HtmlElement;
-import fitnesse.html.HtmlTag;
 import fitnesse.wiki.WikiPage;
+import fitnesse.wikitext.shared.HeadingContentBuilder;
 import fitnesse.wikitext.shared.Names;
 import org.junit.After;
 import org.junit.Before;
@@ -14,7 +13,6 @@ import java.util.regex.Pattern;
 
 import static fitnesse.wikitext.parser.ParserTestHelper.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class HeadingsTest {
@@ -58,19 +56,15 @@ public class HeadingsTest {
   }
 
   @Test
-  public void whenEmtpyListExpectNull() {
+  public void whenEmptyListExpectNull() {
     // arrange
-    List<Symbol> headerLines = new LinkedList<>();
+    List<Symbol> parameters = new LinkedList<>();
 
     // act
-    Headings.HeadingContentBuilder builder = new Headings().new HeadingContentBuilder(headerLines,
-      Headings.DEFAULT_STYLE);
-    HtmlElement htmlElement = builder.htmlElements();
+    String html = buildHtml(parameters);
 
     // assert
-    assertNotNull(htmlElement);
-    assertTrue(htmlElement instanceof HtmlTag);
-    assertEquals("div", ((HtmlTag) htmlElement).tagName());
+    assertEquals("<div class=\"contents\">\n\t<b>Contents:</b>\n</div>\n", html);
   }
 
   @Test
@@ -80,15 +74,11 @@ public class HeadingsTest {
     parameters.add(buildHeaderLine("1", "Text of Heading 1"));
 
     // act
-    Headings.HeadingContentBuilder builder =
-      new Headings().new HeadingContentBuilder(parameters, Headings.DEFAULT_STYLE);
-    HtmlElement htmlElement = builder.htmlElements();
+    String html = buildHtml(parameters);
 
     // assert
-    assertNotNull(htmlElement);
-    assertTrue(htmlElement instanceof HtmlTag);
     assertTrue(Pattern.compile("<ol.*<li.*Text of Heading 1.*</li>.*</ol>", Pattern.DOTALL)
-      .matcher(htmlElement.html()).find());
+      .matcher(html).find());
   }
 
   @Test
@@ -99,16 +89,12 @@ public class HeadingsTest {
     parameters.add(buildHeaderLine("1", "Text of Heading 2"));
 
     // act
-    Headings.HeadingContentBuilder builder =
-      new Headings().new HeadingContentBuilder(parameters, Headings.DEFAULT_STYLE);
-    HtmlElement htmlElement = builder.htmlElements();
+    String html = buildHtml(parameters);
 
     // assert
-    assertNotNull(htmlElement);
-    assertTrue(htmlElement instanceof HtmlTag);
     assertTrue(Pattern.compile("<ol style.*<li class.*<a href.*Text of Heading 1</a>" +
       ".*</li>[\n\r\t ]*<li.*Text of Heading 2</a>.*</li>.*</ol>", Pattern.DOTALL)
-      .matcher(htmlElement.html()).find());
+      .matcher(html).find());
   }
 
   @Test
@@ -119,16 +105,12 @@ public class HeadingsTest {
     parameters.add(buildHeaderLine("2", "Text of Heading 2"));
 
     // act
-    Headings.HeadingContentBuilder builder =
-      new Headings().new HeadingContentBuilder(parameters, Headings.DEFAULT_STYLE);
-    HtmlElement htmlElement = builder.htmlElements();
+    String html = buildHtml(parameters);
 
     // assert
-    assertNotNull(htmlElement);
-    assertTrue(htmlElement instanceof HtmlTag);
     assertTrue(Pattern.compile("<ol style.*<li class.*<a href.*Text of Heading 1</a>.*</li>" +
       ".*<ol style.*<li class.*Text of Heading 2</a>.*</li>.*</ol>.*</ol>", Pattern.DOTALL)
-      .matcher(htmlElement.html()).find());
+      .matcher(html).find());
   }
 
   @Test
@@ -140,17 +122,13 @@ public class HeadingsTest {
     parameters.add(buildHeaderLine("1", "Text of Heading 3"));
 
     // act
-    Headings.HeadingContentBuilder builder =
-      new Headings().new HeadingContentBuilder(parameters, Headings.DEFAULT_STYLE);
-    HtmlElement htmlElement = builder.htmlElements();
+    String html = buildHtml(parameters);
 
     // assert
-    assertNotNull(htmlElement);
-    assertTrue(htmlElement instanceof HtmlTag);
     assertTrue(Pattern.compile("<ol style.*<li class.*<a href.*Text of Heading 1</a>.*</li>.*<ol" +
         " style.*>.*<li class.*<a href.*Text of Heading 2</a>.*</li>.*</ol>.*<li class" +
         ".*<a href.*Text of Heading 3</a>.*</li>.*</ol>",
-      Pattern.DOTALL).matcher(htmlElement.html()).find());
+      Pattern.DOTALL).matcher(html).find());
   }
 
   @Test
@@ -161,16 +139,12 @@ public class HeadingsTest {
     parameters.add(buildHeaderLine("3", "Text of Heading 2"));
 
     // act
-    Headings.HeadingContentBuilder builder =
-      new Headings().new HeadingContentBuilder(parameters, Headings.DEFAULT_STYLE);
-    HtmlElement htmlElement = builder.htmlElements();
+    String html = buildHtml(parameters);
 
     // assert
-    assertNotNull(htmlElement);
-    assertTrue(htmlElement instanceof HtmlTag);
     assertTrue(Pattern.compile("<ol style.*>.*<li class.*<a href.*Text of Heading 1</a>.*</li>" +
       ".*<ol style.*<ol style.*<li class.*<a href.*Text of Heading 2</a>.*</li>.*</ol>.*</ol>", Pattern.DOTALL)
-      .matcher(htmlElement.html()).find());
+      .matcher(html).find());
   }
 
   @Test
@@ -220,4 +194,9 @@ public class HeadingsTest {
     return symbol;
   }
 
+  private String buildHtml(List<Symbol> parameters) {
+    HeadingContentBuilder builder = new HeadingContentBuilder(Names.DEFAULT_STYLE);
+    for (Symbol line: parameters) builder.htmlElements(line, Headings.extractTextFromHeaderLine(line));
+    return builder.html();
+  }
 }

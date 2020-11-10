@@ -1,5 +1,9 @@
 package fitnesse.wikitext.shared;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 // These are the property and variable names used to configure the translation of wiki markup to HTML
 public class Names {
 
@@ -19,6 +23,13 @@ public class Names {
   // properties for the header widgets
   public static final String LEVEL = "level";
   public static final String ID = "id";
+
+  // properties for the !headings widget
+  public static final String STYLE = "STYLE";
+  //values for the style
+  public static final String DEFAULT_STYLE = "decimal";
+  public static final List<String> VALID_STYLES = new ArrayList<>(Arrays.asList(
+    "decimal", "decimal-leading-zero", "lower-roman", "upper-roman", "lower-alpha", "upper-alpha", "none"));
 
   // properties for the !img widget
   public static final String IMAGE_BORDER= "-b";
