@@ -41,7 +41,8 @@ public class Helper {
   }
 
   public static void assertTranslates(String expected, String input, FakeExternal external) { //todo: deal with newlines, could be platform-specific
-    assertEquals(input, expected, new HtmlTranslator(external).translate(parse(input, external)));
+    Symbol syntaxTree = parse(input, external);
+    assertEquals(input, expected, new HtmlTranslator(external, syntaxTree).translate(syntaxTree));
   }
 
   public static Symbol parse(String input) {

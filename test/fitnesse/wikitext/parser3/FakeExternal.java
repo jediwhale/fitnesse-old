@@ -25,25 +25,17 @@ public class FakeExternal implements External, VariableStore {
   }
 
   @Override
-  public String buildLink(String path, String description, String trailer) {
-    return HtmlTag.name("a").attribute("href", "Fake." + path + trailer).body(description).htmlInline();
-  }
-
-  @Override
   public Maybe<External> make(String pageName) {
-    FakeExternal result = new FakeExternal(new FakeSourcePage());
+    FakeSourcePage page = new FakeSourcePage();
+    FakeExternal result = new FakeExternal(page);
     result.pageName = this.pageName + "." + pageName;
+    page.content = pages.getOrDefault(result.pageName, result.pageName + " content");
     return pages.containsKey(result.pageName) ? new Maybe<>(result) : Maybe.nothingBecause("Page not found");
   }
 
   @Override
   public int nextId() {
     return id++;
-  }
-
-  @Override
-  public String pageContent() {
-    return pages.get(pageName);
   }
 
   public String pageName = "root";

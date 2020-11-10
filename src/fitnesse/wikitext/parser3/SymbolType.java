@@ -12,6 +12,7 @@ public enum SymbolType {
   ERROR,
   EXPRESSION,
   HEADER,
+  HEADINGS,
   IMAGE,
   INCLUDE,
   ITALIC,

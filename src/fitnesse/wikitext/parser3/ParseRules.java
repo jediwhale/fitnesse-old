@@ -20,6 +20,7 @@ class ParseRules {
     rules.put(TokenType.DEFINE, parser -> Variable.parsePut(parser, variables));
     rules.put(TokenType.EXPRESSION_START, parser -> Expression.parse(parser, variables));
     rules.put(TokenType.HEADER, parser -> Header.parse(parser, variables));
+    rules.put(TokenType.HEADINGS, Headings::parse);
     rules.put(TokenType.INCLUDE, parser -> Include.parse(parser, external, variables));
     rules.put(TokenType.IMAGE, Image::parse);
     rules.put(TokenType.ITALIC, Pair.parse(SymbolType.ITALIC));

@@ -83,9 +83,6 @@ public class TokenSourceTest {
     assertScans("Text=hi,Bold=''',Text=there", "hi'''there");
   }
 
-  @Test public void scansHeadings() { assertScansWord("!headings", "Headings"); }
-
-
   @Test public void scansMeta() { assertScansWord("!meta", "Meta"); }
 
   @Test

@@ -25,8 +25,8 @@ class Include {
     result.add(pagePath);
     result.add(
           result.hasProperty("-setup") || result.hasProperty("-teardown")
-            ? parser.withContent(included.getValue().pageContent()).parseToEnd() //todo: not sure this is correct, maybe bug in v2
-            : Parser.parse(included.getValue().pageContent(), ParseRules.make(variables, included.getValue())));
+            ? parser.withContent(included.getValue().getSourcePage().getContent()).parseToEnd() //todo: not sure this is correct, maybe bug in v2
+            : Parser.parse(included.getValue().getSourcePage().getContent(), ParseRules.make(variables, included.getValue())));
 
     if (result.hasProperty("-setup")) variables.findVariable(COLLAPSE_SETUP).ifPresent(value -> result.putProperty(COLLAPSE_SETUP, value));
     if (result.hasProperty("-teardown")) variables.findVariable(COLLAPSE_TEARDOWN).ifPresent(value -> result.putProperty(COLLAPSE_TEARDOWN, value));

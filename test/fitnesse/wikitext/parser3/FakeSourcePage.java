@@ -28,7 +28,7 @@ public class FakeSourcePage implements SourcePage {
 
   @Override
   public String getContent() {
-    return null;
+    return content;
   }
 
   @Override
@@ -70,4 +70,6 @@ public class FakeSourcePage implements SourcePage {
   public int compareTo(SourcePage sourcePage) {
     return 0;
   }
+
+  public String content;
 }

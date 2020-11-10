@@ -6,7 +6,7 @@ import fitnesse.wikitext.shared.ToHtml;
 import java.util.EnumMap;
 
 public class HtmlTranslator implements Translator {
-  public HtmlTranslator(External external) {
+  public HtmlTranslator(External external, Symbol syntaxTree) {
     symbolTypes = new EnumMap<>(SymbolType.class);
     symbolTypes.put(SymbolType.ANCHOR_NAME, Translate.with(ToHtml::anchorName).content());
     symbolTypes.put(SymbolType.ANCHOR_REFERENCE, Translate.with(ToHtml::anchorReference).content());
@@ -19,6 +19,7 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.ERROR, Translate.with(ToHtml::error).content());
     symbolTypes.put(SymbolType.EXPRESSION, Translate.with(ToHtml::expression).content());
     symbolTypes.put(SymbolType.HEADER, Translate.with(ToHtml::header).children());
+    symbolTypes.put(SymbolType.HEADINGS, (symbol, t) -> Headings.translate(symbol, syntaxTree));
     symbolTypes.put(SymbolType.IMAGE, Translate.with(ToHtml::image).content());
     symbolTypes.put(SymbolType.INCLUDE, Include::translate);
     symbolTypes.put(SymbolType.ITALIC, Translate.with(ToHtml::pair).text("i").content());

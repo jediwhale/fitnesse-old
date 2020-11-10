@@ -48,8 +48,9 @@ public class TokenType {
     .useScan(HashTable::scan);
   public static final TokenType HEADER = new TokenType("Header")
     .matches(startLine(), matchOne(word("!1"), word("!2"), word("!3"), word("!4"), word("!5"), word("!6")));
+  public static final TokenType HEADINGS = new TokenType("Headings")
+    .matches(startLine(), text("!headings"));
   public static final TokenType HORIZONTAL_RULE = new TokenType("HorizontalRule").matches(text("---"), repeat("-"));
-  public static final TokenType HEADINGS = new TokenType("Headings").matches(word("!headings"));
   public static final TokenType HELP = new TokenType("Help").matches(word("!help"));
   public static final TokenType IMAGE = new TokenType("Image")
     .matchOneOf(word("!img"), word("!img-l"), word("!img-r"));
