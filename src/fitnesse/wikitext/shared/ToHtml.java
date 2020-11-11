@@ -13,6 +13,18 @@ public class ToHtml {
     return HtmlTag.name("a").attribute("href", "#" + strings[0]).body(".#" + strings[0]).html();
   }
 
+  public static String collapsible(String[] strings, PropertySource source) {
+    return HtmlTag.name("div").attribute("class", "collapsible" + source.findProperty(Names.STATE, ""))
+      .child(HtmlTag.name("ul")
+        .child(HtmlTag.name("li")
+          .child(HtmlTag.name("a").attribute("href", "#").attribute("class", "expandall").body("Expand")))
+        .child(HtmlTag.name("li")
+          .child(HtmlTag.name("a").attribute("href", "#").attribute("class", "collapseall").body("Collapse"))))
+      .child(HtmlTag.name("p").attribute("class", "title").body(strings[0]))
+      .child(HtmlTag.name("div").body(strings[1]))
+      .html();
+  }
+
   public static String email(String[] strings) {
     return HtmlTag.name("a").attribute("href", "mailto:" + strings[0]).body(strings[0]).htmlInline();
   }
