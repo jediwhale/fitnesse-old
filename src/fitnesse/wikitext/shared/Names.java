@@ -6,6 +6,11 @@ import java.util.List;
 
 // These are the property and variable names used to configure the translation of wiki markup to HTML
 public class Names {
+  // property for the collapsible widget
+  public static final String STATE = "State";
+  // values for the state
+  public static final String CLOSED = " closed";
+  public static final String INVISIBLE = " invisible";
 
   // variables for the !contents widget
   public static final String FILTER_TOC = "FILTER_TOC";
