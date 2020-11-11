@@ -6,6 +6,7 @@ public enum SymbolType {
   BOLD,
   BOLD_ITALIC,
   CENTER,
+  COLLAPSIBLE,
   CONTENTS,
   DEFINE,
   EMAIL,

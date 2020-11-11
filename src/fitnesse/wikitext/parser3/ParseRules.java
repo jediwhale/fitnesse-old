@@ -15,6 +15,7 @@ class ParseRules {
     rules.put(TokenType.BOLD_ITALIC, Pair.parse(SymbolType.BOLD_ITALIC));
     rules.put(TokenType.BULLET_LIST, WikiList::parse);
     rules.put(TokenType.CENTER, Line.parse(SymbolType.CENTER));
+    rules.put(TokenType.COLLAPSIBLE_START, Collapsible::parse);
     rules.put(TokenType.COMMENT, Comment::parse);
     rules.put(TokenType.CONTENTS, parser -> Contents.parse(parser, variables));
     rules.put(TokenType.DEFINE, parser -> Variable.parsePut(parser, variables));

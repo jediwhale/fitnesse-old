@@ -101,12 +101,6 @@ public class TokenSourceTest {
   }
 
   @Test
-  public void scansCollapsible() {
-    assertScans("CollapsibleStart=!*,Text=stuff,CollapsibleEnd=*!", "!*stuff*!");
-    assertScans("CollapsibleStart=!**,Text=stuff,CollapsibleEnd=**!", "!**stuff**!");
-  }
-
-  @Test
   public void scansHelp() {
     assertScansWord("!help", "Help");
   }

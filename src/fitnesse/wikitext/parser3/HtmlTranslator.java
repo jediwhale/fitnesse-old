@@ -13,6 +13,7 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.BOLD, Translate.with(ToHtml::pair).text("b").content());
     symbolTypes.put(SymbolType.BOLD_ITALIC, Translate.with(ToHtml::nestedPair).text("b").text("i").content());
     symbolTypes.put(SymbolType.CENTER, Translate.with(ToHtml::pair).text("center").content());
+    symbolTypes.put(SymbolType.COLLAPSIBLE, Translate.with(ToHtml::collapsible).branch(0).branch(1));
     symbolTypes.put(SymbolType.CONTENTS, (s, t) -> Contents.translate(s, external));
     symbolTypes.put(SymbolType.DEFINE, Variable::translate);
     symbolTypes.put(SymbolType.EMAIL, Translate.with(ToHtml::email).content());
