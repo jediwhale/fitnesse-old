@@ -19,6 +19,7 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.EMAIL, Translate.with(ToHtml::email).content());
     symbolTypes.put(SymbolType.ERROR, Translate.with(ToHtml::error).content());
     symbolTypes.put(SymbolType.EXPRESSION, Translate.with(ToHtml::expression).content());
+    symbolTypes.put(SymbolType.HASH_TABLE, HashTable::translate);
     symbolTypes.put(SymbolType.HEADER, Translate.with(ToHtml::header).children());
     symbolTypes.put(SymbolType.HEADINGS, (symbol, t) -> Headings.translate(symbol, syntaxTree));
     symbolTypes.put(SymbolType.IMAGE, Translate.with(ToHtml::image).content());

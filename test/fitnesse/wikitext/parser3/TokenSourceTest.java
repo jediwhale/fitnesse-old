@@ -95,12 +95,6 @@ public class TokenSourceTest {
   }
 
   @Test
-  public void scansHashTable() {
-    assertScans("HashTable=!{,Text=key1,Colon=:,Text=value1,Comma=,,Text=key2,Colon=:,Text=value2,BraceEnd=}",
-      "!{key1:value1,key2:value2}");
-  }
-
-  @Test
   public void scansHelp() {
     assertScansWord("!help", "Help");
   }

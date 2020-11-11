@@ -12,6 +12,7 @@ public enum SymbolType {
   EMAIL,
   ERROR,
   EXPRESSION,
+  HASH_TABLE,
   HEADER,
   HEADINGS,
   IMAGE,
