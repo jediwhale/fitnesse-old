@@ -4,18 +4,14 @@ import fitnesse.wiki.PathParser;
 import fitnesse.wiki.WikiPageProperty;
 import fitnesse.wikitext.ParsingPage;
 import fitnesse.wikitext.SourcePage;
+import fitnesse.wikitext.shared.Names;
 
 import java.util.Collection;
 import java.util.Collections;
 
 public class Include extends SymbolType implements Rule, Translation {
-  private static final String[] setUpSymbols = {"COLLAPSE_SETUP"};
-  public static final String TEARDOWN = "teardown";
+  private static final String[] setUpSymbols = {Names.COLLAPSE_SETUP};
   public static final String HELP_ARG = "-h";
-  public static final String SETUP_ARG = "-setup";
-  public static final String TEARDOWN_ARG = "-teardown";
-  public static final String COLLAPSE_ARG = "-c";
-  public static final String SEAMLESS_ARG = "-seamless";
 
   public Include() {
     super("Include");
@@ -60,14 +56,14 @@ public class Include extends SymbolType implements Rule, Translation {
         parser.getPage(), helpText).parse());
     } else {
       current.childAt(1).putProperty(WikiWord.WITH_EDIT, "true");
-      ParsingPage included = option.equals(SETUP_ARG) || option.equals(TEARDOWN_ARG)
+      ParsingPage included = option.equals(Names.SETUP) || option.equals(Names.TEARDOWN)
         ? parser.getPage()
         : parser.getPage().copyForNamedPage(includedPage.getValue());
       current.add("").add(Parser.make(
         included,
         includedPage.getValue().getContent())
         .parse());
-      if (option.equals(SETUP_ARG)) current.evaluateVariables(setUpSymbols, parser.getVariableSource());
+      if (option.equals(Names.SETUP)) current.copyVariables(setUpSymbols, parser.getVariableSource());
     }
 
     // Remove trailing newline so we do not introduce excessive whitespace in the page.
@@ -93,7 +89,7 @@ public class Include extends SymbolType implements Rule, Translation {
       return translator.translate(symbol.childAt(2));
     }
     String option = symbol.childAt(0).getContent();
-    if (option.equals(SEAMLESS_ARG)) {
+    if (option.equals(Names.SEAMLESS)) {
       return translator.translate(symbol.childAt(3));
     } else if (HELP_ARG.equals(option)) {
       return translator.translate(symbol.childAt(3));
@@ -102,14 +98,14 @@ public class Include extends SymbolType implements Rule, Translation {
       String title = "Included page: "
         + translator.translate(symbol.childAt(1));
       Collection<String> extraCollapsibleClass =
-        option.equals(TEARDOWN_ARG) ? Collections.singleton(TEARDOWN) : Collections.emptySet();
+        option.equals(Names.TEARDOWN) ? Collections.singleton(Names.TEARDOWN_CLASS) : Collections.emptySet();
       return Collapsible.generateHtml(collapseState, title, translator.translate(symbol.childAt(3)), extraCollapsibleClass);
     }
   }
 
   private String stateForOption(String option, Symbol symbol) {
-    return ((option.equals(SETUP_ARG) || option.equals(TEARDOWN_ARG)) && symbol.getVariable("COLLAPSE_SETUP", "true").equals("true"))
-      || option.equals(COLLAPSE_ARG)
+    return ((option.equals(Names.SETUP) || option.equals(Names.TEARDOWN)) && symbol.findProperty("COLLAPSE_SETUP", "true").equals("true"))
+      || option.equals(Names.COLLAPSE)
       ? Collapsible.CLOSED
       : "";
   }

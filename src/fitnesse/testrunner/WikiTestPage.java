@@ -9,7 +9,7 @@ import fitnesse.wiki.SymbolicPage;
 import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiPagePath;
 import fitnesse.wikitext.MarkUpSystem;
-import fitnesse.wikitext.parser.Include;
+import fitnesse.wikitext.shared.Names;
 
 import java.io.File;
 import java.util.Collections;
@@ -123,15 +123,15 @@ public class WikiTestPage implements TestPage {
   }
 
   protected void includeScenarioLibrary(WikiPage scenarioLibrary, StringBuilder newPageContent) {
-    includePage(scenarioLibrary, Include.COLLAPSE_ARG, newPageContent);
+    includePage(scenarioLibrary, Names.COLLAPSE, newPageContent);
   }
 
   protected void includeSetUp(WikiPage suiteSetUp, StringBuilder newPageContent) {
-    includePage(suiteSetUp, Include.SETUP_ARG, newPageContent);
+    includePage(suiteSetUp, Names.SETUP, newPageContent);
   }
 
   protected void includeTearDown(WikiPage suiteTearDown, StringBuilder newPageContent) {
-    includePage(suiteTearDown, Include.TEARDOWN_ARG, newPageContent);
+    includePage(suiteTearDown, Names.TEARDOWN, newPageContent);
   }
 
   protected void includePages(String name, List<WikiPage> pages, BiConsumer<WikiPage, StringBuilder> includePage,
