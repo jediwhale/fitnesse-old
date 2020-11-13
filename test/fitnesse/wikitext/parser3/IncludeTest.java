@@ -27,6 +27,7 @@ public class IncludeTest {
     FakeExternal.pages.put("root.MyPage", "stuff");
     assertTranslates(collapsible(""), "!include MyPage");
     assertTranslates(collapsible(" closed"), "!include -setup MyPage");
+    assertTranslates("stuff", "!include -seamless MyPage");
   }
 
   private String collapsible(String closed) {
