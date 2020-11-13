@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import fitnesse.slim.SlimError;
-import fitnesse.wikitext.parser.Include;
+import fitnesse.wikitext.shared.Names;
 import org.htmlparser.Node;
 import org.htmlparser.Parser;
 import org.htmlparser.lexer.Lexer;
@@ -61,7 +61,7 @@ public class HtmlTableScanner implements TableScanner<HtmlTable> {
 
         NodeList children = node.getChildren();
         if (children != null) {
-          scanForTables(children, markAsTeardown || nodeHasClass(node, Include.TEARDOWN));
+          scanForTables(children, markAsTeardown || nodeHasClass(node, Names.TEARDOWN_CLASS));
         }
 
         Node endNode = endTag(node);

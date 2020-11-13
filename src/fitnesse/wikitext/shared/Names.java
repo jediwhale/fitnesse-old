@@ -44,4 +44,15 @@ public class Names {
   // values for the image class
   public static final String LEFT = "left";
   public static final String RIGHT = "right";
+
+  // variables for the !include widget
+  public static final String COLLAPSE_SETUP = "COLLAPSE_SETUP";
+  public static final String COLLAPSE_TEARDOWN = "COLLAPSE_TEARDOWN";
+  // properties for the !include widget
+  public static final String COLLAPSE = "-c";
+  public static final String SEAMLESS = "-seamless";
+  public static final String SETUP = "-setup";
+  public static final String TEARDOWN = "-teardown";
+  // values for the include div class
+  public static final String TEARDOWN_CLASS = "teardown";
 }
