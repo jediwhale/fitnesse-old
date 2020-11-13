@@ -1,11 +1,13 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.wikitext.parser.TextMaker;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.regex.Pattern;
 
 class Parser {
@@ -18,29 +20,29 @@ class Parser {
   }
 
   Parser textType(SymbolType type) {
-    return new Parser(this.tokens, this.rules, content -> type, this.watchTokens);
+    return new Parser(this.tokens, this.rules, (c, o) -> makeLeaf(type, c, o), this.watchTokens);
   }
 
   Parser watchTokens(Consumer<Token> watchTokens) {
-    return new Parser(this.tokens, this.rules, this.textType, watchTokens);
+    return new Parser(this.tokens, this.rules, this.makeSymbolFromText, watchTokens);
   }
 
   Parser withContent(String content) {
-    return new Parser(new TokenSource(tokens, content), rules, textType, token -> {});
+    return new Parser(new TokenSource(tokens, content), rules, makeSymbolFromText, token -> {});
   }
 
   Parser(String input, List<TokenType> tokenTypes, Map<TokenType, ParseRule> rules) {
     this.tokens = new TokenSource(input, tokenTypes);
     this.rules = rules;
-    textType = this::determineTextType;
+    this.makeSymbolFromText = Parser::determineTextSymbol;
     this.watchTokens = token -> {};
   }
 
-  private Parser(TokenSource tokens, Map<TokenType, ParseRule> rules, Function<String, SymbolType> textType, Consumer<Token> watchTokens) {
+  private Parser(TokenSource tokens, Map<TokenType, ParseRule> rules, BiFunction<String, Integer, Symbol> makeSymbolFromText, Consumer<Token> watchTokens) {
     this.tokens = tokens;
     this.rules = rules;
     this.watchTokens = watchTokens;
-    this.textType = textType;
+    this.makeSymbolFromText = makeSymbolFromText;
   }
 
   Token peek(int offset) { return offset >= 0 ? tokens.peek(offset) : tokens.getPrevious(); }
@@ -113,24 +115,38 @@ class Parser {
 
   private static Symbol defaultRule(Parser parser) {
     String content = parser.peek(0).getContent();
-    Symbol result = new LeafSymbol(parser.textType.apply(content), content, parser.peek(0).getOffset());
+    Symbol result = parser.makeSymbolFromText.apply(content, parser.peek(0).getOffset());
     parser.advance();
     return result;
   }
 
-  private SymbolType determineTextType(String text) {
-    return WikiPath.isWikiWordPath(text) ? SymbolType.WIKI_LINK :
-      isEMail(text) ? SymbolType.EMAIL : SymbolType.TEXT;
+  private static Symbol determineTextSymbol(String text, Integer offset) {
+    int wikiWordLength = TextMaker.findWikiWordLength(text);
+    SymbolType type =
+      wikiWordLength > 0 ? SymbolType.WIKI_LINK
+        : isEMail(text) ? SymbolType.EMAIL
+        : SymbolType.TEXT;
+    if (wikiWordLength == 0 || wikiWordLength == text.length()) {
+      return makeLeaf(type, text, offset);
+    }
+    Symbol result = new BranchSymbol(SymbolType.LIST);
+    result.add(makeLeaf(SymbolType.WIKI_LINK, text.substring(0, wikiWordLength), offset));
+    result.add(determineTextSymbol(text.substring(wikiWordLength), offset + wikiWordLength));
+    return result;
   }
 
-  private boolean isEMail(String text) {
+  private static Symbol makeLeaf(SymbolType type, String text, Integer offset) {
+    return new LeafSymbol(type, text, offset);
+  }
+
+  private static boolean isEMail(String text) {
     return text.indexOf("@") > 0 && Pattern.matches(eMailPattern, text);
   }
 
   private static final Terminator END_TERMINATOR = new Terminator(TokenType.END);
   private static final String eMailPattern = "[\\w-_.]+@[\\w-_.]+\\.[\\w-_.]+";
 
-  private final Function<String, SymbolType> textType;
+  private final BiFunction<String, Integer, Symbol> makeSymbolFromText;
   private final TokenSource tokens;
   private final Map<TokenType, ParseRule> rules;
   private final Consumer<Token> watchTokens;

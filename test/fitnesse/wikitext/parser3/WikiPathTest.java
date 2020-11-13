@@ -1,5 +1,6 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.wikitext.parser.TextMaker;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -26,6 +27,8 @@ public class WikiPathTest {
     assertParses("WIKI_LINK=^HiThere", "^HiThere");
     assertParses("WIKI_LINK=>HiThere", ">HiThere");
     assertParses("WIKI_LINK=<HiThere", "<HiThere");
+    assertParses("LIST(WIKI_LINK=<HiThere,TEXT=>)", "<HiThere>");
+    assertParses("LIST(WIKI_LINK=<HiThere,WIKI_LINK=<BoB)", "<HiThere<BoB");
     assertParses("WIKI_LINK=.HiThere", ".HiThere");
   }
 
@@ -36,6 +39,6 @@ public class WikiPathTest {
   }
 
   private void assertWikiWord(boolean expected, String input) {
-    Assert.assertEquals(input, expected, WikiPath.isWikiWordPath(input));
+    Assert.assertEquals(input, expected, TextMaker.findWikiWordLength(input) > 0);
   }
 }
