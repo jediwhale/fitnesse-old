@@ -55,6 +55,8 @@ abstract class Symbol extends Tree<Symbol> implements PropertyStore {
 
   void add(Symbol child) { getBranches().add(child); }
 
+  Symbol lastBranch() { return getBranches().get(getBranches().size() - 1); }
+
   boolean hasError() {
     return
       (getType() == SymbolType.ERROR) ||

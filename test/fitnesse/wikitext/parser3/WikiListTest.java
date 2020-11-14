@@ -33,6 +33,10 @@ public class WikiListTest {
     assertParses("WIKI_LIST= *(LIST(TEXT=hi),LIST(TEXT=there))", " * hi\n * there");
   }
 
+  @Test public void parsesNestedItems() {
+    assertParses("WIKI_LIST= *(LIST(TEXT=hi,WIKI_LIST=  *(LIST(TEXT=there))))", " * hi\n  * there\n");
+  }
+
   @Test public void translatesBullet() {
     assertTranslates("<ul>\n\t<li>hi</li>\n</ul>\n", " * hi");
   }
