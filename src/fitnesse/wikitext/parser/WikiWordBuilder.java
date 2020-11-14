@@ -22,7 +22,7 @@ public class WikiWordBuilder {
       } else if ("FitNesse".equals(originalName)) {
         return "<span class=\"fitnesse\">" + originalName + "</span>";
       } else {
-        return makeLinkToNonExistentWikiPage(originalName, currentPage.makeFullPathOfTarget(wikiWordPath));
+        return makeLinkToNonExistentWikiPage(linkBody, currentPage.makeFullPathOfTarget(wikiWordPath));
       }
     }
 

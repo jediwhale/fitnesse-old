@@ -6,8 +6,8 @@ import org.junit.Test;
 public class WikiWordBuilderTest {
   @Test
   public void buildsLinkToNonExistent() {
-    WikiWordBuilder builder = new WikiWordBuilder(new TestSourcePage().withTarget("NonExistentPage"), "", "");
-    String result = builder.buildLink("", "<i>name</i>");
+    WikiWordBuilder builder = new WikiWordBuilder(new TestSourcePage().withTarget("NonExistentPage"), "", "<i>name</i>");
+    String result = builder.buildLink("", "");
     Assert.assertEquals("<i>name</i><a title=\"create page\" href=\"NonExistentPage?edit&amp;nonExistent=true\">[?]</a>", result);
   }
 
