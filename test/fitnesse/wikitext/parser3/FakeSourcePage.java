@@ -33,7 +33,7 @@ public class FakeSourcePage implements SourcePage {
 
   @Override
   public boolean targetExists(String wikiWordPath) {
-    return true;
+    return !wikiWordPath.contains("New");
   }
 
   @Override

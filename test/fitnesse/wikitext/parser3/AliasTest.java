@@ -63,4 +63,8 @@ public class AliasTest {
     external.putVariable("x", "3");
     assertTranslates(Html.anchor("PageTwo4", "tag"), "[[tag][PageTwo${=1+${x}=}]]", external);
   }
+
+  @Test public void translatesNewPage() {
+    assertTranslates("tag<a title=\"create page\" href=\"Fake.NewPage?edit&amp;nonExistent=true\">[?]</a>", "[[tag][NewPage]]");
+  }
 }
