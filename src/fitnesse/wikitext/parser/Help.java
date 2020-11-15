@@ -1,13 +1,13 @@
 package fitnesse.wikitext.parser;
 
-import fitnesse.wiki.WikiPageProperty;
+import fitnesse.wikitext.shared.Names;
+import fitnesse.wikitext.shared.ToHtml;
 
 import java.util.List;
 
 public class Help extends SymbolType implements Rule, Translation {
-    private static final String editableOption = "-editable";
 
-    public Help() {
+  public Help() {
         super("Help");
         wikiMatcher(new Matcher().string("!help"));
         wikiRule(this);
@@ -19,8 +19,8 @@ public class Help extends SymbolType implements Rule, Translation {
         List<Symbol> lookAhead = parser.peek(new SymbolType[] {SymbolType.Whitespace, SymbolType.Text});
         if (!lookAhead.isEmpty()) {
             String option = lookAhead.get(1).getContent();
-            if (option.equals(editableOption)) {
-                current.putProperty(editableOption, "");
+            if (option.equals(Names.EDITABLE)) {
+                current.putProperty(Names.EDITABLE, "");
                 parser.moveNext(2);
             }
         }
@@ -29,11 +29,6 @@ public class Help extends SymbolType implements Rule, Translation {
 
     @Override
     public String toTarget(Translator translator, Symbol symbol) {
-        String helpText = translator.getPage().getProperty(WikiPageProperty.HELP);
-        String editText = helpText.isEmpty() ? "edit help text" : "edit";
-        if (symbol.hasProperty(editableOption)) {
-          helpText += " <a href=\"" + translator.getPage().getFullPath() + "?properties\">(" + editText + ")</a>";
-        }
-        return helpText;
+      return ToHtml.help(translator.getPage(), symbol);
     }
 }
