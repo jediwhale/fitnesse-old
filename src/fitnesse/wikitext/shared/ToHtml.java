@@ -1,6 +1,8 @@
 package fitnesse.wikitext.shared;
 
 import fitnesse.html.HtmlTag;
+import fitnesse.wiki.WikiPageProperty;
+import fitnesse.wikitext.SourcePage;
 import fitnesse.wikitext.parser.FormattedExpression;
 import fitnesse.wikitext.parser.Maybe;
 
@@ -47,6 +49,14 @@ public class ToHtml {
     result.add(strings[0].trim());
     source.findProperty(Names.ID).ifPresent(id -> result.addAttribute("id", id));
     return result.html();
+  }
+
+  public static String help(SourcePage page, PropertySource source) {
+    String helpText = page.getProperty(WikiPageProperty.HELP);
+    if (source.hasProperty(Names.EDITABLE)) {
+      helpText += " <a href=\"" + page.getFullPath() + "?properties\">(edit" + (helpText.isEmpty() ? " help text" : "") + ")</a>";
+    }
+    return helpText;
   }
 
   public static String image(String[] strings, PropertySource source) {

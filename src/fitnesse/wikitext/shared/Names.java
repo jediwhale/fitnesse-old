@@ -36,6 +36,9 @@ public class Names {
   public static final List<String> VALID_STYLES = new ArrayList<>(Arrays.asList(
     "decimal", "decimal-leading-zero", "lower-roman", "upper-roman", "lower-alpha", "upper-alpha", "none"));
 
+  // properties for the !help widget
+  public static final String EDITABLE = "-editable";
+
   // properties for the !img widget
   public static final String IMAGE_BORDER= "-b";
   public static final String IMAGE_MARGIN = "-m";
