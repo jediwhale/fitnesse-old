@@ -15,6 +15,7 @@ public enum SymbolType {
   HASH_TABLE,
   HEADER,
   HEADINGS,
+  HELP,
   IMAGE,
   INCLUDE,
   ITALIC,

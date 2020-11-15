@@ -95,11 +95,6 @@ public class TokenSourceTest {
   }
 
   @Test
-  public void scansHelp() {
-    assertScansWord("!help", "Help");
-  }
-
-  @Test
   public void scansToday() {
     assertScansWord("!today", "Today");
   }

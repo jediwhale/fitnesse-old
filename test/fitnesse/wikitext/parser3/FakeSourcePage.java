@@ -4,6 +4,8 @@ import fitnesse.wikitext.SourcePage;
 import fitnesse.wikitext.parser.Maybe;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FakeSourcePage implements SourcePage {
   @Override
@@ -23,7 +25,7 @@ public class FakeSourcePage implements SourcePage {
 
   @Override
   public String getFullPath() {
-    return null;
+    return "FullPath";
   }
 
   @Override
@@ -58,12 +60,12 @@ public class FakeSourcePage implements SourcePage {
 
   @Override
   public boolean hasProperty(String propertyKey) {
-    return false;
+    return properties.containsKey(propertyKey);
   }
 
   @Override
   public String getProperty(String propertyKey) {
-    return propertyKey + "Value";
+    return properties.get(propertyKey);
   }
 
   @Override
@@ -72,4 +74,5 @@ public class FakeSourcePage implements SourcePage {
   }
 
   public String content;
+  public Map<String, String> properties = new HashMap<>();
 }
