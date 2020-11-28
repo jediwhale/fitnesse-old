@@ -1,17 +1,20 @@
 package fitnesse.wikitext.parser3;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Stack;
 import java.util.function.Predicate;
 
 class TokenSource {
-  TokenSource(String input, List<TokenType> types) {
-    content = new Content(input);
+  TokenSource(Content content, List<TokenType> types) {
+    this.content = content;
     results = new LinkedList<>();
     use(types, type -> false);
   }
 
-  TokenSource(TokenSource parent, String input) {
-    content = new Content(input);
+  TokenSource(TokenSource parent, Content content) { //todo: this is used for variable and include content, eventually goes away?
+    this.content = content;
     results = new LinkedList<>();
     use(parent.scanTypes.lastElement().types, type -> false);
   }
@@ -76,7 +79,6 @@ class TokenSource {
     }
 
     Optional<Token> findMatch(Content content) {
-      if (content.isNonTokenStart()) return Optional.empty();
       for (TokenType matchType : types) { //todo: do quicker than linear search
         Optional<Token> matchToken = matchType.read(content);
         if (matchToken.isPresent()) return matchToken;

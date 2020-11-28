@@ -48,5 +48,7 @@ public class Alias {
   }
 
   private static final ArrayList<TokenType> ALIAS_TYPES = new ArrayList<>(Arrays.asList(
-    TokenType.ALIAS_END, TokenType.EXPRESSION_START, TokenType.EXPRESSION_END, TokenType.VARIABLE, TokenType.BRACE_END));
+    TokenType.VARIABLE, //must be first
+    TokenType.ALIAS_END, TokenType.EXPRESSION_START, TokenType.EXPRESSION_END, TokenType.BRACE_END
+  ));
 }

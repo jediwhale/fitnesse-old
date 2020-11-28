@@ -27,7 +27,7 @@ class Include {
     result.add(
           result.hasProperty(Names.SETUP) || result.hasProperty(Names.TEARDOWN)
             ? parser.withContent(included.getValue().getSourcePage().getContent()).parseToEnd() //todo: not sure this is correct, maybe bug in v2
-            : Parser.parse(included.getValue().getSourcePage().getContent(), ParseRules.make(variables, included.getValue())));
+            : Parser.parse(included.getValue().getSourcePage().getContent(), variables, included.getValue()));
 
     if (result.hasProperty(Names.SETUP)) variables.findVariable(Names.COLLAPSE_SETUP).ifPresent(value -> result.putProperty(Names.COLLAPSE_SETUP, value));
     if (result.hasProperty(Names.TEARDOWN)) variables.findVariable(Names.COLLAPSE_TEARDOWN).ifPresent(value -> result.putProperty(Names.COLLAPSE_TEARDOWN, value));
@@ -40,7 +40,7 @@ class Include {
     }
     String closeState = "";
     if ((symbol.hasProperty(Names.SETUP) && symbol.findProperty(Names.COLLAPSE_SETUP).orElse("true").equals("true"))
-//      || (symbol.hasTag("-teardown") && symbol.findTag(COLLAPSE_TEARDOWN).orElse("true").equals("true"))
+//todo:     || (symbol.hasTag("-teardown") && symbol.findTag(COLLAPSE_TEARDOWN).orElse("true").equals("true"))
       || symbol.hasProperty(Names.TEARDOWN) //todo: to make test pass, but seems like v2 bug
       || symbol.hasProperty(Names.COLLAPSE)) {
       closeState = Collapsible.CLOSED;

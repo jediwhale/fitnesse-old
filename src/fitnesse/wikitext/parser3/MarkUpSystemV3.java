@@ -5,26 +5,27 @@ import fitnesse.wikitext.ParsingPage;
 import fitnesse.wikitext.SourcePage;
 import fitnesse.wikitext.SyntaxTree;
 
-import java.util.*;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class MarkUpSystemV3 implements MarkUpSystem {
   @Override
   public SyntaxTree parse(ParsingPage page, String content) {
-    return new SyntaxTreeV3(Parser.parse(content, makeParseRules(page)), page);
+    return new SyntaxTreeV3(Parser.parse(content, page), page);
   }
 
   @Override
   public String variableValueToHtml(ParsingPage page, String variableValue) {
-    Symbol symbol = Parser.parse(variableValue, TokenTypes.VARIABLE_DEFINITION_TYPES, makeParseRules(page));
+    //todo: suspect there's a bug for non-simple variable definitions being parsed incorrectly
+    Symbol symbol = Parser.parse(variableValue, TokenTypes.VARIABLE_DEFINITION_TYPES, page);
     return new SyntaxTreeV3(symbol, page).translateToHtml();
   }
 
   @Override
   public void findWhereUsed(SourcePage page, Consumer<String> takeWhereUsed) {
     final ParsingPage parsingPage = new ParsingPage(page);
-    Symbol symbol = Parser.parse(page.getContent(), TokenTypes.REFACTORING_TYPES, makeParseRules(parsingPage));
+    Symbol symbol = Parser.parse(page.getContent(), TokenTypes.REFACTORING_TYPES, parsingPage);
     SyntaxTreeV3 syntaxTree = new SyntaxTreeV3(symbol, parsingPage);
     syntaxTree.findWhereUsed(takeWhereUsed);
   }
@@ -33,7 +34,7 @@ public class MarkUpSystemV3 implements MarkUpSystem {
   public String changeReferences(SourcePage page, Function<String, Optional<String>> changeReference) {
     ParsingPage parsingPage = new ParsingPage(page);
     String original = page.getContent();
-    Symbol symbol = Parser.parse(original, TokenTypes.REFACTORING_TYPES, makeParseRules(parsingPage));
+    Symbol symbol = Parser.parse(original, TokenTypes.REFACTORING_TYPES, parsingPage);
     Replacement replacement = new Replacement(original);
     symbol.walkPreOrder(node -> {
         if (node.isWikiReference()) {
@@ -41,10 +42,6 @@ public class MarkUpSystemV3 implements MarkUpSystem {
         }
       });
     return replacement.makeResult();
-  }
-
-  private Map<TokenType, ParseRule> makeParseRules(ParsingPage page) {
-    return ParseRules.make(page, new ExternalAdapter(page.getPage()));
   }
 
   private static class Replacement {

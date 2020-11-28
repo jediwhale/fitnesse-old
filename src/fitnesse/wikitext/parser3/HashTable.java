@@ -4,6 +4,7 @@ import fitnesse.html.HtmlTag;
 
 class HashTable {
   static void scan(Token token, TokenSource source) {
+    //todo: does this work with nested {...} ?
     source.use(TokenTypes.HASH_TABLE_TYPES, type -> type == TokenType.BRACE_END);
   }
 

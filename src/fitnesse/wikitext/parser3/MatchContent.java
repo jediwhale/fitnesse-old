@@ -112,4 +112,25 @@ interface MatchContent {
   static MatchContent word(String match) {
     return matchAll(text(match), blank());
   }
+
+  static MatchContent variableValue() {
+    return content -> {
+      if (!content.startsWith(VARIABLE_START)) return Optional.empty();
+      Content trial = new Content(content);
+      StringBuilder result = new StringBuilder();
+      trial.advance(VARIABLE_START.length());
+      if (trial.startsWith(EXPRESSION_INDICATOR)) return Optional.empty();
+      do {
+        if (!trial.more()) return Optional.empty();
+        result.append(trial.advance());
+      } while (!trial.startsWith(VARIABLE_END));
+      content.advance(VARIABLE_START.length() + result.length() + VARIABLE_END.length());
+      content.insertVariable(result.toString());
+      return Optional.empty();
+    };
+  }
+
+  String EXPRESSION_INDICATOR = "=";
+  String VARIABLE_START = "${";
+  String VARIABLE_END = "}";
 }

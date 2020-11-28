@@ -1,58 +1,73 @@
 package fitnesse.wikitext.parser3;
 
-public class Content {
-  public Content(String content) {
-    this.content = content;
-    this.current = 0;
-    this.isStartLine = true;
+import java.util.Stack;
+import java.util.function.Function;
+
+class Content {
+  Content(String content, Function<String, ContentSegment> substituteVariable) {
+    this.substituteVariable = substituteVariable;
+    insert(new ContentSegment(content, true));
+    isStartLine = true;
   }
 
-  public Content(Content other) {
-    this.content = other.content;
-    this.current = other.current;
+  Content(Content other) {
+    this.substituteVariable = other.substituteVariable;
     this.isStartLine = other.isStartLine;
+    for (int i = 0; i < other.items.size(); i++) items.push(new ContentSegment(other.items.elementAt(i)));
   }
 
-  public int getCurrent() { return current; }
-  public void setStartLine() { isStartLine = true; }
+  int getCurrent() { return items.size() == 1 ? items.peek().getCurrent() : -1; }
 
-  public void advance(int length) {
-    isStartLine = false;
-    current += length;
-  }
-
-  public char advance() {
-    isStartLine = false;
-    return content.charAt(current++);
-  }
-
-  public boolean startsWith(String match) {
-    return content.startsWith(match, current);
-  }
-
-  public boolean isNonTokenStart() { //todo: refine this
-    return more() && content.charAt(current) != 'h' && Character.isLetterOrDigit(content.charAt(current));
-  }
-
-  public boolean isDigit() {
-    return Character.isDigit(content.charAt(current));
-  }
-
-  public boolean more() {
-    return current < content.length();
-  }
-
-  public boolean isBlankSpace() {
+  boolean startsWith(String match) {
     if (!more()) return false;
-    char candidate = content.charAt(current);
-    return Character.isWhitespace(candidate) && candidate != '\n' && candidate != '\r';
+    int item = items.size() - 1;
+    int offset = -1;
+    for (int i = 0; i < match.length(); i++) {
+      offset++;
+      if (items.elementAt(item).atEnd(offset)) {
+        if (item <= 0) return false;
+        item--;
+        offset = 0;
+      }
+      if (!items.elementAt(item).isCharAt(match.charAt(i), offset)) return false;
+    }
+    return true;
   }
 
-  public boolean isStartLine() {
-    return isStartLine;
+  boolean isBlankSpace() {
+    return more() && items.peek().test(candidate -> Character.isWhitespace(candidate) && candidate != '\n' && candidate != '\r');
   }
 
-  private final String content;
-  private int current;
+  boolean isDigit() {
+    return more() && items.peek().test(Character::isDigit);
+  }
+
+  boolean more() { return !items.empty(); }
+
+  char advance() {
+    isStartLine = false;
+    char result = items.peek().advance();
+    if (items.peek().atEnd(0)) items.pop();
+    return result;
+  }
+
+  void advance(int length) {
+    for (int i = 0; i < length; i++) advance();
+  }
+
+  void insertVariable(String name) {
+    insert(substituteVariable.apply(name));
+  }
+
+  void insert(ContentSegment segment) {
+    if (!segment.atEnd(0)) items.push(segment);
+  }
+
+  void setStartLine() { isStartLine = true; }
+  boolean isStartLine() { return isStartLine; }
+
+  private final Stack<ContentSegment> items = new Stack<>();
+  private final Function<String, ContentSegment> substituteVariable;
   private boolean isStartLine;
 }
+

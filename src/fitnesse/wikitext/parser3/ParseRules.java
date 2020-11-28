@@ -18,7 +18,7 @@ class ParseRules {
     rules.put(TokenType.COLLAPSIBLE_START, Collapsible::parse);
     rules.put(TokenType.COMMENT, Comment::parse);
     rules.put(TokenType.CONTENTS, parser -> Contents.parse(parser, variables));
-    rules.put(TokenType.DEFINE, parser -> Variable.parsePut(parser, variables));
+    rules.put(TokenType.DEFINE, parser -> Define.parse(parser, variables));
     rules.put(TokenType.EXPRESSION_START, parser -> Expression.parse(parser, variables));
     rules.put(TokenType.HASH_TABLE, HashTable::parse);
     rules.put(TokenType.HEADER, parser -> Header.parse(parser, variables));
@@ -41,7 +41,6 @@ class ParseRules {
     rules.put(TokenType.STRIKE, Pair.parse(SymbolType.STRIKE));
     rules.put(TokenType.STYLE, Style::parse);
     rules.put(TokenType.TABLE_START, Table::parseStandard);
-    rules.put(TokenType.VARIABLE, parser -> Variable.parseGet(parser, variables));
     return rules;
   }
 

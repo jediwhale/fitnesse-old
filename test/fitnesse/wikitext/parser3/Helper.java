@@ -22,6 +22,7 @@ public class Helper {
     assertScans("Text=" + word.substring(0,1) + ",BlankSpace= ,Text=" + word.substring(1),
       word.substring(0,1) + " " + word.substring(1));
   }
+
   public static void assertScans(String expected, String input) {
     String result = expected + (expected.length() > 0 ? "," : "") + "End";
     assertEquals(input, result, scan(input));
@@ -50,7 +51,7 @@ public class Helper {
   }
 
   public static Symbol parse(String input, FakeExternal external) {
-    return Parser.parse(input, ParseRules.make(external, external));
+    return Parser.parse(input, external, external);
   }
 
   public static FakeExternal makeExternal() { return new FakeExternal(new FakeSourcePage());}
@@ -58,7 +59,7 @@ public class Helper {
   public static String toError(String message) { return " <span class=\"fail\">" + message + "</span> "; }
 
   private static String scan(String input) {
-    TokenSource source = new TokenSource(input, TokenTypes.WIKI_PAGE_TYPES);
+    TokenSource source = new TokenSource(new Content(input, s -> new ContentSegment("*" + s + "*", true)), TokenTypes.WIKI_PAGE_TYPES);
     StringBuilder result = new StringBuilder();
     do {
       Token token = source.take();

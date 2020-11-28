@@ -41,7 +41,7 @@ public class TokenType {
   public static final TokenType CONTENTS = new TokenType("Contents", "!contents");
   public static final TokenType DEFINE = new TokenType("Define")
     .matches(word("!define"));
-  public static final TokenType EXPRESSION_END = new TokenType("ExpressionStart", "=}");
+  public static final TokenType EXPRESSION_END = new TokenType("ExpressionEnd", "=}");
   public static final TokenType EXPRESSION_START = new TokenType("ExpressionStart", "${=");
   public static final TokenType END = new TokenType("End");
   public static final TokenType HASH_TABLE = new TokenType("HashTable", "!{")
@@ -93,7 +93,8 @@ public class TokenType {
     .matches(text("|"), ignoreBlank(),  matchOne(end(), matchAll(newLine(), notText("|"))));
   public static final TokenType TEXT = new TokenType("Text");
   public static final TokenType TODAY = new TokenType("Today").matches(word("!today"));
-  public static final TokenType VARIABLE = new TokenType("Variable", "${");
+  public static final TokenType VARIABLE = new TokenType("Variable")
+    .matches(variableValue());
 
   public TokenType(String name, String match) {
     this.match = match;
@@ -133,7 +134,7 @@ public class TokenType {
   public void useScan(Token token, TokenSource source) { useScan.accept(token, source); }
 
   private TokenType matches(MatchContent... matchItems) {
-    matcher = matchAll(matchItems);
+    matcher = matchItems.length == 1 ? matchItems[0] : matchAll(matchItems);
     return this;
   }
 

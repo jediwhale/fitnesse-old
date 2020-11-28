@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class TokenTypes {
-
   public static final ArrayList<TokenType> WIKI_PAGE_TYPES = new ArrayList<>(Arrays.asList(
+    TokenType.VARIABLE, //must be first
     TokenType.ALIAS_START,
     TokenType.ALIAS_MIDDLE,
     TokenType.ALIAS_END,
@@ -46,7 +46,6 @@ public class TokenTypes {
     TokenType.TABLE_START,
     TokenType.TABLE_END,
     TokenType.TODAY,
-    TokenType.VARIABLE,
 
     TokenType.LITERAL_END,
     TokenType.NEW_LINE,
@@ -70,11 +69,11 @@ public class TokenTypes {
   }
 
   static final ArrayList<TokenType> LITERAL_TABLE_TYPES = new ArrayList<>(Arrays.asList(
+    TokenType.VARIABLE, // must be first
     TokenType.EXPRESSION_START,
     TokenType.EXPRESSION_END,
     TokenType.LITERAL_START,
     TokenType.LITERAL_END,
-    TokenType.VARIABLE,
     TokenType.BRACE_END,
     TokenType.NEW_LINE,
     TokenType.TABLE_END,
@@ -99,6 +98,7 @@ public class TokenTypes {
   ));
 
   public static final ArrayList<TokenType> VARIABLE_DEFINITION_TYPES = new ArrayList<>(Arrays.asList(
+    TokenType.VARIABLE, // must be first
     TokenType.COMMENT,
     TokenType.DEFINE,
     TokenType.INCLUDE,
@@ -106,7 +106,6 @@ public class TokenTypes {
     TokenType.NEW_LINE,
     TokenType.PREFORMAT_START,
     TokenType.PREFORMAT_END,
-    TokenType.VARIABLE,
 
     TokenType.BLANK_SPACE,
     TokenType.BRACE_END

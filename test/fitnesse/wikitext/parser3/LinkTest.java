@@ -2,7 +2,9 @@ package fitnesse.wikitext.parser3;
 
 import org.junit.Test;
 
-import static fitnesse.wikitext.parser3.Helper.*;
+import static fitnesse.wikitext.parser3.Helper.assertParses;
+import static fitnesse.wikitext.parser3.Helper.assertScans;
+import static fitnesse.wikitext.parser3.Helper.assertTranslates;
 
 public class LinkTest {
   @Test
@@ -19,10 +21,22 @@ public class LinkTest {
     assertParses("LINK=http://(TEXT=PageOne)", "http://PageOne");
   }
 
+  @Test public void parsesWithVariable() {
+    FakeExternal external = Helper.makeExternal();
+    external.putVariable("x", "localhost:8080");
+    assertParses("LINK=http://(TEXT=localhost:8080/page)", "http://${x}/page", external);
+  }
+
   @Test
   public void translates() {
-    assertTranslates(Html.anchor("http://somewhere.com", "http://somewhere.com"), "http://somewhere.com");
+    assertTranslates(Html.anchor("http://somewhere.com"), "http://somewhere.com");
     assertTranslates(Html.anchor("files/myfile", "http://files/myfile"), "http://files/myfile");
+  }
+
+  @Test public void translatesWithVariable() {
+    FakeExternal external = Helper.makeExternal();
+    external.putVariable("x", "localhost:8080");
+    assertTranslates(Html.anchor("http://localhost:8080/page"), "http://${x}/page", external);
   }
 
 }

@@ -3,8 +3,10 @@ package fitnesse.wikitext.parser3;
 import org.junit.Before;
 import org.junit.Test;
 
+import static fitnesse.wikitext.parser3.Helper.assertParses;
+import static fitnesse.wikitext.parser3.Helper.assertScans;
+import static fitnesse.wikitext.parser3.Helper.assertTranslates;
 import static org.junit.Assert.assertEquals;
-import static fitnesse.wikitext.parser3.Helper.*;
 
 public class VariableTest {
 
@@ -23,14 +25,14 @@ public class VariableTest {
 
   @Test
   public void translatesPutErrors() {
-    assertTranslates(toError("!define  Name must be alphanumeric") + "@x y", "!define @x y");
-    assertTranslates(toError("!define x Missing blank space") + "{y}", "!define x{y}");
-    assertTranslates(toError("!define x  Expected { ( or [") + "y", "!define x y");
+    assertTranslates(Helper.toError("!define  Name must be alphanumeric") + "@x y", "!define @x y");
+    assertTranslates(Helper.toError("!define x Missing blank space") + "{y}", "!define x{y}");
+    assertTranslates(Helper.toError("!define x  Expected { ( or [") + "y", "!define x y");
   }
 
   @Test
   public void putsVariables() {
-    parse("!define x {y}", external);
+    Helper.parse("!define x {y}", external);
     assertEquals("y", external.findVariable("x").orElse(""));
   }
 
@@ -43,13 +45,18 @@ public class VariableTest {
 
   @Test
   public void scansGet() {
-    assertScans("Variable=${,Text=x,BraceEnd=}", "${x}");
+    assertScans("Text=*x*", "${x}");
+    assertScans("Text=*xyz*", "${xyz}");
+    assertScans("ExpressionStart=${=,Text=1+2,BraceEnd=}", "${=1+2}");
+    assertScans("Text=$,BraceStart={,Text=xyz", "${xyz");
+    assertScans("Text=$xyz,BraceEnd=}", "$xyz}");
+    assertScans("Text=$,BraceStart={,BraceEnd=}", "${}");
   }
 
   @Test
   public void parsesGet() {
     external.putVariable("x", "y");
-    assertParses("LIST(TEXT=y)", "${x}", external);
+    assertParses("TEXT=y", "${x}", external);
   }
 
   @Test
@@ -60,12 +67,12 @@ public class VariableTest {
 
   @Test
   public void translatesGetError() {
-    assertTranslates(toError("Undefined variable: x"), "${x}");
+    assertTranslates(Helper.toError("Undefined variable: x"), "${x}", external);
   }
 
   @Before
   public void setUp() {
-    external = makeExternal();
+    external = Helper.makeExternal();
   }
 
   private void assertTranslatesDefine(String expected, String input) {

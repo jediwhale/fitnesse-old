@@ -27,7 +27,7 @@ public class TokenSourceTest {
   }
 
   @Test public void peeksContent() {
-    TokenSource source = new TokenSource("%^^@=hi=@there", types);
+    TokenSource source = makeTokenSource("%^^@=hi=@there");
     assertEquals("tokenOne=%", source.peek(0).toString());
     assertEquals("Text=hi", source.peek(3).toString());
     assertEquals("tokenTwo=^^", source.peek(1).toString());
@@ -38,7 +38,7 @@ public class TokenSourceTest {
   }
 
   @Test public void keepsPrevious() {
-    TokenSource source = new TokenSource("%^^", types);
+    TokenSource source = makeTokenSource("%^^");
     source.take();
     assertEquals("tokenOne=%", source.getPrevious().toString());
     source.take();
@@ -46,7 +46,7 @@ public class TokenSourceTest {
   }
 
   @Test public void putsBack() {
-    TokenSource source = new TokenSource("%^^", types);
+    TokenSource source = makeTokenSource("%^^");
     source.take();
     assertEquals("tokenTwo=^^", source.peek(0).toString());
     source.putBack();
@@ -99,9 +99,13 @@ public class TokenSourceTest {
     assertScansWord("!today", "Today");
   }
 
+  private TokenSource makeTokenSource(String input) {
+    return new TokenSource(new Content(input, s -> new ContentSegment(s, true)), types);
+  }
+
   private void assertScansTypes(String expected, String input) {
     StringBuilder result = new StringBuilder();
-    TokenSource source = new TokenSource(input, types);
+    TokenSource source = makeTokenSource(input);
     while (true) {
       Token token = source.take();
       if (token.isType(TokenType.END)) break;

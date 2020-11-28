@@ -4,8 +4,11 @@ import fitnesse.html.HtmlTag;
 
 public class Html {
 
+  public static String anchor(String reference) {
+    return anchor(reference, reference);
+  }
+
   public static String anchor(String reference, String content) {
     return HtmlTag.name("a").attribute("href", reference).body(content).htmlInline();
   }
-
 }
