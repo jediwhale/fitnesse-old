@@ -19,6 +19,12 @@ class TokenSource {
     use(parent.scanTypes.lastElement().types, type -> false);
   }
 
+  TokenSource(TokenSource parent, List<TokenType> types) {
+    this.content = parent.content;
+    results = new LinkedList<>();
+    use(types, type -> false);
+  }
+
   void putBack() { results.addFirst(previous); }
   Token getPrevious() { return previous; }
 

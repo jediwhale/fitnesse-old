@@ -100,7 +100,7 @@ public class TokenSourceTest {
   }
 
   private TokenSource makeTokenSource(String input) {
-    return new TokenSource(new Content(input, s -> new ContentSegment(s, true)), types);
+    return new TokenSource(new Content(input, ContentSegment::new), types);
   }
 
   private void assertScansTypes(String expected, String input) {

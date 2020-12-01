@@ -18,7 +18,7 @@ class Define {
     parser.advance();
     result.add(parser.parseCurrent());
     parser.advance();
-    result.add(Symbol.text(parser.parseDefine(Terminator.make(parser.advance()))));
+    result.add(Symbol.text(parser.withTokenTypes(TokenTypes.DEFINE_TYPES).parseText(Terminator.make(parser.advance()))));
 
     variables.putVariable(result.getContent(0), result.getContent(1));
     return result;

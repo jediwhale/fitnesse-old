@@ -115,19 +115,27 @@ interface MatchContent {
 
   static MatchContent variableValue() {
     return content -> {
-      if (!content.startsWith(VARIABLE_START)) return Optional.empty();
-      Content trial = new Content(content);
-      StringBuilder result = new StringBuilder();
-      trial.advance(VARIABLE_START.length());
-      if (trial.startsWith(EXPRESSION_INDICATOR)) return Optional.empty();
-      do {
-        if (!trial.more()) return Optional.empty();
-        result.append(trial.advance());
-      } while (!trial.startsWith(VARIABLE_END));
-      content.advance(VARIABLE_START.length() + result.length() + VARIABLE_END.length());
-      content.insertVariable(result.toString());
+      scanVariableName(content).ifPresent(content::insertVariable);
       return Optional.empty();
     };
+  }
+
+  static MatchContent variableToken() {
+    return content -> scanVariableName(content).map(name -> VARIABLE_START + name + VARIABLE_END);
+  }
+
+  static Optional<String> scanVariableName(Content content) {
+    if (!content.startsWith(VARIABLE_START)) return Optional.empty();
+    Content trial = new Content(content);
+    StringBuilder result = new StringBuilder();
+    trial.advance(VARIABLE_START.length());
+    if (trial.startsWith(EXPRESSION_INDICATOR)) return Optional.empty();
+    do {
+      if (!trial.more()) return Optional.empty();
+      result.append(trial.advance());
+    } while (!trial.startsWith(VARIABLE_END));
+    content.advance(VARIABLE_START.length() + result.length() + VARIABLE_END.length());
+    return Optional.of(result.toString());
   }
 
   String EXPRESSION_INDICATOR = "=";

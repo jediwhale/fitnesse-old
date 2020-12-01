@@ -38,6 +38,10 @@ class Parser {
     return new Parser(new TokenSource(tokens, new Content(content, this::substituteVariable)), variables, rules, makeSymbolFromText, token -> {});
   }
 
+  Parser withTokenTypes(List<TokenType> tokenTypes) {
+    return new Parser(new TokenSource(tokens, tokenTypes), variables, rules, makeSymbolFromText, watchTokens);
+  }
+
   Parser(String input, List<TokenType> tokenTypes, VariableStore variables, External external) {
     this.tokens = new TokenSource(new Content(input, this::substituteVariable), tokenTypes);
     this.rules = ParseRules.make(variables, external);
@@ -93,13 +97,6 @@ class Parser {
       (list, error) -> list.add(0, Symbol.error(error)));
   }
 
-  String parseDefine(Terminator terminator) {
-    variableEqualityMask = false; //todo: yuck, using a boolean
-    String result = parseText(terminator);
-    variableEqualityMask = true;
-    return result;
-  }
-
   String parseText(Terminator terminator) { //todo: can replace this with token source use scans??
     StringBuilder result = new StringBuilder();
     Parser child = watchTokens(token -> result.append(token.getContent()));
@@ -131,10 +128,7 @@ class Parser {
 
   private ContentSegment substituteVariable(String name) {
     return new ContentSegment(
-      variableEqualityMask
-        ? variables.findVariable(name).orElse(" !style_fail{Undefined variable: " + name + "} ")
-        : "${" + name + "}",
-      variableEqualityMask);
+        variables.findVariable(name).orElse(" !style_fail{Undefined variable: " + name + "} "));
   }
 
   private static Symbol defaultRule(Parser parser) {
@@ -175,5 +169,4 @@ class Parser {
   private final Map<TokenType, ParseRule> rules;
   private final Consumer<Token> watchTokens;
   private final VariableSource variables;
-  private boolean variableEqualityMask = true;
 }

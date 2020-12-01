@@ -6,7 +6,7 @@ import java.util.function.Function;
 class Content {
   Content(String content, Function<String, ContentSegment> substituteVariable) {
     this.substituteVariable = substituteVariable;
-    insert(new ContentSegment(content, true));
+    insert(new ContentSegment(content));
     isStartLine = true;
   }
 

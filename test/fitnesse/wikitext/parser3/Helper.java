@@ -59,7 +59,7 @@ public class Helper {
   public static String toError(String message) { return " <span class=\"fail\">" + message + "</span> "; }
 
   private static String scan(String input) {
-    TokenSource source = new TokenSource(new Content(input, s -> new ContentSegment("*" + s + "*", true)), TokenTypes.WIKI_PAGE_TYPES);
+    TokenSource source = new TokenSource(new Content(input, s -> new ContentSegment("*" + s + "*")), TokenTypes.WIKI_PAGE_TYPES);
     StringBuilder result = new StringBuilder();
     do {
       Token token = source.take();

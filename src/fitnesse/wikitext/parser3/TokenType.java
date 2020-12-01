@@ -93,8 +93,10 @@ public class TokenType {
     .matches(text("|"), ignoreBlank(),  matchOne(end(), matchAll(newLine(), notText("|"))));
   public static final TokenType TEXT = new TokenType("Text");
   public static final TokenType TODAY = new TokenType("Today").matches(word("!today"));
-  public static final TokenType VARIABLE = new TokenType("Variable")
-    .matches(variableValue());
+  public static final TokenType VARIABLE_VALUE = new TokenType("Variable")
+    .matches(variableValue()); //this is used when a variable value is looked up and substituted for the variable token
+  public static final TokenType VARIABLE_TOKEN = new TokenType("Variable")
+    .matches(variableToken()); //this is used when the variable token is kept as is
 
   public TokenType(String name, String match) {
     this.match = match;

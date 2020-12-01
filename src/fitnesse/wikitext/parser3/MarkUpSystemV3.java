@@ -17,7 +17,8 @@ public class MarkUpSystemV3 implements MarkUpSystem {
 
   @Override
   public String variableValueToHtml(ParsingPage page, String variableValue) {
-    //todo: suspect there's a bug for non-simple variable definitions being parsed incorrectly
+    // this appears to be used for various properties that control processing, not for page markup
+    // so a simplified set of token types are used
     Symbol symbol = Parser.parse(variableValue, TokenTypes.VARIABLE_DEFINITION_TYPES, page);
     return new SyntaxTreeV3(symbol, page).translateToHtml();
   }

@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class TokenTypes {
-  public static final ArrayList<TokenType> WIKI_PAGE_TYPES = new ArrayList<>(Arrays.asList(
-    TokenType.VARIABLE, //must be first
+  public static final ArrayList<TokenType> CORE_TYPES = new ArrayList<>(Arrays.asList(
     TokenType.ALIAS_START,
     TokenType.ALIAS_MIDDLE,
     TokenType.ALIAS_END,
@@ -62,14 +61,25 @@ public class TokenTypes {
     TokenType.STRIKE
   ));
 
-  public static final ArrayList<TokenType> HASH_TABLE_TYPES = new ArrayList<>(WIKI_PAGE_TYPES);
+  public static final ArrayList<TokenType> WIKI_PAGE_TYPES = new ArrayList<>(CORE_TYPES);
   static {
+    WIKI_PAGE_TYPES.add(0, TokenType.VARIABLE_VALUE); //must be first
+  }
+
+  public static final ArrayList<TokenType> DEFINE_TYPES = new ArrayList<>(CORE_TYPES);
+  static {
+    DEFINE_TYPES.add(0, TokenType.VARIABLE_TOKEN);
+  }
+
+  public static final ArrayList<TokenType> HASH_TABLE_TYPES = new ArrayList<>(CORE_TYPES);
+  static {
+    HASH_TABLE_TYPES.add(0, TokenType.VARIABLE_VALUE); //must be first
     HASH_TABLE_TYPES.add(TokenType.COLON);
     HASH_TABLE_TYPES.add(TokenType.COMMA);
   }
 
   static final ArrayList<TokenType> LITERAL_TABLE_TYPES = new ArrayList<>(Arrays.asList(
-    TokenType.VARIABLE, // must be first
+    TokenType.VARIABLE_VALUE, // must be first
     TokenType.EXPRESSION_START,
     TokenType.EXPRESSION_END,
     TokenType.LITERAL_START,
@@ -98,7 +108,7 @@ public class TokenTypes {
   ));
 
   public static final ArrayList<TokenType> VARIABLE_DEFINITION_TYPES = new ArrayList<>(Arrays.asList(
-    TokenType.VARIABLE, // must be first
+    TokenType.VARIABLE_VALUE, // must be first
     TokenType.COMMENT,
     TokenType.DEFINE,
     TokenType.INCLUDE,

@@ -15,7 +15,7 @@ public class ContentTest {
   @Test public void multipleSources() {
     Content content = makeContent("ac");
     assertNext(content, 'a', 0);
-    content.insert(new ContentSegment("b", true));
+    content.insert(new ContentSegment("b"));
     assertNext(content, 'b', -1);
     assertNext(content, 'c', 1);
     Assert.assertFalse(content.more());
@@ -34,7 +34,7 @@ public class ContentTest {
     Content content = makeContent("ac");
     Assert.assertTrue(content.startsWith("ac"));
     content.advance(1);
-    content.insert(new ContentSegment("b", true));
+    content.insert(new ContentSegment("b"));
     Assert.assertTrue(content.startsWith("bc"));
     content.advance(1);
     Assert.assertFalse(content.startsWith("cd"));
@@ -47,6 +47,6 @@ public class ContentTest {
   }
 
   private Content makeContent(String input) {
-    return new Content(input, s -> new ContentSegment(s, true));
+    return new Content(input, ContentSegment::new);
   }
 }
