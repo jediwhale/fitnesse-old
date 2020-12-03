@@ -17,10 +17,6 @@ public class TableTest {
     assertScans("TableStart=|,Text=a,TableEnd=|\n,Text=there","|a|\nthere");
   }
 
-  @Test public void scansLiteral() {
-    assertScans("TableStart=!|,Text=''a'',TableEnd=|","!|''a''|");
-  }
-
   @Test public void scansTrailingBlanks() {
     assertScans("TableStart=|,Text=a,CellDelimiter=|  \n|,Text=b,TableEnd=|","|a|  \n|b|");
     assertScans("TableStart=|,Text=a,CellDelimiter=|\n|,Text=b,TableEnd=|  \n","|a|\n|b|  \n");
@@ -55,6 +51,21 @@ public class TableTest {
     assertTranslates(table(row(cell("a") )+ row(cell("b"))), "|a|  \n|b|  \n");
   }
 
+  @Test public void translatesVariableWithCellDelimiter() {
+    external.putVariable("x", "a|b");
+    assertTranslates(table(row(cell("a|b"))), "|${x}|\n", external);
+    assertTranslates(table(row(cell("a|b"))), "!|${x}|\n", external);
+
+  }
+
+  @Test public void translatesVariableWithNestedTable() {
+    external.putVariable("x", "|a|\n");
+    external.putVariable("y", "|a|");
+    assertTranslates(table(row(cell(innerTable(row(cell("a")))))), "|${x}|\n", external);
+    assertTranslates(table(row(cell(innerTable(row(cell("a")))))), "|${y}|\n", external);
+    assertTranslates(table(row(cell("|a|"))), "!|${x}|\n", external);
+  }
+
   @Test public void translatesVariableInLiteralTable() {
     external.putVariable("hi", "there");
     assertTranslates(table(row(cell("there"))), "!|${hi}|", external);
@@ -73,8 +84,12 @@ public class TableTest {
     assertTranslates(table(row(cell("&lt;hi&gt;"))), "!|<hi>|");
   }
 
+  private static String innerTable(String row) {
+    return "<table>" + HtmlElement.endl + row + "</table>";
+  }
+
   private static String table(String row) {
-    return "<table>" + HtmlElement.endl + row + "</table>" + HtmlElement.endl;
+    return innerTable(row)+ HtmlElement.endl;
   }
 
   private static String row(String cell) {

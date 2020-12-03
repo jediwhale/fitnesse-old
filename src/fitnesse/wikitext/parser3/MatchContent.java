@@ -46,7 +46,9 @@ interface MatchContent {
 
   static MatchContent end() {
     return content ->
-      (!content.more() || content.startsWith(TokenType.NESTING_END.getMatch()))
+      (!content.more()
+        || content.startsWith(TokenType.NESTING_END.getMatch())
+        || content.startsWith(TokenType.NESTING_PSEUDO_END.getMatch()))
         ? Optional.of("")
         : Optional.empty();
   }

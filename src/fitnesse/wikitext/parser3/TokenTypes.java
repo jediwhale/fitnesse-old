@@ -71,11 +71,16 @@ public class TokenTypes {
     DEFINE_TYPES.add(0, TokenType.VARIABLE_TOKEN);
   }
 
-  public static final ArrayList<TokenType> HASH_TABLE_TYPES = new ArrayList<>(CORE_TYPES);
+  public static final ArrayList<TokenType> HASH_TABLE_TYPES = new ArrayList<>(WIKI_PAGE_TYPES);
   static {
-    HASH_TABLE_TYPES.add(0, TokenType.VARIABLE_VALUE); //must be first
     HASH_TABLE_TYPES.add(TokenType.COLON);
     HASH_TABLE_TYPES.add(TokenType.COMMA);
+  }
+
+  public static final ArrayList<TokenType> STANDARD_TABLE_TYPES = new ArrayList<>(WIKI_PAGE_TYPES);
+  static {
+    STANDARD_TABLE_TYPES.add(TokenType.NESTING_PSEUDO_START);
+    STANDARD_TABLE_TYPES.add(TokenType.NESTING_PSEUDO_END);
   }
 
   static final ArrayList<TokenType> LITERAL_TABLE_TYPES = new ArrayList<>(Arrays.asList(
@@ -87,7 +92,9 @@ public class TokenTypes {
     TokenType.BRACE_END,
     TokenType.NEW_LINE,
     TokenType.TABLE_END,
-    TokenType.CELL_DELIMITER
+    TokenType.CELL_DELIMITER,
+    TokenType.NESTING_PSEUDO_START,
+    TokenType.NESTING_PSEUDO_END
   ));
 
   public static final ArrayList<TokenType> REFACTORING_TYPES = new ArrayList<>(Arrays.asList(

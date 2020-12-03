@@ -49,6 +49,7 @@ class Terminator {
     map.put(TokenType.EXPRESSION_START, TokenType.EXPRESSION_END);
     map.put(TokenType.LITERAL_START, TokenType.LITERAL_END);
     map.put(TokenType.NESTING_START, TokenType.NESTING_END);
+    map.put(TokenType.NESTING_PSEUDO_START, TokenType.NESTING_PSEUDO_END);
     map.put(TokenType.PARENTHESIS_START, TokenType.PARENTHESIS_END);
     map.put(TokenType.PREFORMAT_START, TokenType.PREFORMAT_END);
     return Collections.unmodifiableMap(map);

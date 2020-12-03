@@ -5,14 +5,18 @@ import fitnesse.html.HtmlTag;
 import java.util.Optional;
 
 class Table {
-  static void scan(Token token, TokenSource source) {
-    if (token.getContent().contains("!")) {
-      source.use(TokenTypes.LITERAL_TABLE_TYPES, type -> type == TokenType.TABLE_END);
-    }
-  }
 
   static Symbol parseStandard(Parser parser) {
-    return parseWithBarDelimiter(parser.peek(0).getContent().contains("!") ? parser.textType(SymbolType.TEXT) : parser);
+    Token token = parser.peek(0);
+    if (token.getContent().contains("!")) {
+      parser.pushTypes(TokenTypes.LITERAL_TABLE_TYPES);
+    }
+    else {
+      parser.pushTypes(TokenTypes.STANDARD_TABLE_TYPES);
+    }
+    Symbol result = parseWithBarDelimiter(parser.peek(0).getContent().contains("!") ? parser.textType(SymbolType.TEXT) : parser);
+    parser.popTypes();
+    return result;
   }
 
   static Symbol parsePlain(Parser parser) {
@@ -70,12 +74,16 @@ class Table {
         row.add(cell);
       } while (!isEndOfRow(parser.peek(-1)));
       result.add(row);
-    } while (!parser.peek(-1).isType(TokenType.TABLE_END));
+    } while (!isEndOfTable(parser.peek(-1)));
     return result;
   }
 
   private static boolean isEndOfRow(Token token) {
-    return token.getContent().contains("\r") || token.getContent().contains("\n") || token.isType(TokenType.TABLE_END);
+    return token.getContent().contains("\r") || token.getContent().contains("\n") || isEndOfTable(token);
+  }
+
+  private static boolean isEndOfTable(Token token) {
+    return token.isType(TokenType.TABLE_END) || token.isType(TokenType.END);
   }
 
   static String translate(Symbol table, Translator translator) {

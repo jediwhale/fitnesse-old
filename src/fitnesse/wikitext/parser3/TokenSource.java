@@ -32,6 +32,8 @@ class TokenSource {
     scanTypes.push(new ScanTypes(types, terminator));
   }
 
+  void popTypes() { scanTypes.pop(); }
+
   Token take() {
     while (results.isEmpty()) readResult();
     previous = results.remove();
@@ -54,12 +56,23 @@ class TokenSource {
         }
       }
       else {
-        if (textOffset < 0) textOffset = content.getCurrent();
-        text.append(content.advance());
+        collectText();
       }
     } else {
       addResult(new Token(TokenType.END));
     }
+  }
+
+  private void collectText() {
+    int current = content.getCurrent();
+    char character = content.advance();
+
+    // the pseudo-nesting characters are used for compatibility with parser v2 to handle variables inside table cells
+    // if they haven't been used by now, they are discarded
+    if (character == Nesting.START || character == Nesting.END) return;
+
+    if (textOffset < 0) textOffset = current;
+    text.append(character);
   }
 
   private void addResult(Token token) {

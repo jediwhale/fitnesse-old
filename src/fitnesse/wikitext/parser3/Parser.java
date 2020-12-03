@@ -58,8 +58,12 @@ class Parser {
     this.variables = variables;
   }
 
+  //todo: public surface is getting bigger and bigger...
+
   Token peek(int offset) { return offset >= 0 ? tokens.peek(offset) : tokens.getPrevious(); }
   void putBack() { tokens.putBack(); }
+  void pushTypes(List<TokenType> types) { tokens.use(types, type -> false); }
+  void popTypes() { tokens.popTypes(); }
 
   Token advance() {
     Token result =  tokens.take();
@@ -128,7 +132,11 @@ class Parser {
 
   private ContentSegment substituteVariable(String name) {
     return new ContentSegment(
-        variables.findVariable(name).orElse(" !style_fail{Undefined variable: " + name + "} "));
+        variables.findVariable(name)
+          // the variable value is delimited with pseudo-nesting characters
+          // these are used for compatibility with parser v2 to handle variables inside table cells
+          .map(s -> Nesting.START + s + Nesting.END)
+          .orElse(" !style_fail{Undefined variable: " + name + "} "));
   }
 
   private static Symbol defaultRule(Parser parser) {

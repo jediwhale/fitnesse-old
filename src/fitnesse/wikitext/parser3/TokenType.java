@@ -67,6 +67,9 @@ public class TokenType {
   public static final TokenType NESTING_START = new TokenType("NestingStart", "!(")
     .isStart();
   public static final TokenType NESTING_END = new TokenType("NestingEnd", ")!");
+  public static final TokenType NESTING_PSEUDO_START = new TokenType("NestingPseudoStart", String.valueOf(Nesting.START))
+    .isStart();
+  public static final TokenType NESTING_PSEUDO_END = new TokenType("NestingPseudoEnd", String.valueOf(Nesting.END));
   public static final TokenType NEW_LINE = new TokenType("NewLine")
     .matches(newLine())
     .isStart();
@@ -87,8 +90,7 @@ public class TokenType {
   public static final TokenType STRIKE = new TokenType("Strike", "--");
   public static final TokenType STYLE = new TokenType("Style", "!style_");
   public static final TokenType TABLE_START = new TokenType("TableStart")
-    .matches(startLine(), matchOne(text("-!|"), text("!|"), text("-|"), text("|")))
-    .useScan(Table::scan);
+    .matches(startLine(), matchOne(text("-!|"), text("!|"), text("-|"), text("|")));
   public static final TokenType TABLE_END = new TokenType("TableEnd")
     .matches(text("|"), ignoreBlank(),  matchOne(end(), matchAll(newLine(), notText("|"))));
   public static final TokenType TEXT = new TokenType("Text");
@@ -114,7 +116,7 @@ public class TokenType {
     return useScan((token, source) -> source.use(new ArrayList<>(Collections.singletonList(terminator)), type -> type == terminator));
   }
 
-  public TokenType useScan(BiConsumer<Token, TokenSource> useScan) {
+  public TokenType useScan(BiConsumer<Token, TokenSource> useScan) { //todo: eliminate this??
     this.useScan = useScan;
     return this;
   }
