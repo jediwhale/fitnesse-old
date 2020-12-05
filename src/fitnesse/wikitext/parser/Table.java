@@ -19,8 +19,14 @@ public class Table extends SymbolType implements Rule, Translation {
     wikiMatcher(new Matcher().startLine().string("!|"));
     wikiMatcher(new Matcher().startLine().string("-|"));
     wikiMatcher(new Matcher().startLine().string("-!|"));
+    wikiMatcher(new Matcher().startLine().string("-^|"));
+    wikiMatcher(new Matcher().startLine().string("^|"));
     wikiRule(this);
     htmlTranslation(this);
+  }
+
+  public Table(String name) {
+    super(name);
   }
 
   @Override
@@ -50,10 +56,12 @@ public class Table extends SymbolType implements Rule, Translation {
     return new Maybe<>(current);
   }
 
-  private Symbol parseCell(Parser parser, String content) {
+  protected Symbol parseCell(Parser parser, String content) {
     Symbol cell = (content.contains("!"))
       ? parser.parseToWithSymbols(cellTerminators, SymbolProvider.literalTableProvider, ParseSpecification.tablePriority)
-      : parser.parseToWithSymbols(cellTerminators, SymbolProvider.tableParsingProvider, ParseSpecification.tablePriority);
+      : (content.contains("^"))
+        ? parser.parseToWithSymbols(cellTerminators, SymbolProvider.noLinksTableParsingProvider, ParseSpecification.tablePriority)
+        : parser.parseToWithSymbols(cellTerminators, SymbolProvider.tableParsingProvider, ParseSpecification.tablePriority);
     cell.setType(tableCell);
     return cell;
   }
