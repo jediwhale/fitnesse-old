@@ -51,11 +51,14 @@ public class TableTest {
     assertTranslates(table(row(cell("a") )+ row(cell("b"))), "|a|  \n|b|  \n");
   }
 
+  @Test public void translatesLiteralCell() {
+    assertTranslates(table(row(cell("something\n"))), "|!-something\n-! |\n");
+  }
+
   @Test public void translatesVariableWithCellDelimiter() {
     external.putVariable("x", "a|b");
     assertTranslates(table(row(cell("a|b"))), "|${x}|\n", external);
     assertTranslates(table(row(cell("a|b"))), "!|${x}|\n", external);
-
   }
 
   @Test public void translatesVariableWithNestedTable() {

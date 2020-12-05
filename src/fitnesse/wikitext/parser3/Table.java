@@ -95,6 +95,24 @@ class Table {
   }
 
   private static HtmlTag cell(Symbol cell, Translator translator) {
-    return HtmlTag.name("td").body(translator.translate(cell).trim());
+    return HtmlTag.name("td").body(new CellTranslator(translator).translate(cell).trim().replaceAll(LITERAL_DELIMITER, ""));
+  }
+
+  private static final String LITERAL_DELIMITER = String.valueOf(134);
+
+  private static class CellTranslator implements Translator {
+    CellTranslator(Translator translator) {
+      this.translator = translator;
+    }
+
+    @Override
+    public TranslateRule findRule(SymbolType symbolType) {
+      return symbolType == SymbolType.LITERAL
+        // to prevent literals from being trimmed in table cells
+        ? (symbol, t) -> LITERAL_DELIMITER + translator.translate(symbol) + LITERAL_DELIMITER
+        : translator.findRule(symbolType);
+    }
+
+    private final Translator translator;
   }
 }

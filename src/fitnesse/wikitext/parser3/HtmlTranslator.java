@@ -45,8 +45,8 @@ public class HtmlTranslator implements Translator {
   }
 
   @Override
-  public String translate(Symbol symbol) {
-    return symbolTypes.get(symbol.getType()).translate(symbol, this);
+  public TranslateRule findRule(SymbolType symbolType) {
+    return symbolTypes.get(symbolType);
   }
 
   private final EnumMap<SymbolType, TranslateRule> symbolTypes;

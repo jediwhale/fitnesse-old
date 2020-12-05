@@ -13,7 +13,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -171,6 +173,15 @@ public class FileUtil {
       } catch (IOException e) {
         LOG.log(Level.INFO, "Unable to close " + closeable, e);
       }
+    }
+  }
+
+  public static void debug(String content) {
+    Path path = Paths.get("debug.txt");
+    try {
+      Files.write(path, (content + "\n").getBytes(), Files.exists(path) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 }
