@@ -14,10 +14,7 @@ class HashTable {
     do {
       Symbol row = new BranchSymbol(SymbolType.LIST);
       result.add(row);
-      Symbol key = new BranchSymbol(SymbolType.LIST);
-      row.add(key);
-      key.add(parser.parseCurrent());
-      parser.advance(); //todo: check colon
+      row.add(parser.parseList(SymbolType.LIST, KEY_TERMINATOR));
       row.add(parser.parseList(SymbolType.LIST, ROW_TERMINATOR));
     } while (parser.peek(-1).isType(TokenType.COMMA));
     return result;
@@ -38,5 +35,6 @@ class HashTable {
     return HtmlTag.name("td").attribute("class", cellClass).body(translator.translate(cell).trim());
   }
 
+  private static final Terminator KEY_TERMINATOR = new Terminator(type -> type == TokenType.COLON);
   private static final Terminator ROW_TERMINATOR = new Terminator(type -> type == TokenType.COMMA || type == TokenType.BRACE_END);
 }

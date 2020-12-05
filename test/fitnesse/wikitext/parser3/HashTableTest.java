@@ -20,11 +20,24 @@ public class HashTableTest {
   @Test public void translates() {
     assertTranslates(
       "<table class=\"hash_table\">\n" +
-      "\t<tr class=\"hash_row\">\n" +
-      "\t\t<td class=\"hash_key\">key</td>\n" +
-      "\t\t<td class=\"hash_value\">value</td>\n" +
-      "\t</tr>\n" +
-      "</table>\n",
+        hashRow("key", "value") +
+        "</table>\n",
       "!{key:value}");
+    assertTranslates(
+      "<table class=\"hash_table\">\n" +
+        hashRow("key1", "value1") +
+        hashRow("key2", "value2") +
+        "</table>\n",
+      "!{ key1 : value1 , key2 : value2 }");
+    //todo: test with embedded newlines
+  }
+
+  private String hashRow(String key, String value) {
+    return
+      "\t<tr class=\"hash_row\">\n" +
+      "\t\t<td class=\"hash_key\">" + key + "</td>\n" +
+      "\t\t<td class=\"hash_value\">" + value + "</td>\n" +
+      "\t</tr>\n";
+
   }
 }
