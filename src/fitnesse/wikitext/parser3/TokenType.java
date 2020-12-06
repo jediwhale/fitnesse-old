@@ -92,7 +92,8 @@ public class TokenType {
   public static final TokenType TABLE_START = new TokenType("TableStart")
     .matches(startLine(), matchOne(text("-!|"), text("!|"), text("-|"), text("|")));
   public static final TokenType TABLE_END = new TokenType("TableEnd")
-    .matches(text("|"), ignoreBlank(),  matchOne(end(), matchAll(newLine(), notText("|"))));
+    .matches(text("|"), ignoreBlank(),  matchOne(end(), matchAll(newLine(), notText("|"))))
+    .isStart();
   public static final TokenType TEXT = new TokenType("Text");
   public static final TokenType TODAY = new TokenType("Today").matches(word("!today"));
   public static final TokenType VARIABLE_VALUE = new TokenType("Variable")

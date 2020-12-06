@@ -87,6 +87,10 @@ public class TableTest {
     assertTranslates(table(row(cell("&lt;hi&gt;"))), "!|<hi>|");
   }
 
+  @Test public void translatesTwoTables() {
+    assertTranslates(table(row(cell("a"))) + table(row(cell("b"))), "|a|\n!|b|\n");
+  }
+
   private static String innerTable(String row) {
     return "<table>" + HtmlElement.endl + row + "</table>";
   }
