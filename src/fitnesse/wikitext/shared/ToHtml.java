@@ -77,6 +77,10 @@ public class ToHtml {
     return HtmlTag.name("a").attribute("href", files < 0 ? url : url.substring(files + 2)).body(description).htmlInline();
   }
 
+  public static String meta(String[] strings) {
+    return HtmlTag.name("span").attribute("class", "meta").body(strings[0]).htmlInline();
+  }
+
   public static String nestedPair(String[] strings) {
     return HtmlTag.name(strings[0]).child(HtmlTag.name(strings[1]).body(strings[2])).htmlInline();
   }
