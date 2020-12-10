@@ -13,6 +13,9 @@ public class HashTableTest {
     @Test public void translatesHashTables() {
         ParserTestHelper.assertTranslatesTo("!{a:b,c:d}", hashTable());
         ParserTestHelper.assertTranslatesTo("!{a:b, c:d}", hashTable());
+        //todo: bugs in v2, embedded newlines, comma and colon interchangeable
+        //ParserTestHelper.assertTranslatesTo("!{\na:b,\nc:d\n}", hashTable());
+        //ParserTestHelper.assertTranslatesTo("!{a,b:c,d}", not a hash table);
     }
 
     @Test public void invalidHashInTableIsIgnored() {

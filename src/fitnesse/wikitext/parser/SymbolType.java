@@ -64,7 +64,7 @@ public class SymbolType implements Matchable {
     public static final SymbolType Meta = new SymbolType("Meta")
             .wikiMatcher(new Matcher().startLineOrCell().string("!meta"))
             .wikiRule(new LineRule())
-            .htmlTranslation(new HtmlBuilder("span").body(0).attribute("class", "meta").inline());
+            .htmlTranslation(Translate.with(ToHtml::meta).child(0));
     public static final SymbolType Newline = new SymbolType("Newline")
             .wikiMatcher(new Matcher().string("\n"))
             .wikiMatcher(new Matcher().string("\r\n"))
