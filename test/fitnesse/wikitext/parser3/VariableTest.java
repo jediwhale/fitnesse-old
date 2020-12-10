@@ -14,6 +14,7 @@ public class VariableTest {
   public void parsesPut() {
     assertParses("DEFINE(TEXT=x,TEXT=y)", "!define x {y}");
     assertParses("DEFINE(TEXT=x,TEXT=''y'')", "!define x {''y''}");
+    assertParses("DEFINE(TEXT=x,TEXT=!define y {z})", "!define x {!define y {z}}");
   }
 
   @Test

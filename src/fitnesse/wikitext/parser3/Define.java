@@ -24,6 +24,17 @@ class Define {
     return result;
   }
 
+  static Symbol parseNested(Parser parser) {
+    // this is used when a define appears inside another define
+    // it does not return a parse tree or define a variable
+    // it just advances through the tokens to accumulate text for the outer define
+    parser.advance();
+    parser.parseCurrent();
+    parser.advance();
+    parser.parseList(parser.advance());
+    return Symbol.text("");
+  }
+
   static String translate(Symbol symbol, Translator translator) {
     return HtmlTag.name("span")
       .attribute("class", "meta")

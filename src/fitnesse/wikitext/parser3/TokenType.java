@@ -39,8 +39,8 @@ public class TokenType {
     .matches(startLine(), text("#"), endWith(newLine()))
     .isStart();
   public static final TokenType CONTENTS = new TokenType("Contents", "!contents");
-  public static final TokenType DEFINE = new TokenType("Define")
-    .matches(word("!define"));
+  public static final TokenType DEFINE = new TokenType("Define").matches(word("!define"));
+  public static final TokenType DEFINE_NESTED = new TokenType("Define").matches(word("!define"));
   public static final TokenType EXPRESSION_END = new TokenType("ExpressionEnd", "=}");
   public static final TokenType EXPRESSION_START = new TokenType("ExpressionStart", "${=");
   public static final TokenType END = new TokenType("End");

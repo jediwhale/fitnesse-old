@@ -17,7 +17,6 @@ public class TokenTypes {
     TokenType.COLLAPSIBLE_START,
     TokenType.COMMENT,
     TokenType.CONTENTS,
-    TokenType.DEFINE,
     TokenType.EXPRESSION_START,
     TokenType.EXPRESSION_END,
     TokenType.HASH_TABLE,
@@ -64,11 +63,13 @@ public class TokenTypes {
   public static final ArrayList<TokenType> WIKI_PAGE_TYPES = new ArrayList<>(CORE_TYPES);
   static {
     WIKI_PAGE_TYPES.add(0, TokenType.VARIABLE_VALUE); //must be first
+    WIKI_PAGE_TYPES.add(TokenType.DEFINE);
   }
 
   public static final ArrayList<TokenType> DEFINE_TYPES = new ArrayList<>(CORE_TYPES);
   static {
-    DEFINE_TYPES.add(0, TokenType.VARIABLE_TOKEN);
+    DEFINE_TYPES.add(0, TokenType.VARIABLE_TOKEN); //must be first
+    DEFINE_TYPES.add(TokenType.DEFINE_NESTED);
   }
 
   public static final ArrayList<TokenType> HASH_TABLE_TYPES = new ArrayList<>(WIKI_PAGE_TYPES);
