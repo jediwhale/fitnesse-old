@@ -75,7 +75,7 @@ public class TokenType {
     .isStart();
   public static final TokenType NUMBERED_LIST = new TokenType("NumberedList")
     .matches(startLine(), blank(), digit());
-  public static final TokenType NOTE = new TokenType("Note").matches(startLine(), word("!note"));
+  public static final TokenType NOTE = new TokenType("Note").matches(word("!note"));
   public static final TokenType PARENTHESIS_END = new TokenType("ParenthesisEnd", ")");
   public static final TokenType PARENTHESIS_START = new TokenType("ParenthesisStart", "(");
   public static final TokenType PATH = new TokenType("Path")

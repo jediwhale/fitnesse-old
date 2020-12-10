@@ -21,6 +21,7 @@ public class VariableTest {
     assertTranslatesDefine("x=y", "!define x {y}");
     assertTranslatesDefine("a.b_c=y", "!define a.b_c {y}");
     assertTranslatesDefine("x=''y''", "!define x {''y''}");
+    assertTranslatesDefine("x=|a|\n|b|", "!define x {|a|\n|b|}");
   }
 
   @Test

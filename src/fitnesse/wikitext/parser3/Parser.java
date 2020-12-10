@@ -27,19 +27,23 @@ class Parser {
   }
 
   Parser textType(SymbolType type) {
-    return new Parser(tokens, variables, rules, (c, o) -> makeLeaf(type, c, o), this.watchTokens);
+    return new Parser(tokens, variables, rules, (c, o) -> makeLeaf(type, c, o), this.watchTokens, parentTerminator);
   }
 
   Parser watchTokens(Consumer<Token> watchTokens) {
-    return new Parser(tokens, variables, rules, makeSymbolFromText, watchTokens);
+    return new Parser(tokens, variables, rules, makeSymbolFromText, watchTokens, parentTerminator);
   }
 
   Parser withContent(String content) {
-    return new Parser(new TokenSource(tokens, new Content(content, this::substituteVariable)), variables, rules, makeSymbolFromText, token -> {});
+    return new Parser(new TokenSource(tokens, new Content(content, this::substituteVariable)), variables, rules, makeSymbolFromText, token -> {}, parentTerminator);
+  }
+
+  Parser withTerminator(Terminator parentTerminator) {
+    return new Parser(tokens, variables, rules, makeSymbolFromText, watchTokens, parentTerminator);
   }
 
   Parser withTokenTypes(List<TokenType> tokenTypes) {
-    return new Parser(new TokenSource(tokens, tokenTypes), variables, rules, makeSymbolFromText, watchTokens);
+    return new Parser(new TokenSource(tokens, tokenTypes), variables, rules, makeSymbolFromText, watchTokens, parentTerminator);
   }
 
   Parser(String input, List<TokenType> tokenTypes, VariableStore variables, External external) {
@@ -48,14 +52,16 @@ class Parser {
     this.makeSymbolFromText = Parser::determineTextSymbol;
     this.watchTokens = token -> {};
     this.variables = variables;
+    this.parentTerminator = Terminator.NONE;
   }
 
-  private Parser(TokenSource tokens, VariableSource variables,  Map<TokenType, ParseRule> rules, BiFunction<String, Integer, Symbol> makeSymbolFromText, Consumer<Token> watchTokens) {
+  private Parser(TokenSource tokens, VariableSource variables,  Map<TokenType, ParseRule> rules, BiFunction<String, Integer, Symbol> makeSymbolFromText, Consumer<Token> watchTokens, Terminator parentTerminator) {
     this.tokens = tokens;
     this.rules = rules;
     this.watchTokens = watchTokens;
     this.makeSymbolFromText = makeSymbolFromText;
     this.variables = variables;
+    this.parentTerminator = parentTerminator;
   }
 
   //todo: public surface is getting bigger and bigger...
@@ -85,7 +91,7 @@ class Parser {
   }
 
   Symbol parseToEnd() {
-    return parseList(SymbolType.LIST, END_TERMINATOR, (list, error) -> {});
+    return parseList(SymbolType.LIST, END_TERMINATOR, Terminator.NONE, this);
   }
 
   Symbol parseList(Token start) {
@@ -97,24 +103,27 @@ class Parser {
   }
 
   Symbol parseList(SymbolType symbolType, Terminator terminator) {
-    return parseList(symbolType, terminator,
-      (list, error) -> list.add(0, Symbol.error(error)));
+    return parseList(symbolType, terminator, Terminator.NONE, withTerminator(terminator));
   }
 
-  String parseText(Terminator terminator) { //todo: can replace this with token source use scans??
+  Symbol parseListInParent(SymbolType symbolType, Terminator terminator) {
+    return parseList(symbolType, terminator, parentTerminator, withTerminator(parentTerminator));
+  }
+
+  String parseText(Terminator terminator) {
     StringBuilder result = new StringBuilder();
-    Parser child = watchTokens(token -> result.append(token.getContent()));
+    Parser child = watchTokens(token -> result.append(token.getContent())).withTerminator(terminator);
     child.parseToTerminator(terminator, child::parseCurrent, result::append); //todo: test what error looks like?
     advance();
     return result.toString();
   }
 
-  private Symbol parseList(SymbolType symbolType, Terminator terminator, BiConsumer<List<Symbol>, String> onError) {
+  private Symbol parseList(SymbolType symbolType, Terminator includedTerminator, Terminator excludedTerminator, Parser child) {
     List<Symbol> symbols = new ArrayList<>();
-    parseToTerminator(terminator,
-      () -> symbols.add(parseCurrent()),
-      error -> onError.accept(symbols, error));
-    advance();
+    parseToTerminator(Terminator.make(includedTerminator, excludedTerminator),
+      () -> symbols.add(child.parseCurrent()),
+      error ->symbols.add(0, Symbol.error(error)));
+    if (includedTerminator.matches(peek(0).getType())) advance();
     return Symbol.make(symbolType, symbols);
   }
 
@@ -172,9 +181,11 @@ class Parser {
   private static final Terminator END_TERMINATOR = new Terminator(TokenType.END);
   private static final String eMailPattern = "[\\w-_.]+@[\\w-_.]+\\.[\\w-_.]+";
 
+  //todo: too much stuff...
   private final BiFunction<String, Integer, Symbol> makeSymbolFromText;
   private final TokenSource tokens;
   private final Map<TokenType, ParseRule> rules;
   private final Consumer<Token> watchTokens;
   private final VariableSource variables;
+  private final Terminator parentTerminator;
 }

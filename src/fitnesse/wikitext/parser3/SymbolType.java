@@ -23,6 +23,7 @@ public enum SymbolType {
   LINK,
   LITERAL,
   LIST,
+  META,
   NESTING,
   NEW_LINE,
   NOTE,

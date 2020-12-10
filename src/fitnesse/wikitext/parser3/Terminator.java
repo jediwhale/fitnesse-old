@@ -7,8 +7,13 @@ import java.util.function.Predicate;
 
 class Terminator {
   static final Terminator END_LINE = new Terminator(type -> type == TokenType.NEW_LINE || type == TokenType.END);
+  static final Terminator NONE = new Terminator(type -> false);
 
   static Terminator make(Token start) { return make(start, ""); }
+
+  static Terminator make(Terminator first, Terminator second) {
+    return new Terminator(type -> first.matches(type) || second.matches(type), first.description, first.prefix);
+  }
 
   static Terminator make(Token start, String prefix) {
     TokenType startType = start.getType();

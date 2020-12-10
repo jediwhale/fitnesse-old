@@ -5,7 +5,7 @@ class Line {
     return parser -> {
       Symbol result = new BranchSymbol(type);
       parser.advance();
-      result.add(parser.parseList(SymbolType.LIST, Terminator.END_LINE));
+      result.add(parser.parseListInParent(SymbolType.LIST, Terminator.END_LINE));
       return result;
     };
   }

@@ -31,6 +31,7 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.WIKI_LIST, WikiList::translate);
     symbolTypes.put(SymbolType.LITERAL, Literal::translate);
     symbolTypes.put(SymbolType.LIST, Symbol::translateChildren);
+    symbolTypes.put(SymbolType.META, Translate.with(ToHtml::meta).content());
     symbolTypes.put(SymbolType.NESTING, Symbol::translateChildren);
     symbolTypes.put(SymbolType.NEW_LINE, Translate.with(ToHtml::newLine));
     symbolTypes.put(SymbolType.NOTE, Translate.with(ToHtml::note).content());

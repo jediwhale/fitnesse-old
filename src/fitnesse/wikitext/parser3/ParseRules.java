@@ -30,6 +30,7 @@ class ParseRules {
     rules.put(TokenType.LAST_MODIFIED, makeType(SymbolType.LAST_MODIFIED));
     rules.put(TokenType.LINK, Link::parse);
     rules.put(TokenType.LITERAL_START, Literal::parse);
+    rules.put(TokenType.META, Line.parse(SymbolType.META));
     rules.put(TokenType.NESTING_START, Nesting::parse);
     rules.put(TokenType.NESTING_PSEUDO_START, Nesting::parse);
     rules.put(TokenType.NEW_LINE, makeType(SymbolType.NEW_LINE));
