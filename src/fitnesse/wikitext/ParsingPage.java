@@ -1,5 +1,7 @@
 package fitnesse.wikitext;
 
+import fitnesse.wikitext.shared.PageVariableSource;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -30,7 +32,7 @@ public class ParsingPage implements VariableStore {
     this.page = page;
     this.namedPage = namedPage;
     this.variableSource = new CompositeVariableSource(
-            new NamedPageVariableSource(namedPage),
+            new PageVariableSource(namedPage),
             variableSource);
     this.cache = cache;
   }
@@ -90,29 +92,6 @@ public class ParsingPage implements VariableStore {
     @Override
     public int nextId() {
       return id++;
-    }
-  }
-
-
-  private static class NamedPageVariableSource implements VariableSource {
-
-    private final SourcePage namedPage;
-
-    private NamedPageVariableSource(SourcePage namedPage) {
-      this.namedPage = namedPage;
-    }
-
-    @Override
-    public Optional<String> findVariable(String key) {
-      String value;
-      if (key.equals("PAGE_NAME"))
-        value = namedPage.getName();
-      else if (key.equals("PAGE_PATH"))
-        value = namedPage.getPath();
-      else
-        return Optional.empty();
-
-      return Optional.ofNullable(value);
     }
   }
 }

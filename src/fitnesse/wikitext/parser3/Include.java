@@ -3,7 +3,9 @@ package fitnesse.wikitext.parser3;
 import fitnesse.wikitext.VariableStore;
 import fitnesse.wikitext.parser.Collapsible;
 import fitnesse.wikitext.parser.Maybe;
+import fitnesse.wikitext.shared.ExtendedVariableStore;
 import fitnesse.wikitext.shared.Names;
+import fitnesse.wikitext.shared.PageVariableSource;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -27,7 +29,10 @@ class Include {
     result.add(
           result.hasProperty(Names.SETUP) || result.hasProperty(Names.TEARDOWN)
             ? parser.withContent(included.getValue().getSourcePage().getContent()).parseToEnd() //todo: not sure this is correct, maybe bug in v2
-            : Parser.parse(included.getValue().getSourcePage().getContent(), variables, included.getValue()));
+            : Parser.parse(
+                included.getValue().getSourcePage().getContent(),
+                new ExtendedVariableStore(variables, new PageVariableSource(included.getValue().getSourcePage())),
+                included.getValue()));
 
     if (result.hasProperty(Names.SETUP)) variables.findVariable(Names.COLLAPSE_SETUP).ifPresent(value -> result.putProperty(Names.COLLAPSE_SETUP, value));
     if (result.hasProperty(Names.TEARDOWN)) variables.findVariable(Names.COLLAPSE_TEARDOWN).ifPresent(value -> result.putProperty(Names.COLLAPSE_TEARDOWN, value));

@@ -27,6 +27,7 @@ public class FakeExternal implements External, VariableStore {
   @Override
   public Maybe<External> make(String pageName) {
     FakeSourcePage page = new FakeSourcePage();
+    page.name = pageName;
     FakeExternal result = new FakeExternal(page);
     result.pageName = this.pageName + "." + pageName;
     page.content = pages.getOrDefault(result.pageName, result.pageName + " content");

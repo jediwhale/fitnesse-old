@@ -10,7 +10,7 @@ import java.util.Map;
 public class FakeSourcePage implements SourcePage {
   @Override
   public String getName() {
-    return "FakeName";
+    return name;
   }
 
   @Override
@@ -73,6 +73,7 @@ public class FakeSourcePage implements SourcePage {
     return 0;
   }
 
+  public String name = "FakeName";
   public String content;
   public Map<String, String> properties = new HashMap<>();
 }

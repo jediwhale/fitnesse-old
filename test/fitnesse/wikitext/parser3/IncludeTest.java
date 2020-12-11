@@ -23,17 +23,19 @@ public class IncludeTest {
   }
 
   @Test public void translates() {
+    FakeExternal external = new FakeExternal(new FakeSourcePage());
+    external.putVariable("PAGE_NAME", "TopPage");
     FakeExternal.pages.clear();
-    FakeExternal.pages.put("root.MyPage", "stuff");
-    assertTranslates(collapsible(""), "!include MyPage");
-    assertTranslates(collapsible(" closed"), "!include -setup MyPage");
-    assertTranslates("stuff", "!include -seamless MyPage");
+    FakeExternal.pages.put("root.MyPage", "this is ${PAGE_NAME}");
+    assertTranslates(collapsible("", "MyPage"), "!include MyPage", external);
+    assertTranslates(collapsible(" closed", "TopPage"), "!include -setup MyPage", external);
+    assertTranslates("this is <a href=\"Fake.MyPage\">MyPage</a>", "!include -seamless MyPage", external);
   }
 
-  private String collapsible(String closed) {
+  private String collapsible(String closed, String pageName) {
     return "<div class=\"collapsible" + closed + "\"><ul><li><a href='#' class='expandall'>Expand</a></li><li><a href='#' class='collapseall'>Collapse</a></li></ul>\n" +
       "\t<p class=\"title\">Included page: <a href=\"Fake.MyPage\">MyPage</a></p>\n" +
-      "\t<div>stuff</div>\n" +
+      "\t<div>this is <a href=\"Fake." + pageName + "\">" + pageName + "</a></div>\n" +
       "</div>\n";
   }
 }
