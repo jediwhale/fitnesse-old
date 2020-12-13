@@ -84,6 +84,11 @@ public class TokenTypes {
     STANDARD_TABLE_TYPES.add(TokenType.NESTING_PSEUDO_END);
   }
 
+  public static final ArrayList<TokenType> NO_LINK_TABLE_TYPES = new ArrayList<>(STANDARD_TABLE_TYPES);
+  static {
+    NO_LINK_TABLE_TYPES.remove(TokenType.LINK);
+  }
+
   static final ArrayList<TokenType> LITERAL_TABLE_TYPES = new ArrayList<>(Arrays.asList(
     TokenType.VARIABLE_VALUE, // must be first
     TokenType.EXPRESSION_START,

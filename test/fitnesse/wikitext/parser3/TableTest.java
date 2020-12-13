@@ -87,6 +87,11 @@ public class TableTest {
     assertTranslates(table(row(cell("&lt;hi&gt;"))), "!|<hi>|");
   }
 
+  @Test public void translatesLinksInNoLinksTable()  {
+    assertTranslates(table(row(cell("WikiWord"))), "^|WikiWord|");
+    assertTranslates(table(row(cell("http://mysite.org"))), "^|http://mysite.org|");
+  }
+
   @Test public void translatesTwoTables() {
     assertTranslates(table(row(cell("a"))) + table(row(cell("b"))), "|a|\n!|b|\n");
   }

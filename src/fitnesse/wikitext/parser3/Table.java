@@ -2,19 +2,22 @@ package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlTag;
 
-import java.util.Optional;
+import java.util.function.BiConsumer;
 
 class Table {
 
   static Symbol parseStandard(Parser parser) {
-    Token token = parser.peek(0);
-    if (token.getContent().contains("!")) {
+    String tableStart = parser.peek(0).getContent();
+    if (tableStart.contains("!")) {
       parser.pushTypes(TokenTypes.LITERAL_TABLE_TYPES);
+    }
+    else if (tableStart.contains("^")) {
+      parser.pushTypes(TokenTypes.NO_LINK_TABLE_TYPES);
     }
     else {
       parser.pushTypes(TokenTypes.STANDARD_TABLE_TYPES);
     }
-    Symbol result = parseWithBarDelimiter(parser.peek(0).getContent().contains("!") ? parser.textType(SymbolType.TEXT) : parser);
+    Symbol result = parseWithBarDelimiter(tableStart.contains("!") || tableStart.contains("^")  ? parser.textType(SymbolType.TEXT) : parser);
     parser.popTypes();
     return result;
   }
@@ -26,41 +29,45 @@ class Table {
   private static Symbol parseWithCustomDelimiter(Parser parser) {
     Symbol result = new BranchSymbol(SymbolType.TABLE);
     parser.advance();
-    Optional<String> separator = parser.peek(0).isType(TokenType.TEXT)
-      ? Optional.of(parser.advance().getContent())
-      : Optional.empty();
+    BiConsumer<Symbol, String> populateRow;
+    if (parser.peek(0).isType(TokenType.TEXT)) {
+      String separator = parser.advance().getContent();
+      populateRow = (row, text) -> addSeparateCells(row, text, separator);
+    }
+    else {
+      populateRow = Table::addSingleCell;
+    }
     if (parser.peek(0).isType(TokenType.BLANK_SPACE)) {
       parser.advance();
-      result.add(makeRow(parser, separator));
+      result.add(makeRow(parser, populateRow));
     }
     else {
       parser.advance(); //todo: check newline
     }
     do {
-      result.add(makeRow(parser, separator));
+      result.add(makeRow(parser, populateRow));
     } while (!parser.peek(0).isType(TokenType.END) && !parser.peek(0).isType(TokenType.PLAIN_TEXT_TABLE_END));
     parser.advance();
     return result;
   }
 
-  private static Symbol makeRow(Parser parser, Optional<String> separator) {
+  private static Symbol makeRow(Parser parser, BiConsumer<Symbol, String> populateRow) {
     Symbol row = new BranchSymbol(SymbolType.LIST);
     String rowText = parser.parseText(new Terminator(TokenType.NEW_LINE));
-    if (separator.isPresent()) {
-      for (String cellText : rowText.split(separator.get())) {
-        row.add(makeCell(cellText));
-      }
-    }
-    else {
-      row.add(makeCell(rowText));
-    }
+    populateRow.accept(row, rowText);
     return row;
   }
 
-  private static Symbol makeCell(String content) {
+  private static void addSeparateCells(Symbol row, String rowText, String separator) {
+    for (String cellText : rowText.split(separator)) {
+      addSingleCell(row, cellText);
+    }
+  }
+
+  private static void addSingleCell(Symbol row, String rowText) {
     Symbol cell = new BranchSymbol(SymbolType.LIST);
-    cell.add(Symbol.text(content));
-    return cell;
+    cell.add(Symbol.text(rowText));
+    row.add(cell);
   }
 
   private static Symbol parseWithBarDelimiter(Parser parser) {

@@ -90,7 +90,7 @@ public class TokenType {
   public static final TokenType STRIKE = new TokenType("Strike", "--");
   public static final TokenType STYLE = new TokenType("Style", "!style_");
   public static final TokenType TABLE_START = new TokenType("TableStart")
-    .matches(startLine(), matchOne(text("-!|"), text("!|"), text("-|"), text("|")));
+    .matches(startLine(), matchOne(text("-!|"), text("!|"), text("-^|"), text("^|"), text("-|"), text("|")));
   public static final TokenType TABLE_END = new TokenType("TableEnd")
     .matches(text("|"), ignoreBlank(),  matchOne(end(), matchAll(newLine(), notText("|"))))
     .isStart();
