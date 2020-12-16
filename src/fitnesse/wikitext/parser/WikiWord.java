@@ -1,7 +1,7 @@
 package fitnesse.wikitext.parser;
 
 import fitnesse.html.HtmlText;
-import fitnesse.wikitext.SourcePage;
+import fitnesse.wikitext.shared.SourcePage;
 import util.GracefulNamer;
 
 public class WikiWord extends SymbolType implements Translation {

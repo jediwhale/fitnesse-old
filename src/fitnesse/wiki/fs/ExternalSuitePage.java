@@ -1,7 +1,7 @@
 package fitnesse.wiki.fs;
 
 import fitnesse.wiki.*;
-import fitnesse.wikitext.VariableSource;
+import fitnesse.wikitext.shared.VariableSource;
 
 import java.io.File;
 import java.util.ArrayList;

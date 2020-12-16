@@ -1,7 +1,5 @@
 package fitnesse.wikitext.shared;
 
-import fitnesse.wikitext.VariableSource;
-
 public interface PropertyStore extends PropertySource {
 
   void putProperty(String key, String value);

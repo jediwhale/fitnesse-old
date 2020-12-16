@@ -5,7 +5,11 @@ import fitnesse.wiki.BaseWikitextPage;
 import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiPageDummy;
 import fitnesse.wiki.WikiSourcePage;
-import fitnesse.wikitext.*;
+import fitnesse.wikitext.shared.CompositeVariableSource;
+import fitnesse.wikitext.shared.ParsingPage;
+import fitnesse.wikitext.shared.SourcePage;
+import fitnesse.wikitext.shared.SyntaxTree;
+import fitnesse.wikitext.shared.VariableSource;
 
 import static org.junit.Assert.*;
 

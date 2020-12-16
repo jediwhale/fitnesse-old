@@ -10,6 +10,7 @@ import fitnesse.slim.protocol.SlimSerializer;
 import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiSourcePage;
 import fitnesse.wikitext.parser.*;
+import fitnesse.wikitext.shared.ParsingPage;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

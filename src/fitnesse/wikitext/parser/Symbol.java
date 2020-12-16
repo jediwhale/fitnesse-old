@@ -1,7 +1,7 @@
 package fitnesse.wikitext.parser;
 
 import fitnesse.util.Tree;
-import fitnesse.wikitext.VariableSource;
+import fitnesse.wikitext.shared.VariableSource;
 import fitnesse.wikitext.shared.SyntaxNode;
 
 import java.util.*;

@@ -1,7 +1,7 @@
 package fitnesse.wikitext.parser.decorator;
 
 import fitnesse.wikitext.parser.Symbol;
-import fitnesse.wikitext.VariableSource;
+import fitnesse.wikitext.shared.VariableSource;
 
 // @deprecated use SyntaxNodeDecorator
 @Deprecated

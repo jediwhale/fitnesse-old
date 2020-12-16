@@ -1,8 +1,8 @@
 package fitnesse.wikitext.parser;
 
 import fitnesse.wiki.PathParser;
-import fitnesse.wikitext.ParsingPage;
-import fitnesse.wikitext.SyntaxTree;
+import fitnesse.wikitext.shared.ParsingPage;
+import fitnesse.wikitext.shared.SyntaxTree;
 
 import java.util.Optional;
 import java.util.function.Consumer;

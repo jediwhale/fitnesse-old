@@ -1,7 +1,7 @@
 package fitnesse.wikitext.parser;
 
-import fitnesse.wikitext.ParsingPage;
-import fitnesse.wikitext.SourcePage;
+import fitnesse.wikitext.shared.ParsingPage;
+import fitnesse.wikitext.shared.SourcePage;
 import fitnesse.wikitext.shared.MarkUpConfig;
 
 public class HtmlTranslator extends Translator {

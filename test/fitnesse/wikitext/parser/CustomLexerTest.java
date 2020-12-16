@@ -2,8 +2,8 @@ package fitnesse.wikitext.parser;
 
 import java.util.*;
 
-import fitnesse.wikitext.ParsingPage;
-import fitnesse.wikitext.SourcePage;
+import fitnesse.wikitext.shared.ParsingPage;
+import fitnesse.wikitext.shared.SourcePage;
 import org.junit.Test;
 
 import static java.util.Arrays.asList;

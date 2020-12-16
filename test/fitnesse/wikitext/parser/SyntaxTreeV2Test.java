@@ -1,7 +1,7 @@
 package fitnesse.wikitext.parser;
 
 import fitnesse.wiki.WikiPage;
-import fitnesse.wikitext.SyntaxTree;
+import fitnesse.wikitext.shared.SyntaxTree;
 import org.junit.Test;
 
 import java.util.ArrayList;

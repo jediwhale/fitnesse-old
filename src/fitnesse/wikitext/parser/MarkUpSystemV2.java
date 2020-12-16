@@ -1,9 +1,9 @@
 package fitnesse.wikitext.parser;
 
-import fitnesse.wikitext.ParsingPage;
-import fitnesse.wikitext.SourcePage;
-import fitnesse.wikitext.SyntaxTree;
-import fitnesse.wikitext.MarkUpSystem;
+import fitnesse.wikitext.shared.ParsingPage;
+import fitnesse.wikitext.shared.SourcePage;
+import fitnesse.wikitext.shared.SyntaxTree;
+import fitnesse.wikitext.shared.MarkUpSystem;
 
 import java.util.Optional;
 import java.util.function.Consumer;

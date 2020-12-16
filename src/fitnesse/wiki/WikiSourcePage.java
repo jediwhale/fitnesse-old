@@ -1,7 +1,7 @@
 package fitnesse.wiki;
 
 import fitnesse.wikitext.parser.Maybe;
-import fitnesse.wikitext.SourcePage;
+import fitnesse.wikitext.shared.SourcePage;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;

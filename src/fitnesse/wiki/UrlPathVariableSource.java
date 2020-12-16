@@ -3,7 +3,7 @@ package fitnesse.wiki;
 import java.util.Map;
 import java.util.Optional;
 
-import fitnesse.wikitext.VariableSource;
+import fitnesse.wikitext.shared.VariableSource;
 import fitnesse.wikitext.parser.Maybe;
 
 public class UrlPathVariableSource implements VariableSource {

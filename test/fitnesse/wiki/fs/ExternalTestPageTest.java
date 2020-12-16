@@ -4,7 +4,7 @@ import fitnesse.wiki.PageType;
 import fitnesse.wiki.SystemVariableSource;
 import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiPagePath;
-import fitnesse.wikitext.VariableSource;
+import fitnesse.wikitext.shared.VariableSource;
 import org.junit.Before;
 import org.junit.Test;
 

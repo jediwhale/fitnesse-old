@@ -1,7 +1,7 @@
 package fitnesse.wikitext.parser;
 
-import fitnesse.wikitext.ParsingPage;
-import fitnesse.wikitext.VariableSource;
+import fitnesse.wikitext.shared.ParsingPage;
+import fitnesse.wikitext.shared.VariableSource;
 
 import java.util.ArrayList;
 import java.util.List;

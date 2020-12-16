@@ -3,7 +3,7 @@ package fitnesse.testsystems.slim;
 import fitnesse.plugins.PluginFeatureFactoryBase;
 import fitnesse.slim.test.MyFixture;
 import fitnesse.testsystems.slim.tables.SlimTableFactory;
-import fitnesse.wikitext.ParsingPage;
+import fitnesse.wikitext.shared.ParsingPage;
 import fitnesse.wikitext.parser.SymbolProvider;
 import fitnesse.wikitext.parser.Table;
 import fitnesse.wikitext.shared.MarkUpConfig;

@@ -1,7 +1,7 @@
 package fitnesse.wikitext.parser;
 
 import fitnesse.wiki.WikiSourcePage;
-import fitnesse.wikitext.ParsingPage;
+import fitnesse.wikitext.shared.ParsingPage;
 import org.junit.Test;
 
 import fitnesse.wiki.WikiPageDummy;

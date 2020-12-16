@@ -1,7 +1,5 @@
 package fitnesse.wikitext.shared;
 
-import fitnesse.wikitext.ParsingPage;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

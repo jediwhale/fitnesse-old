@@ -3,7 +3,7 @@ package fitnesse.wiki;
 import java.util.Optional;
 import java.util.Properties;
 
-import fitnesse.wikitext.VariableSource;
+import fitnesse.wikitext.shared.VariableSource;
 
 public class SystemVariableSource implements VariableSource {
   private final Properties properties;

@@ -8,7 +8,7 @@ import fitnesse.wiki.PathParser;
 import fitnesse.wiki.SymbolicPage;
 import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiPagePath;
-import fitnesse.wikitext.MarkUpSystem;
+import fitnesse.wikitext.shared.MarkUpSystem;
 import fitnesse.wikitext.shared.Names;
 
 import java.io.File;

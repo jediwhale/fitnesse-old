@@ -2,7 +2,7 @@ package fitnesse.wiki.search;
 
 import fitnesse.components.TraversalListener;
 import fitnesse.wiki.*;
-import fitnesse.wikitext.MarkUpSystem;
+import fitnesse.wikitext.shared.MarkUpSystem;
 
 import java.util.ArrayList;
 import java.util.List;

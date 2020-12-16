@@ -1,6 +1,6 @@
 package fitnesse.wiki;
 
-import fitnesse.wikitext.SyntaxTree;
+import fitnesse.wikitext.shared.SyntaxTree;
 
 /**
  * This interface denotes a class that can expose parsed wiki page content.
