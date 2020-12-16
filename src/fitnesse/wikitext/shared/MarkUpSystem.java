@@ -1,4 +1,4 @@
-package fitnesse.wikitext;
+package fitnesse.wikitext.shared;
 
 import fitnesse.wikitext.parser.MarkUpSystemV2;
 import fitnesse.wikitext.parser3.MarkUpSystemV3;

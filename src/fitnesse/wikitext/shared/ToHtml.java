@@ -2,7 +2,6 @@ package fitnesse.wikitext.shared;
 
 import fitnesse.html.HtmlTag;
 import fitnesse.wiki.WikiPageProperty;
-import fitnesse.wikitext.SourcePage;
 import fitnesse.wikitext.parser.FormattedExpression;
 import fitnesse.wikitext.parser.Maybe;
 

@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import fitnesse.wiki.*;
-import fitnesse.wikitext.VariableSource;
+import fitnesse.wikitext.shared.VariableSource;
 import util.FileUtil;
 
 import static java.lang.String.format;

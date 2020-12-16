@@ -58,4 +58,7 @@ public class Names {
   public static final String TEARDOWN = "-teardown";
   // values for the include div class
   public static final String TEARDOWN_CLASS = "teardown";
+
+  //properties for the table widget
+  public static final String CLASS = "class";
 }

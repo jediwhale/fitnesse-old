@@ -2,7 +2,7 @@
 // Released under the terms of the CPL Common Public License version 1.0.
 package fitnesse.wiki;
 
-import fitnesse.wikitext.SyntaxTree;
+import fitnesse.wikitext.shared.SyntaxTree;
 
 import java.util.Collection;
 import java.util.LinkedList;

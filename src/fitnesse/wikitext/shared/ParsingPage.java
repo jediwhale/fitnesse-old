@@ -1,4 +1,4 @@
-package fitnesse.wikitext;
+package fitnesse.wikitext.shared;
 
 import fitnesse.wikitext.shared.PageVariableSource;
 

@@ -1,6 +1,6 @@
 package fitnesse.wikitext.parser;
 
-import fitnesse.wikitext.VariableSource;
+import fitnesse.wikitext.shared.VariableSource;
 import fitnesse.wikitext.parser.decorator.ParsedSymbolDecorator;
 import fitnesse.wikitext.shared.ToHtml;
 
@@ -155,14 +155,20 @@ public class SymbolType implements Matchable {
       return closeType;
     }
 
+    // @deprecated use MarkUpConfig addDecorator
+    @Deprecated
     public void addDecorator(ParsedSymbolDecorator symbolDecorator) {
       decorators.add(symbolDecorator);
     }
 
+    // @deprecated use MarkUpConfig removeDecorator
+    @Deprecated
     public void removeDecorator(ParsedSymbolDecorator symbolDecorator) {
       decorators.remove(symbolDecorator);
     }
 
+    // @deprecated use MarkUpConfig decorate
+    @Deprecated
     void applyParsedSymbolDecorations(Symbol symbol, VariableSource variableSource) {
         decorators.forEach(decorator -> decorator.handleParsedSymbol(symbol, variableSource));
     }

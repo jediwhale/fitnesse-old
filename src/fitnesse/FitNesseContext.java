@@ -18,7 +18,7 @@ import fitnesse.wiki.UrlPathVariableSource;
 import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiPageFactory;
 import fitnesse.wiki.fs.VersionsController;
-import fitnesse.wikitext.VariableSource;
+import fitnesse.wikitext.shared.VariableSource;
 
 import java.io.File;
 import java.util.Map;

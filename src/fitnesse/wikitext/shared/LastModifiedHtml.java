@@ -3,7 +3,6 @@ package fitnesse.wikitext.shared;
 import fitnesse.html.HtmlTag;
 import fitnesse.util.Clock;
 import fitnesse.wiki.WikiPageProperty;
-import fitnesse.wikitext.SourcePage;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

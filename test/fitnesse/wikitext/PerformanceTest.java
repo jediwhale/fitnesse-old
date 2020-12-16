@@ -12,6 +12,8 @@ import fitnesse.wiki.WikiSourcePage;
 import fitnesse.wikitext.parser.*;
 import fitnesse.wikitext.parser3.MarkUpSystemV3;
 import fitnesse.wikitext.parser3.SyntaxTreeV3;
+import fitnesse.wikitext.shared.ParsingPage;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

@@ -14,7 +14,7 @@ import fitnesse.wiki.PathParser;
 import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiPageFactory;
 import fitnesse.wiki.WikiPageFactoryRegistry;
-import fitnesse.wikitext.VariableSource;
+import fitnesse.wikitext.shared.VariableSource;
 
 /**
  * This is the general factory used to load and create wiki pages.

@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import fitnesse.wikitext.VariableSource;
+import fitnesse.wikitext.shared.VariableSource;
 
 public class VariableTool {
   private static final Pattern variablePattern = Pattern.compile("\\$\\{.*}");

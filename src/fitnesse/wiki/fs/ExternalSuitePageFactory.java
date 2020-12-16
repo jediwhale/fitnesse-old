@@ -4,7 +4,7 @@ import java.io.File;
 
 import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiPageFactory;
-import fitnesse.wikitext.VariableSource;
+import fitnesse.wikitext.shared.VariableSource;
 
 import static fitnesse.wiki.fs.ExternalSuitePage.hasHtmlChild;
 

@@ -1,6 +1,6 @@
 package fitnesse.wikitext.parser;
 
-import fitnesse.wikitext.SourcePage;
+import fitnesse.wikitext.shared.SourcePage;
 
 public abstract class Translator {
 
