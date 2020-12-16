@@ -1,9 +1,8 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.html.HtmlTag;
-import fitnesse.wikitext.SourcePage;
-import fitnesse.wikitext.VariableStore;
 import fitnesse.wikitext.parser.Maybe;
+import fitnesse.wikitext.shared.SourcePage;
+import fitnesse.wikitext.shared.VariableStore;
 
 import java.util.HashMap;
 import java.util.Optional;

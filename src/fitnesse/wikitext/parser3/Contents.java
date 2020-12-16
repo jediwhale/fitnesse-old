@@ -2,9 +2,9 @@ package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlTag;
 import fitnesse.html.HtmlUtil;
-import fitnesse.wikitext.VariableStore;
 import fitnesse.wikitext.shared.ContentsItemBuilder;
 import fitnesse.wikitext.shared.Names;
+import fitnesse.wikitext.shared.VariableStore;
 
 class Contents {
   static Symbol parse(Parser parser, VariableStore variables) {

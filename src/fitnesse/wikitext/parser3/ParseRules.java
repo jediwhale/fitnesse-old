@@ -1,6 +1,6 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.wikitext.VariableStore;
+import fitnesse.wikitext.shared.VariableStore;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,8 +1,7 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.wikitext.SourcePage;
 import fitnesse.wikitext.parser.Maybe;
-import fitnesse.wikitext.parser.WikiWordBuilder;
+import fitnesse.wikitext.shared.SourcePage;
 
 class ExternalAdapter implements External {
   ExternalAdapter(SourcePage page) {

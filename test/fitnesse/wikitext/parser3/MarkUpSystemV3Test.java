@@ -1,7 +1,7 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.wikitext.SourcePage;
 import fitnesse.wikitext.parser.TestSourcePage;
+import fitnesse.wikitext.shared.SourcePage;
 import org.junit.Assert;
 import org.junit.Test;
 

@@ -1,7 +1,7 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.wikitext.VariableStore;
 import fitnesse.wikitext.shared.Names;
+import fitnesse.wikitext.shared.VariableStore;
 
 class Header {
   static Symbol parse(Parser parser, VariableStore variables) {

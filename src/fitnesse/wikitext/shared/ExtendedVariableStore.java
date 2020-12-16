@@ -1,8 +1,5 @@
 package fitnesse.wikitext.shared;
 
-import fitnesse.wikitext.VariableSource;
-import fitnesse.wikitext.VariableStore;
-
 import java.util.Optional;
 
 public class ExtendedVariableStore implements VariableStore {

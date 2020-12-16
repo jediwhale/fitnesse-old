@@ -11,16 +11,17 @@ import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiSourcePage;
 import fitnesse.wikitext.parser.*;
 import fitnesse.wikitext.parser3.MarkUpSystemV3;
-import fitnesse.wikitext.parser3.SyntaxTreeV3;
 import fitnesse.wikitext.shared.ParsingPage;
 
+import fitnesse.wikitext.shared.SyntaxTree;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 public class PerformanceTest {
-    private String tablePageContent = "";
-    private String definePageContent = "";
+    private final String tablePageContent;
+    private final String definePageContent;
+
     public PerformanceTest() {
         StringBuilder table = new StringBuilder();
         StringBuilder define = new StringBuilder();
@@ -48,7 +49,7 @@ public class PerformanceTest {
     public void ParserDefineTable() {
       StringBuilder input = new StringBuilder();
       for (int i = 0; i < 30; i++) {
-        input.append("!define x" + i + " {|a|\n|b|}\n");
+        input.append("!define x").append(i).append(" {|a|\n|b|}\n");
       }
       runParser2("define table2", input.toString());
       runParser3("define table3", input.toString());
@@ -86,7 +87,7 @@ public class PerformanceTest {
     public void listDeserializationTest() {
       List<Object> objects = new ArrayList<>();
       for (int i = 0; i < 10000; i++) {
-        objects.add(new String("This is string " + i));
+        objects.add("This is string " + i);
       }
       final String serializedList = SlimSerializer.serialize(objects);
 

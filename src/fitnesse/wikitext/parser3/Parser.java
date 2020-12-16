@@ -1,14 +1,13 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.wikitext.ParsingPage;
-import fitnesse.wikitext.VariableSource;
-import fitnesse.wikitext.VariableStore;
 import fitnesse.wikitext.parser.TextMaker;
+import fitnesse.wikitext.shared.ParsingPage;
+import fitnesse.wikitext.shared.VariableSource;
+import fitnesse.wikitext.shared.VariableStore;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
@@ -55,7 +54,7 @@ class Parser {
     this.parentTerminator = Terminator.NONE;
   }
 
-  private Parser(TokenSource tokens, VariableSource variables,  Map<TokenType, ParseRule> rules, BiFunction<String, Integer, Symbol> makeSymbolFromText, Consumer<Token> watchTokens, Terminator parentTerminator) {
+  private Parser(TokenSource tokens, VariableSource variables, Map<TokenType, ParseRule> rules, BiFunction<String, Integer, Symbol> makeSymbolFromText, Consumer<Token> watchTokens, Terminator parentTerminator) {
     this.tokens = tokens;
     this.rules = rules;
     this.watchTokens = watchTokens;

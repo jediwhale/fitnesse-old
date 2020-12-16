@@ -1,11 +1,11 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.wikitext.VariableStore;
 import fitnesse.wikitext.parser.Collapsible;
 import fitnesse.wikitext.parser.Maybe;
 import fitnesse.wikitext.shared.ExtendedVariableStore;
 import fitnesse.wikitext.shared.Names;
 import fitnesse.wikitext.shared.PageVariableSource;
+import fitnesse.wikitext.shared.VariableStore;
 
 import java.util.Collection;
 import java.util.Collections;

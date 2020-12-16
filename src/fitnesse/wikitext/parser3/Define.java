@@ -1,7 +1,7 @@
 package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlTag;
-import fitnesse.wikitext.VariableStore;
+import fitnesse.wikitext.shared.VariableStore;
 
 class Define {
   static Symbol parse(Parser parser, VariableStore variables) {

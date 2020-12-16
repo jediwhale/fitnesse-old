@@ -1,0 +1,60 @@
+name =<table>
+	<tr>
+		<td>!note &gt; 50% (note)</td>
+	</tr>
+	<tr>
+		<td>!meta &lt; 50% (meta)</td>
+	</tr>
+</table>
+match=!note > 50% (note)
+name =<table>
+	<tr>
+		<td>!note &gt; 50% (note)</td>
+	</tr>
+	<tr>
+		<td>!meta &lt; 50% (meta)</td>
+	</tr>
+</table>
+match=!meta < 50% (meta)
+name =< 50%
+match=< 50%
+name =<table>
+	<tr>
+		<td><p class="note">&gt; 50% (note) </p></td>
+	</tr>
+	<tr>
+		<td>!meta &lt; 50% (meta)</td>
+	</tr>
+</table>
+match=<p class="note">&gt; 50% (note) </p>
+name =<table>
+	<tr>
+		<td><p class="note">&gt; 50% (note) </p></td>
+	</tr>
+	<tr>
+		<td>!meta &lt; 50% (meta)</td>
+	</tr>
+</table>
+match=!meta < 50% (meta)
+name =< 50%
+match=< 50%
+name =<table>
+	<tr>
+		<td><p class="note">&gt; 50% (note) </p></td>
+	</tr>
+	<tr>
+		<td><p class="meta">&lt; 50% (meta) </p></td>
+	</tr>
+</table>
+match=<p class="note">&gt; 50% (note) </p>
+name =<table>
+	<tr>
+		<td><p class="note">&gt; 50% (note) </p></td>
+	</tr>
+	<tr>
+		<td><p class="meta">&lt; 50% (meta) </p></td>
+	</tr>
+</table>
+match=<p class="meta">&lt; 50% (meta) </p>
+name =< 50%
+match=< 50%

@@ -1,7 +1,7 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.wikitext.SourcePage;
 import fitnesse.wikitext.parser.Maybe;
+import fitnesse.wikitext.shared.SourcePage;
 
 import java.util.Collection;
 import java.util.HashMap;
