@@ -3,16 +3,14 @@ package fitnesse.testsystems.slim;
 import fitnesse.plugins.PluginFeatureFactoryBase;
 import fitnesse.slim.test.MyFixture;
 import fitnesse.testsystems.slim.tables.SlimTableFactory;
-import fitnesse.wikitext.parser.Symbol;
+import fitnesse.wikitext.ParsingPage;
 import fitnesse.wikitext.parser.SymbolProvider;
 import fitnesse.wikitext.parser.Table;
-import fitnesse.wikitext.VariableSource;
-import fitnesse.wikitext.parser.decorator.ParsedSymbolDecorator;
+import fitnesse.wikitext.shared.MarkUpConfig;
+import fitnesse.wikitext.shared.Names;
+import fitnesse.wikitext.shared.SyntaxNode;
 
 import java.util.logging.Logger;
-
-import static fitnesse.wikitext.parser.decorator.SymbolClassPropertyAppender.classPropertyAppender;
-import static fitnesse.wikitext.parser.decorator.SymbolInspector.inspect;
 
 /**
  * Test plugin used in Acceptance tests suite showing how custom symbol rendering can be plugged in.
@@ -32,20 +30,20 @@ public class CustomScriptTableRenderingPlugin extends PluginFeatureFactoryBase {
     slimTableFactory.addAlias("my use case", MyFixture.class.getSimpleName());
   }
 
-  private static class TableSymbolDecorator implements ParsedSymbolDecorator {
+  private static class TableSymbolDecorator {
     static void install() {
-      Table.symbolType.addDecorator(new TableSymbolDecorator());
+      MarkUpConfig.addDecorator(Table.symbolType.toString(), TableSymbolDecorator::handleParsedSymbol);
+      //Table.symbolType.addDecorator(new TableSymbolDecorator());
     }
 
-    @Override
-    public void handleParsedSymbol(Symbol table, VariableSource variableSource) {
-      Symbol firstCell = table.getChildren()
+    static void handleParsedSymbol(SyntaxNode table, ParsingPage page) {
+      SyntaxNode firstCell = table.getChildren()
                               .get(0)
                               .getChildren()
                               .get(0);
-      String firstCellContent = inspect(firstCell).getRawContent();
+      String firstCellContent = firstCell.getAllContent();
       if (firstCellContent.contains("script") && firstCellContent.contains("my use case")) {
-        classPropertyAppender().addPropertyValue(table, "myUseCase");
+        table.appendProperty(Names.CLASS, "myUseCase");
       }
     }
   }

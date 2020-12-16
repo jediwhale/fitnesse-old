@@ -1,9 +1,7 @@
 package fitnesse.wikitext.parser;
 
 import fitnesse.util.StringUtils;
-
-import static fitnesse.wikitext.parser.decorator.SymbolClassPropertyAppender.CLASS_PROPERTY_NAME;
-import static fitnesse.wikitext.parser.decorator.SymbolClassPropertyAppender.classPropertyAppender;
+import fitnesse.wikitext.shared.Names;
 
 public class Table extends SymbolType implements Rule, Translation {
   public static final Table symbolType = new Table();
@@ -85,7 +83,7 @@ public class Table extends SymbolType implements Rule, Translation {
       rowCount++;
       writer.startTag("tr");
       if (rowCount == 1 && table.hasProperty("hideFirst")) {
-        classPropertyAppender().addPropertyValue(row, "hidden");
+        row.appendProperty(Names.CLASS, "hidden");
       }
       writeClassAttributeIfDefinedForSymbol(row, writer);
       int extraColumnSpan = longestRow - rowLength(row);
@@ -108,9 +106,7 @@ public class Table extends SymbolType implements Rule, Translation {
   }
 
   private void writeClassAttributeIfDefinedForSymbol(Symbol symbol, HtmlWriter writer) {
-    if (symbol.hasProperty(CLASS_PROPERTY_NAME)) {
-      writer.putAttribute("class", symbol.getProperty(CLASS_PROPERTY_NAME));
-    }
+    symbol.ifPresent(Names.CLASS, writer::putAttribute);
   }
 
   protected String translateCellBody(Translator translator, Symbol cell) {

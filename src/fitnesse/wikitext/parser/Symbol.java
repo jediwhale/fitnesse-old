@@ -2,11 +2,11 @@ package fitnesse.wikitext.parser;
 
 import fitnesse.util.Tree;
 import fitnesse.wikitext.VariableSource;
-import fitnesse.wikitext.shared.PropertyStore;
+import fitnesse.wikitext.shared.SyntaxNode;
 
 import java.util.*;
 
-public class Symbol extends Tree<Symbol> implements PropertyStore {
+public class Symbol extends Tree<Symbol> implements SyntaxNode {
     private static final List<Symbol> NO_CHILDREN = Collections.emptyList();
 
     public static final Maybe<Symbol> nothing = new Maybe<>();
@@ -49,7 +49,7 @@ public class Symbol extends Tree<Symbol> implements PropertyStore {
         return isType(HeaderLine.symbolType) || isType(SymbolType.CenterLine) || isType(SymbolType.Meta) ||
                 isType(SymbolType.NoteLine);
     }
-    public String getContent() { return content; }
+
     public void setContent(String content) { this.content = content; }
 
     public Symbol childAt(int index) { return getChildren().get(index); }
@@ -58,6 +58,9 @@ public class Symbol extends Tree<Symbol> implements PropertyStore {
 
   @Override protected List<Symbol> getBranches() { return branches; }
   @Override protected Symbol getNode() { return this; }
+
+  @Override public String getContent() { return content; }
+  @Override public String getTypeName() { return getType().toString(); }
 
   @Override
   public Optional<String> findProperty(String key) {

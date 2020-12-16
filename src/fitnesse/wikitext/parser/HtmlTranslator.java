@@ -2,6 +2,7 @@ package fitnesse.wikitext.parser;
 
 import fitnesse.wikitext.ParsingPage;
 import fitnesse.wikitext.SourcePage;
+import fitnesse.wikitext.shared.MarkUpConfig;
 
 public class HtmlTranslator extends Translator {
   public HtmlTranslator(SourcePage currentPage, SyntaxTreeV2 syntaxTree) {
@@ -19,10 +20,14 @@ public class HtmlTranslator extends Translator {
 
   @Override
   protected Translation getTranslation(Symbol symbol) {
-    symbol.getType().applyParsedSymbolDecorations(symbol, syntaxTree.getParsingPage());
+    //apply decorators
+    MarkUpConfig.decorate(symbol, getParsingPage());
+
+    // apply deprecated decorators
+    symbol.getType().applyParsedSymbolDecorations(symbol, getParsingPage());
+
     return super.getTranslation(symbol);
   }
 
   private final SyntaxTreeV2 syntaxTree;
-
 }
