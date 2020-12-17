@@ -14,7 +14,7 @@ public class SyntaxTreeV3 implements SyntaxTree {
 
   @Override
   public String translateToHtml() {
-    return new HtmlTranslator(new ExternalAdapter(page.getPage()), tree).translate(tree);
+    return new HtmlTranslator(new ExternalAdapter(page.getPage()), tree, page).translate(tree);
   }
 
   @Override

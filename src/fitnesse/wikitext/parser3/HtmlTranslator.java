@@ -1,12 +1,17 @@
 package fitnesse.wikitext.parser3;
 
 import fitnesse.wikitext.shared.LastModifiedHtml;
+import fitnesse.wikitext.shared.MarkUpConfig;
+import fitnesse.wikitext.shared.ParsingPage;
 import fitnesse.wikitext.shared.ToHtml;
 
 import java.util.EnumMap;
 
 public class HtmlTranslator implements Translator {
-  public HtmlTranslator(External external, Symbol syntaxTree) {
+
+  public HtmlTranslator(External external, Symbol syntaxTree, ParsingPage page) {
+    //todo: external and page are overlapping members...
+    this.page = page;
     symbolTypes = new EnumMap<>(SymbolType.class);
     symbolTypes.put(SymbolType.ANCHOR_NAME, Translate.with(ToHtml::anchorName).content());
     symbolTypes.put(SymbolType.ANCHOR_REFERENCE, Translate.with(ToHtml::anchorReference).content());
@@ -50,5 +55,11 @@ public class HtmlTranslator implements Translator {
     return symbolTypes.get(symbolType);
   }
 
+  @Override
+  public void decorate(Symbol symbol) {
+    MarkUpConfig.decorate(symbol, page);
+  }
+
+  private final ParsingPage page;
   private final EnumMap<SymbolType, TranslateRule> symbolTypes;
 }

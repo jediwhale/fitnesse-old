@@ -2,11 +2,11 @@ package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlUtil;
 import fitnesse.util.Tree;
-import fitnesse.wikitext.shared.PropertyStore;
+import fitnesse.wikitext.shared.SyntaxNode;
 
 import java.util.*;
 
-abstract class Symbol extends Tree<Symbol> implements PropertyStore {
+abstract class Symbol extends Tree<Symbol> implements SyntaxNode {
 
   static Symbol error(String message) { return new LeafSymbol(SymbolType.ERROR, message); }
   static Symbol text(String message) { return new LeafSymbol(SymbolType.TEXT, message); }
@@ -33,15 +33,17 @@ abstract class Symbol extends Tree<Symbol> implements PropertyStore {
     return value != null ? Optional.of(value) : Optional.empty();
   }
 
-  @Override
-  public boolean hasProperty(String key) { return getProperties().containsKey(key); }
+  @Override public boolean hasProperty(String key) { return getProperties().containsKey(key); }
 
-  @Override
-  public void putProperty(String key, String value) { getProperties().put(key, value);}
+  @Override public void putProperty(String key, String value) { getProperties().put(key, value);}
+
+  @Override public String getContent() { return content; }
+
+  @Override public String getTypeName() { return getType().toString(); }
+
+  @Override public List<Symbol> getChildren() { return getBranches(); }
 
   SymbolType getType() { return symbolType; }
-
-  String getContent() { return content; }
 
   String getContent(int child) { return getBranches().get(child).getContent(); }
 

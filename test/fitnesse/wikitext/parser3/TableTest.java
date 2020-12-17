@@ -1,6 +1,11 @@
 package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlElement;
+import fitnesse.wikitext.shared.MarkUpConfig;
+import fitnesse.wikitext.shared.Names;
+import fitnesse.wikitext.shared.ParsingPage;
+import fitnesse.wikitext.shared.SyntaxNode;
+import fitnesse.wikitext.shared.SyntaxNodeDecorator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -96,6 +101,17 @@ public class TableTest {
     assertTranslates(table(row(cell("a"))) + table(row(cell("b"))), "|a|\n!|b|\n");
   }
 
+  @Test public void decoratesTable() {
+    SyntaxNodeDecorator decorator = TableTest::decorateTable;
+    MarkUpConfig.addDecorator("Table", decorator);
+    assertTranslates(table(row(" class=\"testClass\"", cell("a"))), "|a|\n");
+    MarkUpConfig.removeDecorator("Table", decorator);
+  }
+
+  private static void decorateTable(SyntaxNode table, ParsingPage parsingPage) {
+    for (SyntaxNode row: table.getChildren()) row.appendProperty(Names.CLASS, "testClass");
+  }
+
   private static String innerTable(String row) {
     return "<table>" + HtmlElement.endl + row + "</table>";
   }
@@ -105,7 +121,11 @@ public class TableTest {
   }
 
   private static String row(String cell) {
-    return "\t<tr>" + HtmlElement.endl + cell + "\t</tr>" + HtmlElement.endl;
+    return row("", cell);
+  }
+
+  private static String row(String attributes, String cell) {
+    return "\t<tr" + attributes + ">" + HtmlElement.endl + cell + "\t</tr>" + HtmlElement.endl;
   }
 
   private static String cell(String content) {

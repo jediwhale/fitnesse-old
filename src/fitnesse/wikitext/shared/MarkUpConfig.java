@@ -7,20 +7,24 @@ import java.util.Map;
 
 public class MarkUpConfig {
   public static void addDecorator(String syntaxType, SyntaxNodeDecorator decorator) {
-    if (!decorators.containsKey(syntaxType)) {
-      decorators.put(syntaxType, new ArrayList<>());
+    String key = syntaxType.toLowerCase();
+    if (!decorators.containsKey(key)) {
+      decorators.put(key, new ArrayList<>());
     }
-    decorators.get(syntaxType).add(decorator);
+    //todo: check if already added
+    decorators.get(key).add(decorator);
   }
 
   public static void removeDecorator(String syntaxType, SyntaxNodeDecorator decorator) {
-    if (!decorators.containsKey(syntaxType)) return;
-    decorators.get(syntaxType).remove(decorator);
+    String key = syntaxType.toLowerCase();
+    if (!decorators.containsKey(key)) return;
+    decorators.get(key).remove(decorator);
   }
 
   public static void decorate(SyntaxNode node, ParsingPage page) {
-    if (!decorators.containsKey(node.getTypeName())) return;
-    for (SyntaxNodeDecorator decorator: decorators.get(node.getTypeName())) {
+    String key = node.getTypeName().toLowerCase();
+    if (!decorators.containsKey(key)) return;
+    for (SyntaxNodeDecorator decorator: decorators.get(key)) {
       decorator.decorate(node, page);
     }
   }

@@ -1,6 +1,7 @@
 package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlTag;
+import fitnesse.wikitext.shared.Names;
 
 import java.util.function.BiConsumer;
 
@@ -27,7 +28,7 @@ class Table {
   }
 
   private static Symbol parseWithCustomDelimiter(Parser parser) {
-    Symbol result = new BranchSymbol(SymbolType.TABLE);
+    Symbol result = new TaggedSymbol(SymbolType.TABLE);
     parser.advance();
     BiConsumer<Symbol, String> populateRow;
     if (parser.peek(0).isType(TokenType.TEXT)) {
@@ -52,7 +53,7 @@ class Table {
   }
 
   private static Symbol makeRow(Parser parser, BiConsumer<Symbol, String> populateRow) {
-    Symbol row = new BranchSymbol(SymbolType.LIST);
+    Symbol row = new TaggedSymbol(SymbolType.LIST);
     String rowText = parser.parseText(new Terminator(TokenType.NEW_LINE));
     populateRow.accept(row, rowText);
     return row;
@@ -65,16 +66,16 @@ class Table {
   }
 
   private static void addSingleCell(Symbol row, String rowText) {
-    Symbol cell = new BranchSymbol(SymbolType.LIST);
+    Symbol cell = new TaggedSymbol(SymbolType.LIST);
     cell.add(Symbol.text(rowText));
     row.add(cell);
   }
 
   private static Symbol parseWithBarDelimiter(Parser parser) {
-    Symbol result = new BranchSymbol(SymbolType.TABLE);
+    Symbol result = new TaggedSymbol(SymbolType.TABLE);
     parser.advance();
     do {
-      Symbol row = new BranchSymbol(SymbolType.LIST);
+      Symbol row = new TaggedSymbol(SymbolType.LIST);
       do {
         Symbol cell = parser.parseList(SymbolType.LIST,
           new Terminator(type -> type == TokenType.CELL_DELIMITER || type == TokenType.TABLE_END, "|", ""));
@@ -94,15 +95,21 @@ class Table {
   }
 
   static String translate(Symbol table, Translator translator) {
-    return table.collectBranches(child -> row(child, translator), HtmlTag.name("table"), HtmlTag::add).html();
+    HtmlTag result = table.collectBranches(child -> row(child, translator), HtmlTag.name("table"), HtmlTag::add);
+    table.ifPresent(Names.CLASS, result::addAttribute);
+    return result.html();
   }
 
   private static HtmlTag row(Symbol row, Translator translator) {
-    return row.collectBranches(child -> cell(child, translator), HtmlTag.name("tr"), HtmlTag::add);
+    HtmlTag result = row.collectBranches(child -> cell(child, translator), HtmlTag.name("tr"), HtmlTag::add);
+    row.ifPresent(Names.CLASS, result::addAttribute);
+    return result;
   }
 
   private static HtmlTag cell(Symbol cell, Translator translator) {
-    return HtmlTag.name("td").body(new CellTranslator(translator).translate(cell).trim().replaceAll(LITERAL_DELIMITER, ""));
+    HtmlTag result = HtmlTag.name("td").body(new CellTranslator(translator).translate(cell).trim().replaceAll(LITERAL_DELIMITER, ""));
+    cell.ifPresent(Names.CLASS, result::addAttribute);
+    return result;
   }
 
   private static final String LITERAL_DELIMITER = String.valueOf(134);
@@ -119,6 +126,9 @@ class Table {
         ? (symbol, t) -> LITERAL_DELIMITER + translator.translate(symbol) + LITERAL_DELIMITER
         : translator.findRule(symbolType);
     }
+
+    @Override
+    public void decorate(Symbol symbol) { translator.decorate(symbol); }
 
     private final Translator translator;
   }
