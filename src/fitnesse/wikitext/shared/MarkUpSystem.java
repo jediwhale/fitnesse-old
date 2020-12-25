@@ -13,5 +13,6 @@ public interface MarkUpSystem {
   void findWhereUsed(SourcePage page, Consumer<String> takeWhereUsed);
   String changeReferences(SourcePage page, Function<String, Optional<String>> changeReference);
 
-  static MarkUpSystem make() { return new MarkUpSystemV3(); } //todo: eventually can make different kinds of markup systems
+  static MarkUpSystem make() {
+    return MarkUpConfig.version.equals("3") ? new MarkUpSystemV3() : new MarkUpSystemV2(); }
 }

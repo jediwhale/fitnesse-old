@@ -3,6 +3,7 @@
 package fitnesseMain;
 
 import fitnesse.ContextConfigurator;
+import fitnesse.wikitext.shared.MarkUpConfig;
 import util.CommandLine;
 
 import static fitnesse.ConfigurationParameter.*;
@@ -11,7 +12,7 @@ import static fitnesse.ContextConfigurator.*;
 public class Arguments {
 
   private final CommandLine commandLine = new CommandLine(
-          "[-v][-p port][-d dir][-r root][-l logDir][-f config][-e days][-o][-i][-a credentials][-c command][-b output][-lh]");
+          "[-v][-p port][-d dir][-r root][-l logDir][-f config][-e days][-o][-i][-a credentials][-c command][-b output][-lh][-parser version]");
 
   private final String rootPath;
   private final Integer port;
@@ -46,6 +47,8 @@ public class Arguments {
     this.omitUpdate = commandLine.hasOption("o");
     this.installOnly = commandLine.hasOption("i");
     this.localhostOnly = commandLine.hasOption("lh");
+    //todo: temporary so I can test with either parser
+    MarkUpConfig.version = commandLine.getOptionArgument("parser", "version", "2");
   }
 
   static void printUsage() {

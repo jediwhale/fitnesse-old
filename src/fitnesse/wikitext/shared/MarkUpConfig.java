@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public class MarkUpConfig {
+  public static String version = "2";
+
   public static void addDecorator(String syntaxType, SyntaxNodeDecorator decorator) {
     String key = syntaxType.toLowerCase();
     if (!decorators.containsKey(key)) {
