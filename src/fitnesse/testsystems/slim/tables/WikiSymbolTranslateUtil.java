@@ -1,6 +1,6 @@
 package fitnesse.testsystems.slim.tables;
 
-import fitnesse.wikitext.shared.MarkUpSystem;
+import fitnesse.wikitext.shared.MarkUpConfig;
 import fitnesse.wikitext.parser.Maybe;
 import fitnesse.wikitext.shared.ParsingPage;
 import fitnesse.wikitext.shared.SourcePage;
@@ -15,7 +15,8 @@ import java.util.HashMap;
 class WikiSymbolTranslateUtil {
 
   String getHtmlFor(String input) {
-    return MarkUpSystem.make().parse(new ParsingPage(new DummySourcePage()), input).translateToHtml();
+    //todo: encapsulate this in a markupsystem method
+    return MarkUpConfig.make().parse(new ParsingPage(new DummySourcePage()), input).translateToHtml();
   }
 
   private static class DummySourcePage implements SourcePage {

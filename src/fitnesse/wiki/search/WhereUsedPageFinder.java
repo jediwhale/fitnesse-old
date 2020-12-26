@@ -2,7 +2,7 @@ package fitnesse.wiki.search;
 
 import fitnesse.components.TraversalListener;
 import fitnesse.wiki.*;
-import fitnesse.wikitext.shared.MarkUpSystem;
+import fitnesse.wikitext.shared.MarkUpConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,7 @@ public class WhereUsedPageFinder implements TraversalListener<WikiPage>, PageFin
   }
 
   private void checkContent() {
-    MarkUpSystem.make().findWhereUsed(new WikiSourcePage(currentPage), name -> {
+    MarkUpConfig.make().findWhereUsed(new WikiSourcePage(currentPage), name -> {
       WikiPage referencedPage = new WikiWordReference(currentPage, name).getReferencedPage();
       if (referencedPage != null && referencedPage.equals(subjectPage)) {
         addHit();

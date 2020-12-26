@@ -6,7 +6,7 @@ import fitnesse.util.Clock;
 import fitnesse.wiki.fs.WikiPageProperties;
 import fitnesse.wikitext.parser.Maybe;
 import fitnesse.wikitext.shared.CompositeVariableSource;
-import fitnesse.wikitext.shared.MarkUpSystem;
+import fitnesse.wikitext.shared.MarkUpConfig;
 import fitnesse.wikitext.shared.ParsingPage;
 import fitnesse.wikitext.shared.SyntaxTree;
 import fitnesse.wikitext.shared.VariableSource;
@@ -44,7 +44,7 @@ public abstract class BaseWikitextPage extends BaseWikiPage implements WikitextP
   @Override
   public String getVariable(String name) {
     return getSyntaxTree().findVariable(name)
-      .map(value -> MarkUpSystem.make().variableValueToHtml(parsingPage, value))
+      .map(value -> MarkUpConfig.make().variableValueToHtml(parsingPage, value))
       .orElse(null);
   }
 
@@ -63,7 +63,7 @@ public abstract class BaseWikitextPage extends BaseWikiPage implements WikitextP
   private void parse() {
     if (syntaxTree == null) {
       parsingPage = makeParsingPage(this);
-      syntaxTree = MarkUpSystem.make().parse(parsingPage, getData().getContent());
+      syntaxTree = MarkUpConfig.make().parse(parsingPage, getData().getContent());
     }
   }
 

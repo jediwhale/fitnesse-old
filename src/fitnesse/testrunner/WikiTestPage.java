@@ -8,7 +8,7 @@ import fitnesse.wiki.PathParser;
 import fitnesse.wiki.SymbolicPage;
 import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiPagePath;
-import fitnesse.wikitext.shared.MarkUpSystem;
+import fitnesse.wikitext.shared.MarkUpConfig;
 import fitnesse.wikitext.shared.Names;
 
 import java.io.File;
@@ -42,7 +42,7 @@ public class WikiTestPage implements TestPage {
     // -AJM- Okay, this is not as clean as I'd like it to be, but for now it does the trick
     if (containsWikitext()) {
       String content = getDecoratedContent();
-      return MarkUpSystem.make().parse(BaseWikitextPage.makeParsingPage((BaseWikitextPage) sourcePage), content).translateToHtml();
+      return MarkUpConfig.make().parse(BaseWikitextPage.makeParsingPage((BaseWikitextPage) sourcePage), content).translateToHtml();
     } else {
       return sourcePage.getHtml();
     }
