@@ -1,5 +1,6 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.wikitext.shared.ParsingPage;
 import org.junit.Test;
 
 import static fitnesse.wikitext.parser3.Helper.*;
@@ -50,18 +51,18 @@ public class AliasTest {
 
   @Test
   public void translatesWithVariableLink() {
-    FakeExternal external = makeExternal();
-    external.putVariable("x", "3");
-    external.putVariable("y", "Three");
-    assertTranslates(Html.anchor("Fake.PageThree", "tag"), "[[tag][Page${y}]]", external);
-    assertTranslates(Html.anchor("Fake.PageTwo3", "tag"), "[[tag][PageTwo${x}]]", external);
+    ParsingPage page = makeParsingPage();
+    page.putVariable("x", "3");
+    page.putVariable("y", "Three");
+    assertTranslates(Html.anchor("Fake.PageThree", "tag"), "[[tag][Page${y}]]", page);
+    assertTranslates(Html.anchor("Fake.PageTwo3", "tag"), "[[tag][PageTwo${x}]]", page);
   }
 
   @Test
   public void translatesWithExpression() {
-    FakeExternal external = makeExternal();
-    external.putVariable("x", "3");
-    assertTranslates(Html.anchor("PageTwo4", "tag"), "[[tag][PageTwo${=1+${x}=}]]", external);
+    ParsingPage page = makeParsingPage();
+    page.putVariable("x", "3");
+    assertTranslates(Html.anchor("PageTwo4", "tag"), "[[tag][PageTwo${=1+${x}=}]]", page);
   }
 
   @Test public void translatesNewPage() {

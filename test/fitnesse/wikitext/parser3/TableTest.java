@@ -61,27 +61,27 @@ public class TableTest {
   }
 
   @Test public void translatesVariableWithCellDelimiter() {
-    external.putVariable("x", "a|b");
-    assertTranslates(table(row(cell("a|b"))), "|${x}|\n", external);
-    assertTranslates(table(row(cell("a|b"))), "!|${x}|\n", external);
+    page.putVariable("x", "a|b");
+    assertTranslates(table(row(cell("a|b"))), "|${x}|\n", page);
+    assertTranslates(table(row(cell("a|b"))), "!|${x}|\n", page);
   }
 
   @Test public void translatesVariableWithNestedTable() {
-    external.putVariable("x", "|a|\n");
-    external.putVariable("y", "|a|");
-    assertTranslates(table(row(cell(innerTable(row(cell("a")))))), "|${x}|\n", external);
-    assertTranslates(table(row(cell(innerTable(row(cell("a")))))), "|${y}|\n", external);
-    assertTranslates(table(row(cell("|a|"))), "!|${x}|\n", external);
+    page.putVariable("x", "|a|\n");
+    page.putVariable("y", "|a|");
+    assertTranslates(table(row(cell(innerTable(row(cell("a")))))), "|${x}|\n", page);
+    assertTranslates(table(row(cell(innerTable(row(cell("a")))))), "|${y}|\n", page);
+    assertTranslates(table(row(cell("|a|"))), "!|${x}|\n", page);
   }
 
   @Test public void translatesVariableInLiteralTable() {
-    external.putVariable("hi", "there");
-    assertTranslates(table(row(cell("there"))), "!|${hi}|", external);
+    page.putVariable("hi", "there");
+    assertTranslates(table(row(cell("there"))), "!|${hi}|", page);
   }
 
   @Test public void translatesPageNameInLiteralTable() {
-    external.putVariable("hi", "PageOne");
-    assertTranslates(table(row(cell("PageOne"))), "!|${hi}|", external);
+    page.putVariable("hi", "PageOne");
+    assertTranslates(table(row(cell("PageOne"))), "!|${hi}|", page);
   }
 
   @Test public void translatesLiteralInLiteralTable()  {
@@ -134,8 +134,8 @@ public class TableTest {
 
   @Before
   public void SetUp() {
-    external = makeExternal();
+    page = Helper.makeParsingPage();
   }
 
-  private FakeExternal external;
+  private ParsingPage page;
 }

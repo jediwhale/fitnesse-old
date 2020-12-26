@@ -31,32 +31,32 @@ public class Helper {
   }
 
   public static void assertParses(String expected, String input) {
-    assertParses(expected, input, makeExternal());
+    assertParses(expected, input, makeParsingPage());
   }
 
-  public static void assertParses(String expected, String input, FakeExternal external) {
+  public static void assertParses(String expected, String input, ParsingPage page) {
     String result = "LIST" + (expected.length() > 0 ? "(" + expected + ")" : expected);
-    assertEquals(input, result, parse(input, external).toString());
+    assertEquals(input, result, parse(input, page).toString());
   }
 
   public static void assertTranslates(String expected, String input) {
-    assertTranslates(expected, input, makeExternal());
+    assertTranslates(expected, input, makeParsingPage());
   }
 
-  public static void assertTranslates(String expected, String input, FakeExternal external) { //todo: deal with newlines, could be platform-specific
-    Symbol syntaxTree = parse(input, external);
-    assertEquals(input, expected, new HtmlTranslator(external, syntaxTree, new ParsingPage(external.getSourcePage())).translate(syntaxTree));
+  public static void assertTranslates(String expected, String input, ParsingPage page) { //todo: deal with newlines, could be platform-specific
+    Symbol syntaxTree = parse(input, page);
+    assertEquals(input, expected, new HtmlTranslator(syntaxTree, page).translate(syntaxTree));
   }
 
   public static Symbol parse(String input) {
-    return parse(input, makeExternal());
+    return parse(input, makeParsingPage());
   }
 
-  public static Symbol parse(String input, FakeExternal external) {
-    return Parser.parse(input, external, external);
+  public static Symbol parse(String input, ParsingPage page) {
+    return Parser.parse(input, page);
   }
 
-  public static FakeExternal makeExternal() { return new FakeExternal(new FakeSourcePage());}
+  public static ParsingPage makeParsingPage() { return new ParsingPage(new FakeSourcePage());}
 
   public static String toError(String message) { return " <span class=\"fail\">" + message + "</span> "; }
 

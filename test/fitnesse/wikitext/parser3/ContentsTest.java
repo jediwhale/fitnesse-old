@@ -4,6 +4,7 @@ import fitnesse.wiki.WikiPage;
 import fitnesse.wiki.WikiSourcePage;
 import fitnesse.wikitext.parser.TestRoot;
 import fitnesse.wikitext.shared.Names;
+import fitnesse.wikitext.shared.ParsingPage;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,9 +21,9 @@ public class ContentsTest {
 
   @Test public void parsesWithProperties() {
     assertParses("CONTENTS[-R=2147483647,-f=,-g=]", "!contents -f -g -R");
-    FakeExternal external = makeExternal();
-    external.putVariable(Names.REGRACE_TOC, "true");
-    assertParses("CONTENTS[-R=2,REGRACE_TOC=true]", "!contents -R2", external);
+    ParsingPage page = makeParsingPage();
+    page.putVariable(Names.REGRACE_TOC, "true");
+    assertParses("CONTENTS[-R=2,REGRACE_TOC=true]", "!contents -R2", page);
   }
 
   @Test public void translates() {
@@ -30,7 +31,7 @@ public class ContentsTest {
     WikiPage pageOne = root.makePage("PageOne");
     root.makePage(pageOne, "PageTwo");
     root.makePage(pageOne, "PageThree");
-    external.sourcePage = new WikiSourcePage(pageOne);
+    page = new ParsingPage(new WikiSourcePage(pageOne));
     assertTranslates(
       "<div class=\"contents\">\n" +
       "\t<b>Contents:</b>\n" +
@@ -43,13 +44,13 @@ public class ContentsTest {
       "\t\t</li>\n" +
       "\t</ul>\n" +
       "</div>\n",
-      "!contents", external);
+      "!contents", page);
   }
 
   @Before
   public void SetUp() {
-    external = makeExternal();
+    page = makeParsingPage();
   }
 
-  private FakeExternal external;
+  private ParsingPage page;
 }

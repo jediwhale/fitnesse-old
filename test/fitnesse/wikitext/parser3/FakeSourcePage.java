@@ -8,6 +8,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class FakeSourcePage implements SourcePage {
+  public FakeSourcePage() {}
+
+  public FakeSourcePage(String name) {
+    this.name = name;
+    this.content = "fake content";
+  }
+
+  public FakeSourcePage(String name, String content) {
+    this.name = name;
+    this.content = content;
+  }
+
   @Override
   public String getName() {
     return name;
@@ -50,7 +62,8 @@ public class FakeSourcePage implements SourcePage {
 
   @Override
   public Maybe<SourcePage> findIncludedPage(String pageName) {
-    return null;
+    String key = name + "." + pageName;
+    return pages.containsKey(key) ? new Maybe<>(pages.get(key)) : Maybe.nothingBecause(key + " not found");
   }
 
   @Override
@@ -73,7 +86,12 @@ public class FakeSourcePage implements SourcePage {
     return 0;
   }
 
+  public static void addPage(String name, String content) {
+    pages.put(name, new FakeSourcePage(name, content));
+  }
+
   public String name = "FakeName";
   public String content;
   public Map<String, String> properties = new HashMap<>();
+  public static final HashMap<String, FakeSourcePage> pages = new HashMap<>();
 }

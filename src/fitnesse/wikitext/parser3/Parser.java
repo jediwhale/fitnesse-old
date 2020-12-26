@@ -2,8 +2,6 @@ package fitnesse.wikitext.parser3;
 
 import fitnesse.wikitext.parser.TextMaker;
 import fitnesse.wikitext.shared.ParsingPage;
-import fitnesse.wikitext.shared.VariableSource;
-import fitnesse.wikitext.shared.VariableStore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,53 +11,50 @@ import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 class Parser {
-  static Symbol parse(String input, VariableStore variables, External external) {
-    return new Parser(input, TokenTypes.WIKI_PAGE_TYPES, variables, external).parseToEnd();
-  }
 
   static Symbol parse(String input, ParsingPage page) {
-    return parse(input, TokenTypes.WIKI_PAGE_TYPES, page);
+    return new Parser(input, TokenTypes.WIKI_PAGE_TYPES, page).parseToEnd();
   }
 
   static Symbol parse(String input, List<TokenType> tokenTypes, ParsingPage page) {
-    return new Parser(input, tokenTypes, page, new ExternalAdapter(page.getPage())).parseToEnd();
+    return new Parser(input, tokenTypes, page).parseToEnd();
   }
 
   Parser textType(SymbolType type) {
-    return new Parser(tokens, variables, rules, (c, o) -> makeLeaf(type, c, o), this.watchTokens, parentTerminator);
+    return new Parser(tokens, page, rules, (c, o) -> makeLeaf(type, c, o), this.watchTokens, parentTerminator);
   }
 
   Parser watchTokens(Consumer<Token> watchTokens) {
-    return new Parser(tokens, variables, rules, makeSymbolFromText, watchTokens, parentTerminator);
+    return new Parser(tokens, page, rules, makeSymbolFromText, watchTokens, parentTerminator);
   }
 
   Parser withContent(String content) {
-    return new Parser(new TokenSource(tokens, new Content(content, this::substituteVariable)), variables, rules, makeSymbolFromText, token -> {}, parentTerminator);
+    return new Parser(new TokenSource(tokens, new Content(content, this::substituteVariable)), page, rules, makeSymbolFromText, token -> {}, parentTerminator);
   }
 
   Parser withTerminator(Terminator parentTerminator) {
-    return new Parser(tokens, variables, rules, makeSymbolFromText, watchTokens, parentTerminator);
+    return new Parser(tokens, page, rules, makeSymbolFromText, watchTokens, parentTerminator);
   }
 
   Parser withTokenTypes(List<TokenType> tokenTypes) {
-    return new Parser(new TokenSource(tokens, tokenTypes), variables, rules, makeSymbolFromText, watchTokens, parentTerminator);
+    return new Parser(new TokenSource(tokens, tokenTypes), page, rules, makeSymbolFromText, watchTokens, parentTerminator);
   }
 
-  Parser(String input, List<TokenType> tokenTypes, VariableStore variables, External external) {
+  Parser(String input, List<TokenType> tokenTypes, ParsingPage page) {
+    this.page = page;
     this.tokens = new TokenSource(new Content(input, this::substituteVariable), tokenTypes);
-    this.rules = ParseRules.make(variables, external);
+    this.rules = ParseRules.make(page);
     this.makeSymbolFromText = Parser::determineTextSymbol;
     this.watchTokens = token -> {};
-    this.variables = variables;
     this.parentTerminator = Terminator.NONE;
   }
 
-  private Parser(TokenSource tokens, VariableSource variables, Map<TokenType, ParseRule> rules, BiFunction<String, Integer, Symbol> makeSymbolFromText, Consumer<Token> watchTokens, Terminator parentTerminator) {
+  private Parser(TokenSource tokens, ParsingPage page, Map<TokenType, ParseRule> rules, BiFunction<String, Integer, Symbol> makeSymbolFromText, Consumer<Token> watchTokens, Terminator parentTerminator) {
     this.tokens = tokens;
     this.rules = rules;
     this.watchTokens = watchTokens;
     this.makeSymbolFromText = makeSymbolFromText;
-    this.variables = variables;
+    this.page = page;
     this.parentTerminator = parentTerminator;
   }
 
@@ -140,7 +135,7 @@ class Parser {
 
   private ContentSegment substituteVariable(String name) {
     return new ContentSegment(
-        variables.findVariable(name)
+        page.findVariable(name)
           // the variable value is delimited with pseudo-nesting characters
           // these are used for compatibility with parser v2 to handle variables inside table cells
           .map(s -> Nesting.START + s + Nesting.END)
@@ -181,10 +176,10 @@ class Parser {
   private static final String eMailPattern = "[\\w-_.]+@[\\w-_.]+\\.[\\w-_.]+";
 
   //todo: too much stuff...
+  private final ParsingPage page;
   private final BiFunction<String, Integer, Symbol> makeSymbolFromText;
   private final TokenSource tokens;
   private final Map<TokenType, ParseRule> rules;
   private final Consumer<Token> watchTokens;
-  private final VariableSource variables;
   private final Terminator parentTerminator;
 }

@@ -2,6 +2,7 @@ package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlUtil;
 import fitnesse.wikitext.parser.WikiWordBuilder;
+import fitnesse.wikitext.shared.PageSources;
 
 class WikiPath { //todo: dry with V2, better name
 
@@ -13,10 +14,10 @@ class WikiPath { //todo: dry with V2, better name
     return isPagePath(path) ? length : 0;
   }
 
-  static String toHtml(String[] strings, External external) {
+  static String toHtml(String[] strings, PageSources sources) {
     String path = !strings[1].equals("") ? strings[1] : strings[0];
     String description = !strings[2].equals("") ? strings[2] : HtmlUtil.escapeHTML(strings[0]);
-    return new WikiWordBuilder(external.getSourcePage(), path, description).buildLink(strings[3], path);
+    return new WikiWordBuilder(sources.getPage(), path, description).buildLink(strings[3], path);
   }
 
   private static boolean isPagePath(String path) {

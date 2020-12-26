@@ -1,12 +1,12 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.wikitext.shared.VariableStore;
+import fitnesse.wikitext.shared.ParsingPage;
 
 import java.util.HashMap;
 import java.util.Map;
 
 class ParseRules {
-  static Map<TokenType, ParseRule> make(VariableStore variables, External external) {
+  static Map<TokenType, ParseRule> make(ParsingPage page) {
     Map<TokenType, ParseRule> rules = new HashMap<>();
     rules.put(TokenType.ALIAS_START, Alias::parse);
     rules.put(TokenType.ANCHOR_NAME, Keyword.parseWord(SymbolType.ANCHOR_NAME));
@@ -17,15 +17,15 @@ class ParseRules {
     rules.put(TokenType.CENTER, Line.parse(SymbolType.CENTER));
     rules.put(TokenType.COLLAPSIBLE_START, Collapsible::parse);
     rules.put(TokenType.COMMENT, Comment::parse);
-    rules.put(TokenType.CONTENTS, parser -> Contents.parse(parser, variables));
-    rules.put(TokenType.DEFINE, parser -> Define.parse(parser, variables));
+    rules.put(TokenType.CONTENTS, parser -> Contents.parse(parser, page));
+    rules.put(TokenType.DEFINE, parser -> Define.parse(parser, page));
     rules.put(TokenType.DEFINE_NESTED, Define::parseNested);
-    rules.put(TokenType.EXPRESSION_START, parser -> Expression.parse(parser, variables));
+    rules.put(TokenType.EXPRESSION_START, parser -> Expression.parse(parser, page));
     rules.put(TokenType.HASH_TABLE, HashTable::parse);
-    rules.put(TokenType.HEADER, parser -> Header.parse(parser, variables));
+    rules.put(TokenType.HEADER, parser -> Header.parse(parser, page));
     rules.put(TokenType.HEADINGS, Headings::parse);
     rules.put(TokenType.HELP, Help::parse);
-    rules.put(TokenType.INCLUDE, parser -> Include.parse(parser, external, variables));
+    rules.put(TokenType.INCLUDE, parser -> Include.parse(parser, page, page));
     rules.put(TokenType.IMAGE, Image::parse);
     rules.put(TokenType.ITALIC, Pair.parse(SymbolType.ITALIC));
     rules.put(TokenType.LAST_MODIFIED, makeType(SymbolType.LAST_MODIFIED));

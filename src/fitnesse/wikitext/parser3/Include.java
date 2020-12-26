@@ -2,9 +2,9 @@ package fitnesse.wikitext.parser3;
 
 import fitnesse.wikitext.parser.Collapsible;
 import fitnesse.wikitext.parser.Maybe;
-import fitnesse.wikitext.shared.ExtendedVariableStore;
 import fitnesse.wikitext.shared.Names;
-import fitnesse.wikitext.shared.PageVariableSource;
+import fitnesse.wikitext.shared.ParsingPage;
+import fitnesse.wikitext.shared.SourcePage;
 import fitnesse.wikitext.shared.VariableStore;
 
 import java.util.Collection;
@@ -12,7 +12,7 @@ import java.util.Collections;
 
 class Include {
 
-  static Symbol parse(Parser parser, External external, VariableStore variables) {
+  static Symbol parse(Parser parser, ParsingPage page, VariableStore variables) {
     parser.advance();
     Symbol result = new TaggedSymbol(SymbolType.INCLUDE);
     if (parser.peek(0).isType(TokenType.TEXT) && parser.peek(0).getContent().startsWith("-")) {
@@ -21,22 +21,27 @@ class Include {
     }
 
     Symbol pagePath = parser.parseCurrent();
-    Maybe<External> included = external.make(pagePath.getContent());
+    Maybe<ParsingPage> included = makeIncluded(page, pagePath.getContent());
     if (included.isNothing()) {
       return new LeafSymbol(SymbolType.ERROR, included.because());
     }
     result.add(pagePath);
     result.add(
           result.hasProperty(Names.SETUP) || result.hasProperty(Names.TEARDOWN)
-            ? parser.withContent(included.getValue().getSourcePage().getContent()).parseToEnd() //todo: not sure this is correct, maybe bug in v2
+            ? parser.withContent(included.getValue().getNamedPage().getContent()).parseToEnd()
             : Parser.parse(
-                included.getValue().getSourcePage().getContent(),
-                new ExtendedVariableStore(variables, new PageVariableSource(included.getValue().getSourcePage())),
+                included.getValue().getNamedPage().getContent(),
                 included.getValue()));
 
     if (result.hasProperty(Names.SETUP)) variables.findVariable(Names.COLLAPSE_SETUP).ifPresent(value -> result.putProperty(Names.COLLAPSE_SETUP, value));
     if (result.hasProperty(Names.TEARDOWN)) variables.findVariable(Names.COLLAPSE_TEARDOWN).ifPresent(value -> result.putProperty(Names.COLLAPSE_TEARDOWN, value));
     return result;
+  }
+
+  private static Maybe<ParsingPage> makeIncluded(ParsingPage page, String pageName) {
+    Maybe<SourcePage> includedPage = page.getNamedPage().findIncludedPage(pageName);
+    if (includedPage.isNothing()) return Maybe.nothingBecause(includedPage.because());
+    return new Maybe<>(page.copyForNamedPage(includedPage.getValue()));
   }
 
   static String translate(Symbol symbol, Translator translator) {

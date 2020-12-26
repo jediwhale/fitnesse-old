@@ -1,5 +1,6 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.wikitext.shared.ParsingPage;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,19 +23,19 @@ public class ExpressionTest {
   }
 
   @Test public void translatesWithVariable() {
-    external.putVariable("x", "1");
-    assertTranslates("3", "${=${x}+2=}", external);
+    page.putVariable("x", "1");
+    assertTranslates("3", "${=${x}+2=}", page);
   }
 
   @Test public void translatesWithLocale() {
-    external.putVariable("FORMAT_LOCALE", "fr");
-    assertTranslates("0,5", "${=%1.1f:1/2=}", external);
+    page.putVariable("FORMAT_LOCALE", "fr");
+    assertTranslates("0,5", "${=%1.1f:1/2=}", page);
   }
 
   @Before
   public void SetUp() {
-    external = Helper.makeExternal();
+    page = Helper.makeParsingPage();
   }
 
-  private FakeExternal external;
+  private ParsingPage page;
 }

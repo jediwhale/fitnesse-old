@@ -1,5 +1,6 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.wikitext.shared.ParsingPage;
 import org.junit.Test;
 
 import static fitnesse.wikitext.parser3.Helper.*;
@@ -10,26 +11,30 @@ public class IncludeTest {
   }
 
   @Test public void parses() {
-    FakeExternal.pages.clear();
-    FakeExternal.pages.put("root.MyPage", "stuff");
-    assertParses("INCLUDE(WIKI_LINK=MyPage,LIST(TEXT=stuff))", "!include MyPage");
+    FakeSourcePage source = new FakeSourcePage("root");
+    ParsingPage page = new ParsingPage(source);
+    FakeSourcePage.pages.clear();
+    FakeSourcePage.addPage("root.MyPage", "stuff");
+    assertParses("INCLUDE(WIKI_LINK=MyPage,LIST(TEXT=stuff))", "!include MyPage", page);
   }
 
   @Test public void parsesNested() {
-    FakeExternal.pages.clear();
-    FakeExternal.pages.put("root.MyPage", "!include AnOther");
-    FakeExternal.pages.put("root.MyPage.AnOther", "stuff");
-    assertParses("INCLUDE(WIKI_LINK=MyPage,LIST(INCLUDE(WIKI_LINK=AnOther,LIST(TEXT=stuff))))", "!include MyPage");
+    FakeSourcePage source = new FakeSourcePage("root");
+    ParsingPage page = new ParsingPage(source);
+    FakeSourcePage.pages.clear();
+    FakeSourcePage.addPage("root.MyPage", "!include AnOther");
+    FakeSourcePage.addPage("root.MyPage.AnOther", "stuff");
+    assertParses("INCLUDE(WIKI_LINK=MyPage,LIST(INCLUDE(WIKI_LINK=AnOther,LIST(TEXT=stuff))))", "!include MyPage", page);
   }
 
   @Test public void translates() {
-    FakeExternal external = new FakeExternal(new FakeSourcePage());
-    external.putVariable("PAGE_NAME", "TopPage");
-    FakeExternal.pages.clear();
-    FakeExternal.pages.put("root.MyPage", "this is ${PAGE_NAME}");
-    assertTranslates(collapsible("", "MyPage"), "!include MyPage", external);
-    assertTranslates(collapsible(" closed", "TopPage"), "!include -setup MyPage", external);
-    assertTranslates("this is <a href=\"Fake.MyPage\">MyPage</a>", "!include -seamless MyPage", external);
+    FakeSourcePage source = new FakeSourcePage("TopPage");
+    ParsingPage page = new ParsingPage(source);
+    FakeSourcePage.pages.clear();
+    FakeSourcePage.addPage("TopPage.MyPage", "this is ${PAGE_NAME}");
+    assertTranslates(collapsible("", "TopPage.MyPage"), "!include MyPage", page);
+    assertTranslates(collapsible(" closed", "TopPage"), "!include -setup MyPage", page);
+    assertTranslates("this is <a href=\"Fake.TopPage.MyPage\">TopPage.MyPage</a>", "!include -seamless MyPage", page);
   }
 
   private String collapsible(String closed, String pageName) {

@@ -1,5 +1,6 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.wikitext.shared.ParsingPage;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,15 +35,15 @@ public class VariableTest {
 
   @Test
   public void putsVariables() {
-    Helper.parse("!define x {y}", external);
-    assertEquals("y", external.findVariable("x").orElse(""));
+    Helper.parse("!define x {y}", page);
+    assertEquals("y", page.findVariable("x").orElse(""));
   }
 
   @Test
   public void translatesPutNestedVariable() {
-    external.putVariable("x", "b");
-    assertTranslates(translateDefine("y=a${x}c") + " abc", "!define y (a${x}c) ${y}", external);
-    assertTranslates(translateDefine("y=a${x}c") + " abc", "!define y {a${x}c} ${y}", external);
+    page.putVariable("x", "b");
+    assertTranslates(translateDefine("y=a${x}c") + " abc", "!define y (a${x}c) ${y}", page);
+    assertTranslates(translateDefine("y=a${x}c") + " abc", "!define y {a${x}c} ${y}", page);
   }
 
   @Test
@@ -57,24 +58,24 @@ public class VariableTest {
 
   @Test
   public void parsesGet() {
-    external.putVariable("x", "y");
-    assertParses("TEXT=y", "${x}", external);
+    page.putVariable("x", "y");
+    assertParses("TEXT=y", "${x}", page);
   }
 
   @Test
   public void translatesGet() {
-    external.putVariable("x", "y");
-    assertTranslates("y", "${x}", external);
+    page.putVariable("x", "y");
+    assertTranslates("y", "${x}", page);
   }
 
   @Test
   public void translatesGetError() {
-    assertTranslates(Helper.toError("Undefined variable: x"), "${x}", external);
+    assertTranslates(Helper.toError("Undefined variable: x"), "${x}", page);
   }
 
   @Before
   public void setUp() {
-    external = Helper.makeExternal();
+    page = Helper.makeParsingPage();
   }
 
   private void assertTranslatesDefine(String expected, String input) {
@@ -85,5 +86,5 @@ public class VariableTest {
     return "<span class=\"meta\">variable defined: " + expected + "</span>";
   }
 
-  private FakeExternal external;
+  private ParsingPage page;
 }

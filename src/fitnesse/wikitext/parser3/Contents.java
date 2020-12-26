@@ -4,6 +4,7 @@ import fitnesse.html.HtmlTag;
 import fitnesse.html.HtmlUtil;
 import fitnesse.wikitext.shared.ContentsItemBuilder;
 import fitnesse.wikitext.shared.Names;
+import fitnesse.wikitext.shared.PageSources;
 import fitnesse.wikitext.shared.VariableStore;
 
 class Contents {
@@ -37,11 +38,11 @@ class Contents {
     return result;
   }
 
-  static String translate(Symbol symbol, External external) {
+  static String translate(Symbol symbol, PageSources sources) {
     HtmlTag contents = new HtmlTag("div").attribute("class", "contents"); //todo: dry
     contents.add(HtmlUtil.makeBold("Contents:"));
-    ContentsItemBuilder itemBuilder = new ContentsItemBuilder(symbol, 1, external.getSourcePage());
-    contents.add(itemBuilder.buildLevel(external.getSourcePage()));
+    ContentsItemBuilder itemBuilder = new ContentsItemBuilder(symbol, 1, sources.getPage());
+    contents.add(itemBuilder.buildLevel(sources.getPage()));
     return contents.html();
   }
 }

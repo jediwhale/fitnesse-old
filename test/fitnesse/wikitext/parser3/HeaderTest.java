@@ -1,5 +1,6 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.wikitext.shared.ParsingPage;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,20 +21,20 @@ public class HeaderTest {
   }
 
   @Test public void parses() {
-    external.id = 999;
-    assertParses("HEADER(LIST(TEXT=stuff))[id=999,level=1]", "!1 stuff", external);
-    assertParses("HEADER(LIST(TEXT=hi))[id=1000,level=1],TEXT=there", "!1 hi\nthere", external);
+    for (int i = 0; i < 999; i++) page.nextId();
+    assertParses("HEADER(LIST(TEXT=stuff))[id=999,level=1]", "!1 stuff", page);
+    assertParses("HEADER(LIST(TEXT=hi))[id=1000,level=1],TEXT=there", "!1 hi\nthere", page);
   }
 
   @Test public void translates() {
-    external.id = 999;
-    assertTranslates("<h1 id=\"999\">stuff</h1>\n", "!1 stuff", external);
+    for (int i = 0; i < 999; i++) page.nextId();
+    assertTranslates("<h1 id=\"999\">stuff</h1>\n", "!1 stuff", page);
   }
 
   @Before
   public void SetUp() {
-    external = makeExternal();
+    page = Helper.makeParsingPage();
   }
 
-  private FakeExternal external;
+  private ParsingPage page;
 }

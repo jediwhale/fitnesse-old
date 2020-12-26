@@ -1,7 +1,5 @@
 package fitnesse.wikitext.shared;
 
-import fitnesse.wikitext.shared.PageVariableSource;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -9,7 +7,8 @@ import java.util.Optional;
 /**
  * The page represents wiki page in the course of being parsed.
  */
-public class ParsingPage implements VariableStore {
+//todo: interface segregate the page stuff
+public class ParsingPage implements VariableStore, PageSources {
 
   private final SourcePage page;
   private final SourcePage namedPage; // included page
@@ -20,12 +19,12 @@ public class ParsingPage implements VariableStore {
     this(page, new Cache());
   }
 
-  private ParsingPage(SourcePage page, Cache cache) {
-    this(page, page, cache, cache);
-  }
-
   public ParsingPage(SourcePage page, VariableSource variableSource, Cache cache) {
     this(page, page, variableSource, cache);
+  }
+
+  private ParsingPage(SourcePage page, Cache cache) {
+    this(page, page, cache, cache);
   }
 
   private ParsingPage(SourcePage page, SourcePage namedPage, VariableSource variableSource, Cache cache) {
@@ -45,10 +44,12 @@ public class ParsingPage implements VariableStore {
             this.cache);
   }
 
+  @Override
   public SourcePage getPage() {
     return page;
   }
 
+  @Override
   public SourcePage getNamedPage() {
     return namedPage;
   }

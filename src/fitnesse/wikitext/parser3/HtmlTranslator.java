@@ -9,7 +9,7 @@ import java.util.EnumMap;
 
 public class HtmlTranslator implements Translator {
 
-  public HtmlTranslator(External external, Symbol syntaxTree, ParsingPage page) {
+  public HtmlTranslator(Symbol syntaxTree, ParsingPage page) {
     //todo: external and page are overlapping members...
     this.page = page;
     symbolTypes = new EnumMap<>(SymbolType.class);
@@ -19,7 +19,7 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.BOLD_ITALIC, Translate.with(ToHtml::nestedPair).text("b").text("i").content());
     symbolTypes.put(SymbolType.CENTER, Translate.with(ToHtml::pair).text("center").content());
     symbolTypes.put(SymbolType.COLLAPSIBLE, Translate.with(ToHtml::collapsible).branch(0).branch(1));
-    symbolTypes.put(SymbolType.CONTENTS, (s, t) -> Contents.translate(s, external));
+    symbolTypes.put(SymbolType.CONTENTS, (s, t) -> Contents.translate(s, page));
     symbolTypes.put(SymbolType.DEFINE, Define::translate);
     symbolTypes.put(SymbolType.EMAIL, Translate.with(ToHtml::email).content());
     symbolTypes.put(SymbolType.ERROR, Translate.with(ToHtml::error).content());
@@ -27,11 +27,11 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.HASH_TABLE, HashTable::translate);
     symbolTypes.put(SymbolType.HEADER, Translate.with(ToHtml::header).children());
     symbolTypes.put(SymbolType.HEADINGS, (symbol, t) -> Headings.translate(symbol, syntaxTree));
-    symbolTypes.put(SymbolType.HELP, (s, t) -> ToHtml.help(external.getSourcePage(), s));
+    symbolTypes.put(SymbolType.HELP, (s, t) -> ToHtml.help(page.getPage(), s));
     symbolTypes.put(SymbolType.IMAGE, Translate.with(ToHtml::image).content());
     symbolTypes.put(SymbolType.INCLUDE, Include::translate);
     symbolTypes.put(SymbolType.ITALIC, Translate.with(ToHtml::pair).text("i").content());
-    symbolTypes.put(SymbolType.LAST_MODIFIED, (s, t) -> LastModifiedHtml.write(external.getSourcePage()));
+    symbolTypes.put(SymbolType.LAST_MODIFIED, (s, t) -> LastModifiedHtml.write(page.getPage()));
     symbolTypes.put(SymbolType.LINK, Translate.with(ToHtml::link).leaf().branch(0).branch(1));
     symbolTypes.put(SymbolType.WIKI_LIST, WikiList::translate);
     symbolTypes.put(SymbolType.LITERAL, Literal::translate);
@@ -47,7 +47,7 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.STYLE, Style::translate);
     symbolTypes.put(SymbolType.TABLE, Table::translate);
     symbolTypes.put(SymbolType.TEXT, Symbol::translateContent);
-    symbolTypes.put(SymbolType.WIKI_LINK, Translate.with(s -> WikiPath.toHtml(s, external)).leaf().branch(0).branch(1).branch(2));
+    symbolTypes.put(SymbolType.WIKI_LINK, Translate.with(s -> WikiPath.toHtml(s, page)).leaf().branch(0).branch(1).branch(2));
   }
 
   @Override
