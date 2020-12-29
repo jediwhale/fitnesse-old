@@ -1,6 +1,7 @@
 package fitnesse.wikitext.parser3;
 
 import fitnesse.wikitext.shared.ParsingPage;
+import fitnesse.wikitext.shared.VariableSource;
 
 import static org.junit.Assert.assertEquals;
 
@@ -26,8 +27,12 @@ public class Helper {
   }
 
   public static void assertScans(String expected, String input) {
+    assertScans(expected, input, makeParsingPage());
+  }
+
+  public static void assertScans(String expected, String input, VariableSource variables) {
     String result = expected + (expected.length() > 0 ? "," : "") + "End";
-    assertEquals(input, result, scan(input));
+    assertEquals(input, result, scan(input, variables));
   }
 
   public static void assertParses(String expected, String input) {
@@ -60,8 +65,8 @@ public class Helper {
 
   public static String toError(String message) { return " <span class=\"fail\">" + message + "</span> "; }
 
-  private static String scan(String input) {
-    TokenSource source = new TokenSource(new Content(input, s -> new ContentSegment("*" + s + "*")), TokenTypes.WIKI_PAGE_TYPES);
+  private static String scan(String input, VariableSource variables) {
+    TokenSource source = new TokenSource(new Content(input, variables), TokenTypes.WIKI_PAGE_TYPES);
     StringBuilder result = new StringBuilder();
     do {
       Token token = source.take();

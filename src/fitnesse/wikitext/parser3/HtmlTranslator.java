@@ -10,7 +10,6 @@ import java.util.EnumMap;
 public class HtmlTranslator implements Translator {
 
   public HtmlTranslator(Symbol syntaxTree, ParsingPage page) {
-    //todo: external and page are overlapping members...
     this.page = page;
     symbolTypes = new EnumMap<>(SymbolType.class);
     symbolTypes.put(SymbolType.ANCHOR_NAME, Translate.with(ToHtml::anchorName).content());

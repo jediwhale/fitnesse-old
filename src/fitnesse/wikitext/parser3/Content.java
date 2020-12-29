@@ -1,17 +1,18 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.wikitext.shared.VariableSource;
+
 import java.util.Stack;
-import java.util.function.Function;
 
 class Content {
-  Content(String content, Function<String, ContentSegment> substituteVariable) {
-    this.substituteVariable = substituteVariable;
+  Content(String content, VariableSource variables) {
+    this.variables = variables;
     insert(new ContentSegment(content));
     isStartLine = true;
   }
 
   Content(Content other) {
-    this.substituteVariable = other.substituteVariable;
+    this.variables = other.variables;
     this.isStartLine = other.isStartLine;
     for (int i = 0; i < other.items.size(); i++) items.push(new ContentSegment(other.items.elementAt(i)));
   }
@@ -56,18 +57,28 @@ class Content {
   }
 
   void insertVariable(String name) {
-    insert(substituteVariable.apply(name));
-  }
-
-  void insert(ContentSegment segment) {
-    if (!segment.atEnd(0)) items.push(segment);
+    insert(substituteVariable(name));
   }
 
   void setStartLine() { isStartLine = true; }
   boolean isStartLine() { return isStartLine; }
 
+  private void insert(ContentSegment segment) {
+    if (!segment.atEnd(0)) items.push(segment);
+  }
+
+  private ContentSegment substituteVariable(String name) {
+    return new ContentSegment(
+      variables.findVariable(name)
+        // the variable value is delimited with pseudo-nesting characters
+        // these are used for compatibility with parser v2 to handle variables inside table cells
+        .map(s -> Nesting.START + s + Nesting.END)
+        .orElse(" !style_fail{Undefined variable: " + name + "} "));
+  }
+
+
   private final Stack<ContentSegment> items = new Stack<>();
-  private final Function<String, ContentSegment> substituteVariable;
+  private final VariableSource variables;
   private boolean isStartLine;
 }
 

@@ -7,7 +7,6 @@ import java.util.Optional;
 /**
  * The page represents wiki page in the course of being parsed.
  */
-//todo: interface segregate the page stuff
 public class ParsingPage implements VariableStore, PageSources {
 
   private final SourcePage page;

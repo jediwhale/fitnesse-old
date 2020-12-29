@@ -1,7 +1,10 @@
 package fitnesse.wikitext.parser3;
 
+import fitnesse.wikitext.shared.VariableSource;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.util.Optional;
 
 public class ContentTest {
   @Test public void singleSource() {
@@ -15,8 +18,10 @@ public class ContentTest {
   @Test public void multipleSources() {
     Content content = makeContent("ac");
     assertNext(content, 'a', 0);
-    content.insert(new ContentSegment("b"));
-    assertNext(content, 'b', -1);
+    content.insertVariable("v");
+    assertNext(content, Nesting.START, -1);
+    assertNext(content, 'v', -1);
+    assertNext(content, Nesting.END, -1);
     assertNext(content, 'c', 1);
     Assert.assertFalse(content.more());
   }
@@ -34,9 +39,9 @@ public class ContentTest {
     Content content = makeContent("ac");
     Assert.assertTrue(content.startsWith("ac"));
     content.advance(1);
-    content.insert(new ContentSegment("b"));
-    Assert.assertTrue(content.startsWith("bc"));
-    content.advance(1);
+    content.insertVariable("v");
+    Assert.assertTrue(content.startsWith(Nesting.START + "v" + Nesting.END + "c"));
+    content.advance(3);
     Assert.assertFalse(content.startsWith("cd"));
   }
 
@@ -47,6 +52,13 @@ public class ContentTest {
   }
 
   private Content makeContent(String input) {
-    return new Content(input, ContentSegment::new);
+    return new Content(input, new FakeVariable());
+  }
+
+  private static class FakeVariable implements VariableSource {
+    @Override
+    public Optional<String> findVariable(String name) {
+      return Optional.of(name);
+    }
   }
 }

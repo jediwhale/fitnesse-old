@@ -48,8 +48,11 @@ public class VariableTest {
 
   @Test
   public void scansGet() {
-    assertScans("Text=*x*", "${x}");
-    assertScans("Text=*xyz*", "${xyz}");
+    ParsingPage page = Helper.makeParsingPage();
+    page.putVariable("x", "value");
+    assertScans("Text=value", "${x}", page);
+    page.putVariable("xyz", "other value");
+    assertScans("Text=other,BlankSpace= ,Text=value", "${xyz}", page);
     assertScans("ExpressionStart=${=,Text=1+2,BraceEnd=}", "${=1+2}");
     assertScans("Text=$,BraceStart={,Text=xyz", "${xyz");
     assertScans("Text=$xyz,BraceEnd=}", "$xyz}");

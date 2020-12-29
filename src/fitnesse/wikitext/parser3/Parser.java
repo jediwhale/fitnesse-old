@@ -29,7 +29,7 @@ class Parser {
   }
 
   Parser withContent(String content) {
-    return new Parser(new TokenSource(tokens, new Content(content, this::substituteVariable)), page, rules, makeSymbolFromText, token -> {}, parentTerminator);
+    return new Parser(new TokenSource(tokens, new Content(content, page)), page, rules, makeSymbolFromText, token -> {}, parentTerminator);
   }
 
   Parser withTerminator(Terminator parentTerminator) {
@@ -42,7 +42,7 @@ class Parser {
 
   Parser(String input, List<TokenType> tokenTypes, ParsingPage page) {
     this.page = page;
-    this.tokens = new TokenSource(new Content(input, this::substituteVariable), tokenTypes);
+    this.tokens = new TokenSource(new Content(input, page), tokenTypes);
     this.rules = ParseRules.make(page);
     this.makeSymbolFromText = Parser::determineTextSymbol;
     this.watchTokens = token -> {};
@@ -131,15 +131,6 @@ class Parser {
       }
       action.run();
     }
-  }
-
-  private ContentSegment substituteVariable(String name) {
-    return new ContentSegment(
-        page.findVariable(name)
-          // the variable value is delimited with pseudo-nesting characters
-          // these are used for compatibility with parser v2 to handle variables inside table cells
-          .map(s -> Nesting.START + s + Nesting.END)
-          .orElse(" !style_fail{Undefined variable: " + name + "} "));
   }
 
   private static Symbol defaultRule(Parser parser) {
