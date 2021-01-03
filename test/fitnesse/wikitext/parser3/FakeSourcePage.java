@@ -26,11 +26,6 @@ public class FakeSourcePage implements SourcePage {
   }
 
   @Override
-  public String getFullName() {
-    return null;
-  }
-
-  @Override
   public String getPath() {
     return null;
   }

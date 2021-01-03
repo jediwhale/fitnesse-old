@@ -234,12 +234,6 @@ public class CustomLexerTest {
     }
 
     @Override
-    public String getFullName() {
-      // Used in Contents
-      return null;
-    }
-
-    @Override
     public String getPath() {
       // Used in ParsingPage
       throw new IllegalStateException("Should not have been called in this context");

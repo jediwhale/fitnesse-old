@@ -37,18 +37,13 @@ public class TestSourcePage implements SourcePage {
   }
 
   @Override
-  public String getFullName() {
-    return "fullname";
-  }
-
-  @Override
   public String getPath() {
     return null;
   }
 
   @Override
   public String getFullPath() {
-    return null;
+    return "fullname";
   }
 
   @Override

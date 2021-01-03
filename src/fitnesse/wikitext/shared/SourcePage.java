@@ -6,7 +6,6 @@ import java.util.Collection;
 
 public interface SourcePage extends Comparable<SourcePage> {
     String getName();
-    String getFullName();
     String getPath();
     String getFullPath();
     String getContent();

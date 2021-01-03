@@ -15,11 +15,6 @@ public class WikiSourcePage implements SourcePage {
     public String getName() { return page.getName(); }
 
     @Override
-    public String getFullName() {
-        return page.getFullPath().toString();
-    }
-
-    @Override
     public String getPath() {
         return page.getFullPath().parentPath().toString();
     }

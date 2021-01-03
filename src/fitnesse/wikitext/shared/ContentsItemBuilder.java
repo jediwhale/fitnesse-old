@@ -98,7 +98,7 @@ public class ContentsItemBuilder {
     }
 
     private String buildReference(SourcePage sourcePage) {
-        return sourcePage.getFullName();
+        return sourcePage.getFullPath();
     }
 
     private int getRecursionLimit() {
