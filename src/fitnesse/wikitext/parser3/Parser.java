@@ -1,14 +1,10 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.wikitext.parser.TextMaker;
 import fitnesse.wikitext.shared.ParsingPage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.regex.Pattern;
 
 class Parser {
 
@@ -21,39 +17,37 @@ class Parser {
   }
 
   Parser textType(SymbolType type) {
-    return new Parser(tokens, page, rules, (c, o) -> makeLeaf(type, c, o), this.watchTokens, parentTerminator);
+    return new Parser(tokens, page, rules.withTextType(type), watchTokens, parentTerminator);
   }
 
   Parser watchTokens(Consumer<Token> watchTokens) {
-    return new Parser(tokens, page, rules, makeSymbolFromText, watchTokens, parentTerminator);
+    return new Parser(tokens, page, rules, watchTokens, parentTerminator);
   }
 
   Parser withContent(String content) {
-    return new Parser(new TokenSource(tokens, new Content(content, page)), page, rules, makeSymbolFromText, token -> {}, parentTerminator);
+    return new Parser(new TokenSource(tokens, new Content(content, page)), page, rules, token -> {}, parentTerminator);
   }
 
   Parser withTerminator(Terminator parentTerminator) {
-    return new Parser(tokens, page, rules, makeSymbolFromText, watchTokens, parentTerminator);
+    return new Parser(tokens, page, rules, watchTokens, parentTerminator);
   }
 
   Parser withTokenTypes(List<TokenType> tokenTypes) {
-    return new Parser(new TokenSource(tokens, tokenTypes), page, rules, makeSymbolFromText, watchTokens, parentTerminator);
+    return new Parser(new TokenSource(tokens, tokenTypes), page, rules, watchTokens, parentTerminator);
   }
 
   Parser(String input, List<TokenType> tokenTypes, ParsingPage page) {
     this.page = page;
     this.tokens = new TokenSource(new Content(input, page), tokenTypes);
-    this.rules = ParseRules.make(page);
-    this.makeSymbolFromText = Parser::determineTextSymbol;
+    this.rules = new ParseRules(page);
     this.watchTokens = token -> {};
     this.parentTerminator = Terminator.NONE;
   }
 
-  private Parser(TokenSource tokens, ParsingPage page, Map<TokenType, ParseRule> rules, BiFunction<String, Integer, Symbol> makeSymbolFromText, Consumer<Token> watchTokens, Terminator parentTerminator) {
+  private Parser(TokenSource tokens, ParsingPage page, ParseRules rulesx, Consumer<Token> watchTokens, Terminator parentTerminator) {
     this.tokens = tokens;
-    this.rules = rules;
+    this.rules = rulesx;
     this.watchTokens = watchTokens;
-    this.makeSymbolFromText = makeSymbolFromText;
     this.page = page;
     this.parentTerminator = parentTerminator;
   }
@@ -72,7 +66,7 @@ class Parser {
   }
 
   Symbol parseCurrent() {
-    return rules.getOrDefault(peek(0).getType(), Parser::defaultRule).parse(this);
+    return rules.parse(this);
   }
 
   Symbol makeError(String message, int tokenCount) {
@@ -133,44 +127,12 @@ class Parser {
     }
   }
 
-  private static Symbol defaultRule(Parser parser) {
-    String content = parser.peek(0).getContent();
-    Symbol result = parser.makeSymbolFromText.apply(content, parser.peek(0).getOffset());
-    parser.advance();
-    return result;
-  }
-
-  private static Symbol determineTextSymbol(String text, Integer offset) {
-    int wikiWordLength = TextMaker.findWikiWordLength(text);
-    SymbolType type =
-      wikiWordLength > 0 ? SymbolType.WIKI_LINK
-        : isEMail(text) ? SymbolType.EMAIL
-        : SymbolType.TEXT;
-    if (wikiWordLength == 0 || wikiWordLength == text.length()) {
-      return makeLeaf(type, text, offset);
-    }
-    Symbol result = new BranchSymbol(SymbolType.LIST);
-    result.add(makeLeaf(SymbolType.WIKI_LINK, text.substring(0, wikiWordLength), offset));
-    result.add(determineTextSymbol(text.substring(wikiWordLength), offset + wikiWordLength));
-    return result;
-  }
-
-  private static Symbol makeLeaf(SymbolType type, String text, Integer offset) {
-    return new LeafSymbol(type, text, offset);
-  }
-
-  private static boolean isEMail(String text) {
-    return text.indexOf("@") > 0 && Pattern.matches(eMailPattern, text);
-  }
-
   private static final Terminator END_TERMINATOR = new Terminator(TokenType.END);
-  private static final String eMailPattern = "[\\w-_.]+@[\\w-_.]+\\.[\\w-_.]+";
 
-  //todo: too much stuff...
+  //todo: too much stuff?
   private final ParsingPage page;
-  private final BiFunction<String, Integer, Symbol> makeSymbolFromText;
   private final TokenSource tokens;
-  private final Map<TokenType, ParseRule> rules;
+  private final ParseRules rules;
   private final Consumer<Token> watchTokens;
   private final Terminator parentTerminator;
 }
