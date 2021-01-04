@@ -9,20 +9,21 @@ import fitnesse.testsystems.slim.tables.ScriptTable;
 import fitnesse.testsystems.slim.tables.SlimTable;
 import fitnesse.testsystems.slim.tables.SlimTableFactory;
 import fitnesse.wiki.PageData;
-import fitnesse.wikitext.shared.ParsingPage;
+import fitnesse.wikitext.parser.Symbol;
 import fitnesse.wikitext.parser.Table;
+import fitnesse.wikitext.shared.ParsingPage;
 import fitnesse.wikitext.shared.VariableSource;
-import fitnesse.wikitext.shared.MarkUpConfig;
-import fitnesse.wikitext.shared.Names;
-import fitnesse.wikitext.shared.SyntaxNode;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import static fitnesse.wikitext.parser.decorator.SymbolClassPropertyAppender.classPropertyAppender;
+import static fitnesse.wikitext.parser.decorator.SymbolInspector.inspect;
 import static java.util.Arrays.asList;
 
-public class SlimTableDefaultColoring {
+public class SlimTableDefaultColoring implements ParsedSymbolDecorator {
 
   private static final Set<String> SPECIAL_PAGES =
     new HashSet<>(
@@ -45,13 +46,13 @@ public class SlimTableDefaultColoring {
       if (INSTANCE == null) {
         throw new IllegalStateException("No table factory provided yet");
       }
-      MarkUpConfig.addDecorator(Table.symbolType.toString(), INSTANCE::handleParsedSymbol);
+      Table.symbolType.addDecorator(INSTANCE);
       isInstalled = true;
     }
   }
 
   public static void uninstall() {
-    MarkUpConfig.removeDecorator(Table.symbolType.toString(), INSTANCE::handleParsedSymbol);
+    Table.symbolType.removeDecorator(INSTANCE);
     isInstalled = false;
   }
 
@@ -61,23 +62,26 @@ public class SlimTableDefaultColoring {
     sf = factory;
   }
 
-  public void handleParsedSymbol(SyntaxNode node, ParsingPage page) {
-    if ((isSlimContext(page) && isOnTestPage(page)) || isOnSpecialPage(page)) {
-      handleParsedTable(node);
+  @Override
+  public void handleParsedSymbol(Symbol symbol, VariableSource variableSource) {
+    if ((isSlimContext(variableSource) && isOnTestPage(variableSource)) || isOnSpecialPage(variableSource)) {
+      inspect(symbol).checkSymbolType(Table.symbolType);
+      handleParsedTable(symbol);
     }
   }
 
-  private void handleParsedTable(SyntaxNode table) {
+  private void handleParsedTable(Symbol table) {
     boolean colorTable = false;
     boolean isFirstColumnTitle = false;
     boolean isSecondRowTitle = false;
 
     int rowNo = 0;
-    for (SyntaxNode row : table.getChildren()) {
+    for (Symbol row : table.getChildren()) {
       rowNo++;
-      if (!row.getChildren().isEmpty()) {
-        SyntaxNode firstCell = row.getChildren().get(0);
-        final String cellContent = firstCell.getAllContent();
+      List<Symbol> columns = row.getChildren();
+      if (!columns.isEmpty()) {
+        Symbol firstCell = columns.get(0);
+        final String cellContent = inspect(firstCell).getRawContent();
 
         if (rowNo == 1) {
           // If slim table class declaration then get fixture info for table coloring scheme
@@ -107,35 +111,41 @@ public class SlimTableDefaultColoring {
         // Use color scheme attributes to color table rows.
         if (colorTable) {
           if (rowNo == 1) {
-            row.appendProperty(Names.CLASS, "slimRowTitle");
+            classPropertyAppender().addPropertyValue(row, "slimRowTitle");
           } else if (isSecondRowTitle && rowNo == 2) {
-            row.appendProperty(Names.CLASS, "slimRowTitle");
+            classPropertyAppender().addPropertyValue(row, "slimRowTitle");
           } else if (isFirstColumnTitle) {
             byte[] bodyBytes = cellContent.getBytes();
             int sum = 0;
             for (byte b : bodyBytes) {
               sum = sum + (int) b;
             }
-            row.appendProperty(Names.CLASS, "slimRowColor" + (sum % 10));
+            classPropertyAppender().addPropertyValue(row, "slimRowColor" + (sum % 10));
           } else {
-            row.appendProperty(Names.CLASS, "slimRowColor" + (rowNo % 2));
+            classPropertyAppender().addPropertyValue(row, "slimRowColor" + (rowNo % 2));
           }
         }
       }
     }
   }
 
-  protected static boolean isOnSpecialPage(ParsingPage page) {
-    String name = page.getPage().getName();
-    return SPECIAL_PAGES.contains(name);
+  protected boolean isOnSpecialPage(VariableSource variableSource) {
+    if (variableSource instanceof ParsingPage) {
+      String name = ((ParsingPage) variableSource).getPage().getName();
+      return SPECIAL_PAGES.contains(name);
+    }
+    return false;
   }
 
-  protected static boolean isOnTestPage(ParsingPage page) {
-    return page.getPage().hasProperty("Test");
+  protected boolean isOnTestPage(VariableSource variableSource) {
+    if (variableSource instanceof ParsingPage) {
+      return ((ParsingPage) variableSource).getPage().hasProperty("Test");
+    }
+    return false;
   }
 
-  protected static boolean isSlimContext(VariableSource variables) {
-    Optional<String> testSystem = variables.findVariable("TEST_SYSTEM");
+  protected boolean isSlimContext(VariableSource parsingPage) {
+    Optional<String> testSystem = parsingPage.findVariable("TEST_SYSTEM");
     return testSystem.isPresent() && "slim".equals(testSystem.get());
   }
 }

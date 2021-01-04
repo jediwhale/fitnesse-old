@@ -20,12 +20,7 @@ public class HtmlTranslator extends Translator {
 
   @Override
   protected Translation getTranslation(Symbol symbol) {
-    //apply decorators
-    MarkUpConfig.decorate(symbol, getParsingPage());
-
-    // apply deprecated decorators
     symbol.getType().applyParsedSymbolDecorations(symbol, getParsingPage());
-
     return super.getTranslation(symbol);
   }
 

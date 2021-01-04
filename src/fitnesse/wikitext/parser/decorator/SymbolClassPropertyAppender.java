@@ -4,8 +4,6 @@ import fitnesse.wikitext.parser.Symbol;
 
 import static java.lang.String.format;
 
-// @deprecated use PropertyStore
-@Deprecated
 public class SymbolClassPropertyAppender {
 
   public static final String CLASS_PROPERTY_NAME = "class";

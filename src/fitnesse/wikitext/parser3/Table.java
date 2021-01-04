@@ -127,9 +127,6 @@ class Table {
         : translator.findRule(symbolType);
     }
 
-    @Override
-    public void decorate(Symbol symbol) { translator.decorate(symbol); }
-
     private final Translator translator;
   }
 }

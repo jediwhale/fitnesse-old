@@ -54,11 +54,6 @@ public class HtmlTranslator implements Translator {
     return symbolTypes.get(symbolType);
   }
 
-  @Override
-  public void decorate(Symbol symbol) {
-    MarkUpConfig.decorate(symbol, page);
-  }
-
   private final ParsingPage page;
   private final EnumMap<SymbolType, TranslateRule> symbolTypes;
 }

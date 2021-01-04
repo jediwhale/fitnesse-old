@@ -1,11 +1,9 @@
 package fitnesse.wikitext.parser3;
 
 import fitnesse.html.HtmlElement;
-import fitnesse.wikitext.shared.MarkUpConfig;
 import fitnesse.wikitext.shared.Names;
 import fitnesse.wikitext.shared.ParsingPage;
 import fitnesse.wikitext.shared.SyntaxNode;
-import fitnesse.wikitext.shared.SyntaxNodeDecorator;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -99,13 +97,6 @@ public class TableTest {
 
   @Test public void translatesTwoTables() {
     assertTranslates(table(row(cell("a"))) + table(row(cell("b"))), "|a|\n!|b|\n");
-  }
-
-  @Test public void decoratesTable() {
-    SyntaxNodeDecorator decorator = TableTest::decorateTable;
-    MarkUpConfig.addDecorator("Table", decorator);
-    assertTranslates(table(row(" class=\"testClass\"", cell("a"))), "|a|\n");
-    MarkUpConfig.removeDecorator("Table", decorator);
   }
 
   private static void decorateTable(SyntaxNode table, ParsingPage parsingPage) {
