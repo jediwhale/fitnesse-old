@@ -12,7 +12,11 @@ public class Token {
   }
 
   public Token(String content, int offset) {
-    this.type = TokenType.TEXT;
+    this(TokenType.TEXT, content, offset);
+  }
+
+  public Token(TokenType type, String content, int offset) {
+    this.type = type;
     this.content = content;
     this.offset = offset;
   }

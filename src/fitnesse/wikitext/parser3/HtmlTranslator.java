@@ -46,6 +46,7 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.STYLE, Style::translate);
     symbolTypes.put(SymbolType.TABLE, Table::translate);
     symbolTypes.put(SymbolType.TEXT, Symbol::translateContent);
+    symbolTypes.put(SymbolType.TODAY, (symbol, t) -> ToHtml.today(symbol));
     symbolTypes.put(SymbolType.WIKI_LINK, Translate.with(s -> WikiPath.toHtml(s, page)).leaf().branch(0).branch(1).branch(2));
   }
 

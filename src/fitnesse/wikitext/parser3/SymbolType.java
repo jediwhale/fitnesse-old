@@ -34,6 +34,7 @@ public enum SymbolType {
   STYLE,
   TABLE,
   TEXT,
+  TODAY,
   WIKI_LINK,
   WIKI_LIST
 }

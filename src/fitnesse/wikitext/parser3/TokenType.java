@@ -57,7 +57,7 @@ public class TokenType {
   public static final TokenType INCLUDE = new TokenType("Include")
     .matches(word("!include"));
   public static final TokenType ITALIC = new TokenType("Italic", "''");
-  public static final TokenType LAST_MODIFIED = new TokenType("LastModified","!lastmodified"); //todo: some kind of terminator
+  public static final TokenType LAST_MODIFIED = new TokenType("LastModified","!lastmodified");
   public static final TokenType LINK = new TokenType("Link")
     .matchOneOf(text("http://"), text("https://"));
   public static final TokenType LITERAL_END = new TokenType("LiteralEnd", "-!");
@@ -84,7 +84,7 @@ public class TokenType {
   public static final TokenType PLAIN_TEXT_TABLE_START = new TokenType("PlainTextTableStart", "![");
   public static final TokenType PREFORMAT_END = new TokenType("PreformatEnd", "}}}");
   public static final TokenType PREFORMAT_START = new TokenType("PreformatStart", "{{{")
-    .useScan(PREFORMAT_END);
+    .useScan(Preformat::scan);
   public static final TokenType SEE = new TokenType("See")
     .matches(word("!see"));
   public static final TokenType STRIKE = new TokenType("Strike", "--");
@@ -95,7 +95,7 @@ public class TokenType {
     .matches(text("|"), ignoreBlank(),  matchOne(end(), matchAll(newLine(), notText("|"))))
     .isStart();
   public static final TokenType TEXT = new TokenType("Text");
-  public static final TokenType TODAY = new TokenType("Today").matches(word("!today"));
+  public static final TokenType TODAY = new TokenType("Today", "!today");
   public static final TokenType VARIABLE_VALUE = new TokenType("Variable")
     .matches(variableValue()); //this is used when a variable value is looked up and substituted for the variable token
   public static final TokenType VARIABLE_TOKEN = new TokenType("Variable")
@@ -114,7 +114,7 @@ public class TokenType {
   }
 
   public TokenType useScan(TokenType terminator) {
-    return useScan((token, source) -> source.use(new ArrayList<>(Collections.singletonList(terminator)), type -> type == terminator));
+    return useScan((token, source) -> source.use(new TokenTypes(Collections.singletonList(terminator)), type -> type == terminator));
   }
 
   public TokenType useScan(BiConsumer<Token, TokenSource> useScan) { //todo: eliminate this??

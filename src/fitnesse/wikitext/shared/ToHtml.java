@@ -1,9 +1,15 @@
 package fitnesse.wikitext.shared;
 
 import fitnesse.html.HtmlTag;
+import fitnesse.util.Clock;
 import fitnesse.wiki.WikiPageProperty;
 import fitnesse.wikitext.parser.FormattedExpression;
 import fitnesse.wikitext.parser.Maybe;
+import fitnesse.wikitext.parser.Today;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class ToHtml {
   public static String anchorName(String[] strings) {
@@ -98,5 +104,18 @@ public class ToHtml {
 
   public static String path(String[] strings) {
     return new HtmlTag("span").attribute("class", "meta").body("classpath: " + strings[0]).htmlInline();
+  }
+
+  public static String today(PropertySource source) {
+    //todo: dry with v2
+    String increment = source.findProperty(Names.INCREMENT, "");
+    int incrementInt =
+      increment.startsWith("+") ? Integer.parseInt(increment.substring(1)) :
+        increment.startsWith("-") ? - Integer.parseInt(increment.substring(1)) :
+          0;
+    GregorianCalendar calendar = new GregorianCalendar();
+    calendar.setTime(Clock.currentDate());
+    calendar.add(Calendar.DAY_OF_MONTH, incrementInt);
+    return new SimpleDateFormat("dd MMM, yyyy").format(calendar.getTime());
   }
 }

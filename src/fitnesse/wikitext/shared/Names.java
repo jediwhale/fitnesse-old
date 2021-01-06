@@ -59,6 +59,9 @@ public class Names {
   // values for the include div class
   public static final String TEARDOWN_CLASS = "teardown";
 
+  //properties for the !today widget
+  public static final String INCREMENT = "Increment";
+
   //properties for the table widget
   public static final String CLASS = "class";
 }
