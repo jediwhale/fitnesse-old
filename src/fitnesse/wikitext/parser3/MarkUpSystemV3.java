@@ -5,6 +5,7 @@ import fitnesse.wikitext.shared.ParsingPage;
 import fitnesse.wikitext.shared.SourcePage;
 import fitnesse.wikitext.shared.SyntaxTree;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -19,14 +20,14 @@ public class MarkUpSystemV3 implements MarkUpSystem {
   public String variableValueToHtml(ParsingPage page, String variableValue) {
     // this appears to be used for various properties that control processing, not for page markup
     // so a simplified set of token types are used
-    Symbol symbol = Parser.parse(variableValue, TokenTypes.VARIABLE_DEFINITION_TYPES, page);
+    Symbol symbol = Parser.parse(variableValue, VARIABLE_DEFINITION_TYPES, page);
     return new SyntaxTreeV3(symbol, page).translateToHtml();
   }
 
   @Override
   public void findWhereUsed(SourcePage page, Consumer<String> takeWhereUsed) {
     final ParsingPage parsingPage = new ParsingPage(page);
-    Symbol symbol = Parser.parse(page.getContent(), TokenTypes.REFACTORING_TYPES, parsingPage);
+    Symbol symbol = Parser.parse(page.getContent(), REFACTORING_TYPES, parsingPage);
     SyntaxTreeV3 syntaxTree = new SyntaxTreeV3(symbol, parsingPage);
     syntaxTree.findWhereUsed(takeWhereUsed);
   }
@@ -35,7 +36,7 @@ public class MarkUpSystemV3 implements MarkUpSystem {
   public String changeReferences(SourcePage page, Function<String, Optional<String>> changeReference) {
     ParsingPage parsingPage = new ParsingPage(page);
     String original = page.getContent();
-    Symbol symbol = Parser.parse(original, TokenTypes.REFACTORING_TYPES, parsingPage);
+    Symbol symbol = Parser.parse(original, REFACTORING_TYPES, parsingPage);
     Replacement replacement = new Replacement(original);
     symbol.walkPreOrder(node -> {
         if (node.isWikiReference()) {
@@ -44,6 +45,38 @@ public class MarkUpSystemV3 implements MarkUpSystem {
       });
     return replacement.makeResult();
   }
+
+  private static final TokenTypes REFACTORING_TYPES = new TokenTypes(Arrays.asList(
+    TokenType.ALIAS_END,
+    TokenType.ALIAS_MIDDLE,
+    TokenType.ALIAS_START,
+    TokenType.COMMENT,
+    TokenType.IMAGE,
+    TokenType.LINK,
+    TokenType.LITERAL_START,
+    TokenType.NEW_LINE,
+    TokenType.PATH,
+    TokenType.PREFORMAT_START,
+
+    TokenType.BLANK_SPACE,
+    TokenType.BRACKET_END,
+    TokenType.BRACKET_START
+  ));
+
+  private static final TokenTypes VARIABLE_DEFINITION_TYPES = new TokenTypes(Arrays.asList(
+    TokenType.VARIABLE_VALUE, // must be first
+    TokenType.COMMENT,
+    TokenType.DEFINE,
+    TokenType.INCLUDE,
+    TokenType.LITERAL_START,
+    TokenType.NEW_LINE,
+    TokenType.PREFORMAT_START,
+    TokenType.PREFORMAT_END,
+
+    TokenType.BLANK_SPACE,
+    TokenType.BRACE_END
+  ));
+
 
   private static class Replacement {
     Replacement(String original) {
@@ -70,5 +103,6 @@ public class MarkUpSystemV3 implements MarkUpSystem {
 
     private final StringBuilder changed = new StringBuilder();
     private final String original;
+
   }
 }

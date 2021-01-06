@@ -1,13 +1,12 @@
 package fitnesse.wikitext.parser3;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
 import java.util.function.Predicate;
 
 class TokenSource {
-  TokenSource(Content content, List<TokenType> types) {
+  TokenSource(Content content, TokenTypes types) {
     this.content = content;
     results = new LinkedList<>();
     use(types, type -> false);
@@ -19,7 +18,7 @@ class TokenSource {
     use(parent.scanTypes.lastElement().types, type -> false);
   }
 
-  TokenSource(TokenSource parent, List<TokenType> types) {
+  TokenSource(TokenSource parent, TokenTypes types) {
     this.content = parent.content;
     results = new LinkedList<>();
     use(types, type -> false);
@@ -28,7 +27,7 @@ class TokenSource {
   void putBack() { results.addFirst(previous); }
   Token getPrevious() { return previous; }
 
-  void use(List<TokenType> types, Predicate<TokenType> terminator) {
+  void use(TokenTypes types, Predicate<TokenType> terminator) {
     scanTypes.push(new ScanTypes(types, terminator));
   }
 
@@ -77,7 +76,9 @@ class TokenSource {
 
   private void addResult(Token token) {
     if (text.length() > 0) {
-      results.add(new Token(text.toString(), textOffset));
+      String textString = text.toString();
+      //todo? check list of keyword tokentypes, if none, tokentype.text
+      results.add(new Token(scanTypes.peek().findKeywordType(textString).orElse(TokenType.TEXT),textString, textOffset));
       text.setLength(0);
       textOffset = -1;
     }
@@ -92,22 +93,31 @@ class TokenSource {
   private int textOffset = -1;
 
   private static class ScanTypes {
-    ScanTypes(List<TokenType> types, Predicate<TokenType> terminator) {
+    ScanTypes(TokenTypes types, Predicate<TokenType> terminator) {
       this.types = types;
       this.terminator = terminator;
     }
 
     Optional<Token> findMatch(Content content) {
-      for (TokenType matchType : types) { //todo: do quicker than linear search
+      for (TokenType matchType : types.getDelimiters()) { //todo: do quicker than linear search
         Optional<Token> matchToken = matchType.read(content);
         if (matchToken.isPresent()) return matchToken;
       }
       return Optional.empty();
     }
 
+    Optional<TokenType> findKeywordType(String text) {
+      for (TokenType keywordType: types.getKeywords()) {
+        if (keywordType.getMatch().equals(text)) return Optional.of(keywordType);
+      }
+      return Optional.empty();
+    }
+
     boolean isTerminated(TokenType type) { return terminator.test(type);}
 
-    final List<TokenType> types;
+    //todo? make this a class, provides list of types and can check text for keywords
+    //todo? maybe also check text for wikiword, etc
+    final TokenTypes types;
     private final Predicate<TokenType> terminator;
   }
 }

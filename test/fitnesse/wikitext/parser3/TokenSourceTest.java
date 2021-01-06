@@ -94,10 +94,6 @@ public class TokenSourceTest {
     assertScans("HorizontalRule=--------", "--------");
   }
 
-  @Test
-  public void scansToday() {
-    assertScansWord("!today", "Today");
-  }
 
   private TokenSource makeTokenSource(String input) {
     return new TokenSource(new Content(input, Helper.makeParsingPage()), types);
@@ -119,5 +115,5 @@ public class TokenSourceTest {
   private static final TokenType tokenTwo = new TokenType("tokenTwo", "^^");
   private static final TokenType tokenEndCustom = new TokenType("tokenEndCustom", "=@");
   private static final TokenType tokenCustom = new TokenType("tokenCustom", "@=").useScan(tokenEndCustom);
-  private static final List<TokenType> types = new ArrayList<>(Arrays.asList(tokenOne, tokenTwo, tokenCustom));
+  private static final TokenTypes types = new TokenTypes(Arrays.asList(tokenOne, tokenTwo, tokenCustom));
 }

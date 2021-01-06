@@ -12,7 +12,7 @@ class Parser {
     return new Parser(input, TokenTypes.WIKI_PAGE_TYPES, page).parseToEnd();
   }
 
-  static Symbol parse(String input, List<TokenType> tokenTypes, ParsingPage page) {
+  static Symbol parse(String input, TokenTypes tokenTypes, ParsingPage page) {
     return new Parser(input, tokenTypes, page).parseToEnd();
   }
 
@@ -32,11 +32,11 @@ class Parser {
     return new Parser(tokens, page, rules, watchTokens, parentTerminator);
   }
 
-  Parser withTokenTypes(List<TokenType> tokenTypes) {
+  Parser withTokenTypes(TokenTypes tokenTypes) {
     return new Parser(new TokenSource(tokens, tokenTypes), page, rules, watchTokens, parentTerminator);
   }
 
-  Parser(String input, List<TokenType> tokenTypes, ParsingPage page) {
+  Parser(String input, TokenTypes tokenTypes, ParsingPage page) {
     this.page = page;
     this.tokens = new TokenSource(new Content(input, page), tokenTypes);
     this.rules = new ParseRules(page);
@@ -44,9 +44,9 @@ class Parser {
     this.parentTerminator = Terminator.NONE;
   }
 
-  private Parser(TokenSource tokens, ParsingPage page, ParseRules rulesx, Consumer<Token> watchTokens, Terminator parentTerminator) {
+  private Parser(TokenSource tokens, ParsingPage page, ParseRules rules, Consumer<Token> watchTokens, Terminator parentTerminator) {
     this.tokens = tokens;
-    this.rules = rulesx;
+    this.rules = rules;
     this.watchTokens = watchTokens;
     this.page = page;
     this.parentTerminator = parentTerminator;
@@ -56,7 +56,7 @@ class Parser {
 
   Token peek(int offset) { return offset >= 0 ? tokens.peek(offset) : tokens.getPrevious(); }
   void putBack() { tokens.putBack(); }
-  void pushTypes(List<TokenType> types) { tokens.use(types, type -> false); }
+  void pushTypes(TokenTypes types) { tokens.use(types, type -> false); }
   void popTypes() { tokens.popTypes(); }
 
   Token advance() {

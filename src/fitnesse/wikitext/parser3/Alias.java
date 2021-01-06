@@ -47,7 +47,7 @@ public class Alias {
     return Symbol.make(SymbolType.LINK, link, description);
   }
 
-  private static final ArrayList<TokenType> ALIAS_TYPES = new ArrayList<>(Arrays.asList(
+  private static final TokenTypes ALIAS_TYPES = new TokenTypes(Arrays.asList(
     TokenType.VARIABLE_VALUE, //must be first
     TokenType.ALIAS_END, TokenType.EXPRESSION_START, TokenType.EXPRESSION_END, TokenType.BRACE_END
   ));

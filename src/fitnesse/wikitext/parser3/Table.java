@@ -3,6 +3,7 @@ package fitnesse.wikitext.parser3;
 import fitnesse.html.HtmlTag;
 import fitnesse.wikitext.shared.Names;
 
+import java.util.Arrays;
 import java.util.function.BiConsumer;
 
 class Table {
@@ -10,7 +11,7 @@ class Table {
   static Symbol parseStandard(Parser parser) {
     String tableStart = parser.peek(0).getContent();
     if (tableStart.contains("!")) {
-      parser.pushTypes(TokenTypes.LITERAL_TABLE_TYPES);
+      parser.pushTypes(LITERAL_TABLE_TYPES);
     }
     else if (tableStart.contains("^")) {
       parser.pushTypes(TokenTypes.NO_LINK_TABLE_TYPES);
@@ -113,6 +114,20 @@ class Table {
   }
 
   private static final String LITERAL_DELIMITER = String.valueOf(134);
+
+  private static final TokenTypes LITERAL_TABLE_TYPES = new TokenTypes(Arrays.asList(
+    TokenType.VARIABLE_VALUE, // must be first
+    TokenType.EXPRESSION_START,
+    TokenType.EXPRESSION_END,
+    TokenType.LITERAL_START,
+    TokenType.LITERAL_END,
+    TokenType.BRACE_END,
+    TokenType.NEW_LINE,
+    TokenType.TABLE_END,
+    TokenType.CELL_DELIMITER,
+    TokenType.NESTING_PSEUDO_START,
+    TokenType.NESTING_PSEUDO_END
+  ));
 
   private static class CellTranslator implements Translator {
     CellTranslator(Translator translator) {
