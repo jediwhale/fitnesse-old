@@ -17,6 +17,6 @@ class Preformat {
       TokenType.NEW_LINE,
       TokenType.BLANK_SPACE
     ),
-    Arrays.asList(TokenType.TODAY)
+    Arrays.asList(KeywordType.TODAY)
   );
 }

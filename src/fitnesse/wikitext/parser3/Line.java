@@ -5,6 +5,7 @@ class Line {
     return parser -> {
       Symbol result = new BranchSymbol(type);
       parser.advance();
+      parser.advance(); //todo: check blank
       result.add(parser.parseListInParent(SymbolType.LIST, Terminator.END_LINE));
       return result;
     };

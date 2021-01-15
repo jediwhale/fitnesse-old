@@ -2,12 +2,9 @@ package fitnesse.wikitext.parser3;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static fitnesse.wikitext.parser3.Helper.assertScans;
-import static fitnesse.wikitext.parser3.Helper.assertScansWord;
 import static org.junit.Assert.assertEquals;
 
 public class TokenSourceTest {
@@ -82,8 +79,6 @@ public class TokenSourceTest {
   public void scansLeadingAndTrailingText() {
     assertScans("Text=hi,Bold=''',Text=there", "hi'''there");
   }
-
-  @Test public void scansMeta() { assertScansWord("!meta", "Meta"); }
 
   @Test
   public void scansHorizontalRule() {

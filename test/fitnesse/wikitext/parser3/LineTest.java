@@ -6,7 +6,8 @@ import static fitnesse.wikitext.parser3.Helper.*;
 
 public class LineTest {
   @Test public void scans() {
-    assertScansWord("!note", "Note");
+    assertScansKeyword("!note", "Note");
+    assertScansKeyword("!meta", "Meta");
   }
 
   @Test public void parses() {

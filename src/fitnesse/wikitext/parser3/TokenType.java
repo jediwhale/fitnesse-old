@@ -1,6 +1,5 @@
 package fitnesse.wikitext.parser3;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -13,8 +12,6 @@ public class TokenType {
   public static final TokenType ALIAS_MIDDLE = new TokenType("AliasMiddle", "][")
     .useScan(Alias::scan);
   public static final TokenType ALIAS_START = new TokenType("AliasStart", "[[");
-  public static final TokenType ANCHOR_NAME = new TokenType("AnchorName")
-    .matches(word("!anchor"));
   public static final TokenType ANCHOR_REFERENCE = new TokenType("AnchorReference", ".#");
   public static final TokenType BOLD = new TokenType("Bold", "'''");
   public static final TokenType BOLD_ITALIC = new TokenType("BoldItalic", "'''''");
@@ -29,8 +26,6 @@ public class TokenType {
     .matchOneOf(
       matchAll(text("|"), ignoreBlank(), newLine(), text("|")),
       matchAll(text("|"), ignoreBlank()));
-  public static final TokenType CENTER = new TokenType("Center")
-    .matches(startLine(), word("!c"));
   public static final TokenType COLLAPSIBLE_END = new TokenType("CollapsibleEnd", "*!").matches(repeat("*"), text("!"));
   public static final TokenType COLLAPSIBLE_START = new TokenType("CollapsibleStart").matches(text("!"), repeat("*"));
   public static final TokenType COLON = new TokenType("Colon", ":");
@@ -54,16 +49,12 @@ public class TokenType {
   public static final TokenType HELP = new TokenType("Help").matches(text("!help"));
   public static final TokenType IMAGE = new TokenType("Image")
     .matchOneOf(word("!img"), word("!img-l"), word("!img-r"));
-  public static final TokenType INCLUDE = new TokenType("Include")
-    .matches(word("!include"));
   public static final TokenType ITALIC = new TokenType("Italic", "''");
-  public static final TokenType LAST_MODIFIED = new TokenType("LastModified","!lastmodified");
   public static final TokenType LINK = new TokenType("Link")
     .matchOneOf(text("http://"), text("https://"));
   public static final TokenType LITERAL_END = new TokenType("LiteralEnd", "-!");
   public static final TokenType LITERAL_START = new TokenType("LiteralStart", "!-")
     .useScan(LITERAL_END);
-  public static final TokenType META = new TokenType("Meta").matches(word("!meta"));
   public static final TokenType NESTING_START = new TokenType("NestingStart", "!(")
     .isStart();
   public static final TokenType NESTING_END = new TokenType("NestingEnd", ")!");
@@ -75,7 +66,6 @@ public class TokenType {
     .isStart();
   public static final TokenType NUMBERED_LIST = new TokenType("NumberedList")
     .matches(startLine(), blank(), digit());
-  public static final TokenType NOTE = new TokenType("Note").matches(word("!note"));
   public static final TokenType PARENTHESIS_END = new TokenType("ParenthesisEnd", ")");
   public static final TokenType PARENTHESIS_START = new TokenType("ParenthesisStart", "(");
   public static final TokenType PATH = new TokenType("Path")
@@ -95,7 +85,6 @@ public class TokenType {
     .matches(text("|"), ignoreBlank(),  matchOne(end(), matchAll(newLine(), notText("|"))))
     .isStart();
   public static final TokenType TEXT = new TokenType("Text");
-  public static final TokenType TODAY = new TokenType("Today", "!today");
   public static final TokenType VARIABLE_VALUE = new TokenType("Variable")
     .matches(variableValue()); //this is used when a variable value is looked up and substituted for the variable token
   public static final TokenType VARIABLE_TOKEN = new TokenType("Variable")

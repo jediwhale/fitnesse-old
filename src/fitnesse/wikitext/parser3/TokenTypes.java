@@ -11,11 +11,9 @@ class TokenTypes {
       TokenType.ALIAS_START,
       TokenType.ALIAS_MIDDLE,
       TokenType.ALIAS_END,
-      TokenType.ANCHOR_NAME,
       TokenType.ANCHOR_REFERENCE,
       TokenType.BOLD_ITALIC,
       TokenType.BULLET_LIST,
-      TokenType.CENTER,
       TokenType.COLLAPSIBLE_END,
       TokenType.COLLAPSIBLE_START,
       TokenType.COMMENT,
@@ -28,13 +26,10 @@ class TokenTypes {
       TokenType.HELP,
       TokenType.HORIZONTAL_RULE,
       TokenType.IMAGE,
-      TokenType.INCLUDE,
       TokenType.LINK,
       TokenType.LITERAL_START,
-      TokenType.META,
       TokenType.NESTING_START,
       TokenType.NESTING_END,
-      TokenType.NOTE,
       TokenType.NUMBERED_LIST,
       TokenType.PATH,
       TokenType.PLAIN_TEXT_TABLE_START,
@@ -61,8 +56,13 @@ class TokenTypes {
       TokenType.STRIKE
     ),
     Arrays.asList(
-      TokenType.LAST_MODIFIED,
-      TokenType.TODAY
+      KeywordType.ANCHOR_NAME,
+      KeywordType.CENTER,
+      KeywordType.INCLUDE,
+      KeywordType.LAST_MODIFIED,
+      KeywordType.META,
+      KeywordType.NOTE,
+      KeywordType.TODAY
     ));
 
   static final TokenTypes WIKI_PAGE_TYPES = new TokenTypes(CORE_TYPES)
@@ -88,7 +88,7 @@ class TokenTypes {
     this(delimiters, Collections.emptyList());
   }
 
-  TokenTypes(List<TokenType> delimiters, List<TokenType> keywords) {
+  TokenTypes(List<TokenType> delimiters, List<KeywordType> keywords) {
     this.delimiters = delimiters;
     this.keywords = keywords;
   }
@@ -104,7 +104,7 @@ class TokenTypes {
   }
 
   //todo: replace with function to search keywords
-  List<TokenType> getKeywords() {
+  List<KeywordType> getKeywords() {
     return keywords;
   }
 
@@ -124,5 +124,5 @@ class TokenTypes {
   }
 
   private final List<TokenType> delimiters;
-  private final List<TokenType> keywords;
+  private final List<KeywordType> keywords;
 }

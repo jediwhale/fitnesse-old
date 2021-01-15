@@ -7,7 +7,7 @@ import static fitnesse.wikitext.parser3.Helper.*;
 public class AnchorNameTest {
 
   @Test public void scans() {
-    assertScansWord("!anchor", "AnchorName");
+    assertScansKeyword("!anchor", "AnchorName");
   }
 
   @Test public void parses() {

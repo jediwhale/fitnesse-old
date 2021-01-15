@@ -20,4 +20,17 @@ public class Keyword {
       return new LeafSymbol(type, argument.getContent());
     };
   }
+
+  public static ParseRule parseBlankAndWord(SymbolType type) {
+    return parser -> {
+      //todo: check peek(1) is blank
+      if (!parser.peek(2).isWord()) {
+        return parser.makeError("Name must be alphanumeric", 2);
+      }
+      parser.advance();
+      parser.advance();
+      Symbol argument = parser.parseCurrent();
+      return new LeafSymbol(type, argument.getContent());
+    };
+  }
 }

@@ -70,11 +70,22 @@ class TokenSource {
     // if they haven't been used by now, they are discarded
     if (character == Nesting.START || character == Nesting.END) return;
 
+    // possible start of keyword
+    if (character == '!') addCollectedText();
+
+    // possible end of keyword
+    if (text.length() > 0 && text.charAt(0) == '!' && !Character.isLetterOrDigit(character) && character != '-') addCollectedText();
+
     if (textOffset < 0) textOffset = current;
     text.append(character);
   }
 
   private void addResult(Token token) {
+    addCollectedText();
+    results.add(token);
+  }
+
+  private void addCollectedText() {
     if (text.length() > 0) {
       String textString = text.toString();
       //todo? check list of keyword tokentypes, if none, tokentype.text
@@ -82,7 +93,6 @@ class TokenSource {
       text.setLength(0);
       textOffset = -1;
     }
-    results.add(token);
   }
 
   private Token previous;

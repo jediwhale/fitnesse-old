@@ -14,6 +14,7 @@ class Include {
 
   static Symbol parse(Parser parser, ParsingPage page, VariableStore variables) {
     parser.advance();
+    parser.advance(); //todo: check blank
     Symbol result = new TaggedSymbol(SymbolType.INCLUDE);
     if (parser.peek(0).isType(TokenType.TEXT) && parser.peek(0).getContent().startsWith("-")) {
       result.putProperty(parser.advance().getContent(), "");

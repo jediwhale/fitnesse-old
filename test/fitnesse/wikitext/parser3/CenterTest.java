@@ -6,7 +6,7 @@ import static fitnesse.wikitext.parser3.Helper.*;
 
 public class CenterTest {
   @Test public void scans() {
-    assertScansWordAtStart("!c", "Center");
+    assertScansKeyword("!c", "Center");
   }
 
   @Test public void parses() {

@@ -31,12 +31,12 @@ class ParseRules {
   static Map<TokenType, ParseRule> make(ParsingPage page) {
     Map<TokenType, ParseRule> rules = new HashMap<>();
     rules.put(TokenType.ALIAS_START, Alias::parse);
-    rules.put(TokenType.ANCHOR_NAME, Keyword.parseWord(SymbolType.ANCHOR_NAME));
+    rules.put(KeywordType.ANCHOR_NAME, Keyword.parseBlankAndWord(SymbolType.ANCHOR_NAME));
     rules.put(TokenType.ANCHOR_REFERENCE, Keyword.parseWord(SymbolType.ANCHOR_REFERENCE));
     rules.put(TokenType.BOLD, Pair.parse(SymbolType.BOLD));
     rules.put(TokenType.BOLD_ITALIC, Pair.parse(SymbolType.BOLD_ITALIC));
     rules.put(TokenType.BULLET_LIST, WikiList::parse);
-    rules.put(TokenType.CENTER, Line.parse(SymbolType.CENTER));
+    rules.put(KeywordType.CENTER, Line.parse(SymbolType.CENTER));
     rules.put(TokenType.COLLAPSIBLE_START, Collapsible::parse);
     rules.put(TokenType.COMMENT, Comment::parse);
     rules.put(TokenType.CONTENTS, parser -> Contents.parse(parser, page));
@@ -47,17 +47,17 @@ class ParseRules {
     rules.put(TokenType.HEADER, parser -> Header.parse(parser, page));
     rules.put(TokenType.HEADINGS, Headings::parse);
     rules.put(TokenType.HELP, Help::parse);
-    rules.put(TokenType.INCLUDE, parser -> Include.parse(parser, page, page));
+    rules.put(KeywordType.INCLUDE, parser -> Include.parse(parser, page, page));
     rules.put(TokenType.IMAGE, Image::parse);
     rules.put(TokenType.ITALIC, Pair.parse(SymbolType.ITALIC));
-    rules.put(TokenType.LAST_MODIFIED, makeType(SymbolType.LAST_MODIFIED));
+    rules.put(KeywordType.LAST_MODIFIED, makeType(SymbolType.LAST_MODIFIED));
     rules.put(TokenType.LINK, Link::parse);
     rules.put(TokenType.LITERAL_START, Literal::parse);
-    rules.put(TokenType.META, Line.parse(SymbolType.META));
+    rules.put(KeywordType.META, Line.parse(SymbolType.META));
     rules.put(TokenType.NESTING_START, Nesting::parse);
     rules.put(TokenType.NESTING_PSEUDO_START, Nesting::parse);
     rules.put(TokenType.NEW_LINE, makeType(SymbolType.NEW_LINE));
-    rules.put(TokenType.NOTE, Line.parse(SymbolType.NOTE));
+    rules.put(KeywordType.NOTE, Line.parse(SymbolType.NOTE));
     rules.put(TokenType.NUMBERED_LIST, WikiList::parse);
     rules.put(TokenType.PATH, Path::parse);
     rules.put(TokenType.PLAIN_TEXT_TABLE_START, Table::parsePlain);
@@ -65,7 +65,7 @@ class ParseRules {
     rules.put(TokenType.SEE, Keyword.parse(SymbolType.SEE));
     rules.put(TokenType.STRIKE, Pair.parse(SymbolType.STRIKE));
     rules.put(TokenType.STYLE, Style::parse);
-    rules.put(TokenType.TODAY, Today::parse);
+    rules.put(KeywordType.TODAY, Today::parse);
     rules.put(TokenType.TABLE_START, Table::parseStandard);
     return rules;
   }

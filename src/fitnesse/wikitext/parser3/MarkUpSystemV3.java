@@ -67,7 +67,6 @@ public class MarkUpSystemV3 implements MarkUpSystem {
     TokenType.VARIABLE_VALUE, // must be first
     TokenType.COMMENT,
     TokenType.DEFINE,
-    TokenType.INCLUDE,
     TokenType.LITERAL_START,
     TokenType.NEW_LINE,
     TokenType.PREFORMAT_START,
@@ -75,6 +74,9 @@ public class MarkUpSystemV3 implements MarkUpSystem {
 
     TokenType.BLANK_SPACE,
     TokenType.BRACE_END
+  ),
+    Arrays.asList(
+      KeywordType.INCLUDE
   ));
 
 

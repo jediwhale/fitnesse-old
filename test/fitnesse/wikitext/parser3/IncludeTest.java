@@ -7,7 +7,7 @@ import static fitnesse.wikitext.parser3.Helper.*;
 
 public class IncludeTest {
   @Test public void scans() {
-    assertScans("Include=!include ,Text=MyPage", "!include MyPage");
+    assertScans("Include=!include,BlankSpace= ,Text=MyPage", "!include MyPage");
   }
 
   @Test public void parses() {

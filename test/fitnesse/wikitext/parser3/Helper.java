@@ -7,9 +7,18 @@ import static org.junit.Assert.assertEquals;
 
 public class Helper {
 
+  public static void assertScansKeyword(String word, String tokenType) {
+    assertScans("Text=" + word + "hi", word + "hi");
+    assertScans(tokenType + "=" + word + ",Text=!saw", word + "!saw");
+    assertScans(tokenType + "=" + word + ",BlankSpace= ,Text=hi", word + " hi");
+    assertScans("Text=hi," + tokenType + "=" + word + ",BlankSpace= ,Text=there", "hi" + word + " there");
+    assertScans("Text=" + word.substring(0,1) + ",BlankSpace= ,Text=" + word.substring(1),
+      word.substring(0,1) + " " + word.substring(1));
+  }
+
   public static void assertScansWord(String word, String tokenType) {
     assertScans("Text=" + word + "hi", word + "hi");
-    assertScans("Text=" + word + "!see", word + "!see");
+    assertScans("Text=" + word + ",Text=!saw", word + "!saw");
     assertScans(tokenType + "=" + word + " ,Text=hi", word + " hi");
     assertScans("Text=hi," + tokenType + "=" + word + " ,Text=there", "hi" + word + " there");
     assertScans("Text=" + word.substring(0,1) + ",BlankSpace= ,Text=" + word.substring(1),
@@ -18,9 +27,9 @@ public class Helper {
 
   public static void assertScansWordAtStart(String word, String tokenType) {
     assertScans("Text=" + word + "hi", word + "hi");
-    assertScans("Text=" + word + "!see", word + "!see");
+    assertScans("Text=" + word + ",Text=!saw", word + "!saw");
     assertScans(tokenType + "=" + word + " ,Text=hi", word + " hi");
-    assertScans("Text=hi" + word + ",BlankSpace= ,Text=there", "hi" + word + " there");
+    assertScans("Text=hi,Text=" + word + ",BlankSpace= ,Text=there", "hi" + word + " there");
     assertScans("Text=hi,NewLine=\n," + tokenType + "=" + word + " ,Text=there", "hi\n" + word + " there");
     assertScans("Text=" + word.substring(0,1) + ",BlankSpace= ,Text=" + word.substring(1),
       word.substring(0,1) + " " + word.substring(1));

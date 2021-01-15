@@ -5,7 +5,6 @@ import fitnesse.util.Clock;
 import fitnesse.wiki.WikiPageProperty;
 import fitnesse.wikitext.parser.FormattedExpression;
 import fitnesse.wikitext.parser.Maybe;
-import fitnesse.wikitext.parser.Today;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
