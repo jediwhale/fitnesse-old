@@ -1,6 +1,7 @@
 package fitnesse.wikitext.parser3;
 
 import java.util.Collections;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 import static fitnesse.wikitext.parser3.MatchContent.blank;
@@ -88,15 +89,26 @@ class DelimiterType extends TokenType {
 
   DelimiterType(String name, String match) {
     super(name, match);
+    matcher = text(match);
   }
 
   DelimiterType(String name) {
     super(name);
+    matcher = content -> Optional.empty();
   }
 
-  DelimiterType isStart() {
-    isStart = true;
-    return this;
+  Optional<String> read(Content content) {
+    Optional<String> result = matcher.check(content);
+    if (result.isPresent() && isStart) content.setStartLine();
+    return result;
+  }
+
+  boolean check(Content content) {
+    return matcher.check(content).isPresent();
+  }
+
+  DelimiterType useScan(DelimiterType terminator) {
+    return useScan((token, source) -> source.use(new TokenTypes(Collections.singletonList(terminator)), type -> type == terminator));
   }
 
   DelimiterType matches(MatchContent... matchItems) {
@@ -109,13 +121,16 @@ class DelimiterType extends TokenType {
     return this;
   }
 
+  DelimiterType isStart() {
+    isStart = true;
+    return this;
+  }
 
   DelimiterType useScan(BiConsumer<Token, TokenSource> useScan) { //todo: eliminate this??
     this.useScan = useScan;
     return this;
   }
 
-  DelimiterType useScan(TokenType terminator) {
-    return useScan((token, source) -> source.use(new TokenTypes(Collections.singletonList(terminator)), type -> type == terminator));
-  }
+  protected MatchContent matcher;
+  private boolean isStart = false;
 }

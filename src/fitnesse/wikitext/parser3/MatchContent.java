@@ -47,8 +47,8 @@ interface MatchContent {
   static MatchContent end() {
     return content ->
       (!content.more()
-        || content.startsWith(DelimiterType.NESTING_END.getMatch())
-        || content.startsWith(DelimiterType.NESTING_PSEUDO_END.getMatch()))
+        || DelimiterType.NESTING_END.check(content)
+        || DelimiterType.NESTING_PSEUDO_END.check(content))
         ? Optional.of("")
         : Optional.empty();
   }

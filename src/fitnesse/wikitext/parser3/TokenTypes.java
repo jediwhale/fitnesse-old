@@ -84,11 +84,11 @@ class TokenTypes {
   static final TokenTypes NO_LINK_TABLE_TYPES = new TokenTypes(STANDARD_TABLE_TYPES)
     .remove(DelimiterType.LINK);
 
-  TokenTypes(List<TokenType> delimiters) {
+  TokenTypes(List<DelimiterType> delimiters) {
     this(delimiters, Collections.emptyList());
   }
 
-  TokenTypes(List<TokenType> delimiters, List<KeywordType> keywords) {
+  TokenTypes(List<DelimiterType> delimiters, List<KeywordType> keywords) {
     this.delimiters = delimiters;
     this.keywords = keywords;
   }
@@ -99,7 +99,7 @@ class TokenTypes {
   }
 
   //todo: replace with function to search delimiters
-  List<TokenType> getDelimiters() {
+  List<DelimiterType> getDelimiters() {
     return delimiters;
   }
 
@@ -108,17 +108,17 @@ class TokenTypes {
     return keywords;
   }
 
-  private TokenTypes add(TokenType type) {
+  private TokenTypes add(DelimiterType type) {
     delimiters.add(type);
     return this;
   }
 
-  private TokenTypes addFirst(TokenType type) {
+  private TokenTypes addFirst(DelimiterType type) {
     delimiters.add(0, type);
     return this;
   }
 
-  private TokenTypes remove(TokenType type) {
+  private TokenTypes remove(DelimiterType type) {
     delimiters.remove(type);
     return this;
   }
@@ -128,6 +128,6 @@ class TokenTypes {
     return this;
   }
 
-  private final List<TokenType> delimiters;
+  private final List<DelimiterType> delimiters;
   private final List<KeywordType> keywords;
 }
