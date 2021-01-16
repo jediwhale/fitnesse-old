@@ -3,7 +3,7 @@ package fitnesse.wikitext.parser3;
 import fitnesse.html.HtmlTag;
 
 class HashTable {
-  static void scan(Token token, TokenSource source) {
+  static void scan(TokenSource source) {
     //todo: does this work with nested {...} ?
     source.use(TokenTypes.HASH_TABLE_TYPES, type -> type == DelimiterType.BRACE_END);
   }

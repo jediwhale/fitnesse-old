@@ -3,7 +3,7 @@ package fitnesse.wikitext.parser3;
 import java.util.Arrays;
 
 class Preformat {
-  static void scan(Token token, TokenSource source) {
+  static void scan(TokenSource source) {
     source.use(PREFORMAT_TYPES, type -> type == DelimiterType.PREFORMAT_END);
   }
 

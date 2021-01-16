@@ -46,11 +46,9 @@ class TokenSource {
 
   private void readResult() {
     if (content.more()) {
-      Optional<Token> token = scanTypes.peek().findMatch(content);
+      Optional<Token> token = scanTypes.peek().findMatch(content, this);
       if (token.isPresent()) {
         addResult(token.get());
-        //todo: token type is always delimiter, so use scan could be part of delimitertype. how to pass this?
-        token.get().getType().useScan(token.get(), this);
         if (scanTypes.peek().isTerminated(token.get().getType())) {
           scanTypes.pop();
         }
@@ -108,9 +106,9 @@ class TokenSource {
       this.terminator = terminator;
     }
 
-    Optional<Token> findMatch(Content content) {
+    Optional<Token> findMatch(Content content, TokenSource source) {
       for (DelimiterType matchType : types.getDelimiters()) { //todo: do quicker than linear search
-        Optional<String> matchContent = matchType.read(content);
+        Optional<String> matchContent = matchType.read(content, source);
         if (matchContent.isPresent()) return matchContent.map(s -> new Token(matchType, s));
       }
       return Optional.empty();

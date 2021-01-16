@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Alias {
-  static void scan(Token token, TokenSource source) {
+  static void scan(TokenSource source) {
     source.use(ALIAS_TYPES, type -> type == DelimiterType.ALIAS_END);
   }
 

@@ -18,11 +18,11 @@ class Terminator {
   static Terminator make(Token start, String prefix) {
     TokenType startType = start.getType();
     TokenType endType = endTypes.getOrDefault(startType, startType);
-    return new Terminator(candidate -> candidate == endType, endType.getMatch(), prefix + start.getContent());
+    return new Terminator(candidate -> candidate == endType, endType.getDescription(), prefix + start.getContent());
   }
 
   Terminator(TokenType type) {
-    this(candidate -> candidate == type, type.getMatch(), "");
+    this(candidate -> candidate == type, type.getDescription(), "");
   }
 
   Terminator(Predicate<TokenType> matcher) {
