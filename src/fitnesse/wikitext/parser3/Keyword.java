@@ -5,6 +5,7 @@ public class Keyword {
     return parser -> {
       Symbol result = new BranchSymbol(type);
       parser.advance();
+      parser.advance(); //todo: check blank
       result.add(parser.parseCurrent());
       return result;
     };

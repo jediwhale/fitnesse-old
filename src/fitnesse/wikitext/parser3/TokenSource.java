@@ -88,7 +88,6 @@ class TokenSource {
   private void addCollectedText() {
     if (text.length() > 0) {
       String textString = text.toString();
-      //todo? check list of keyword tokentypes, if none, tokentype.text
       results.add(new Token(scanTypes.peek().findKeywordType(textString).orElse(TokenType.TEXT),textString, textOffset));
       text.setLength(0);
       textOffset = -1;
@@ -117,8 +116,8 @@ class TokenSource {
     }
 
     Optional<TokenType> findKeywordType(String text) {
-      for (TokenType keywordType: types.getKeywords()) {
-        if (keywordType.getMatch().equals(text)) return Optional.of(keywordType);
+      for (KeywordType keywordType: types.getKeywords()) {
+        if (keywordType.isMatch(text)) return Optional.of(keywordType);
       }
       return Optional.empty();
     }

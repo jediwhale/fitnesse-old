@@ -17,26 +17,19 @@ class TokenTypes {
       TokenType.COLLAPSIBLE_END,
       TokenType.COLLAPSIBLE_START,
       TokenType.COMMENT,
-      TokenType.CONTENTS,
       TokenType.EXPRESSION_START,
       TokenType.EXPRESSION_END,
       TokenType.HASH_TABLE,
-      TokenType.HEADER,
-      TokenType.HEADINGS,
-      TokenType.HELP,
       TokenType.HORIZONTAL_RULE,
-      TokenType.IMAGE,
       TokenType.LINK,
       TokenType.LITERAL_START,
       TokenType.NESTING_START,
       TokenType.NESTING_END,
       TokenType.NUMBERED_LIST,
-      TokenType.PATH,
       TokenType.PLAIN_TEXT_TABLE_START,
       TokenType.PLAIN_TEXT_TABLE_END,
       TokenType.PREFORMAT_START,
       TokenType.PREFORMAT_END,
-      TokenType.SEE,
       TokenType.STYLE,
       TokenType.TABLE_START,
       TokenType.TABLE_END,
@@ -57,21 +50,28 @@ class TokenTypes {
     ),
     Arrays.asList(
       KeywordType.ANCHOR_NAME,
+      KeywordType.CONTENTS,
       KeywordType.CENTER,
+      KeywordType.HEADER,
+      KeywordType.HEADINGS,
+      KeywordType.HELP,
+      KeywordType.IMAGE,
       KeywordType.INCLUDE,
       KeywordType.LAST_MODIFIED,
       KeywordType.META,
       KeywordType.NOTE,
+      KeywordType.PATH,
+      KeywordType.SEE,
       KeywordType.TODAY
     ));
 
   static final TokenTypes WIKI_PAGE_TYPES = new TokenTypes(CORE_TYPES)
     .addFirst(TokenType.VARIABLE_VALUE) //must be first
-    .add(TokenType.DEFINE);
+    .addKeyword(KeywordType.DEFINE);
 
   static final TokenTypes DEFINE_TYPES = new TokenTypes(CORE_TYPES)
     .addFirst(TokenType.VARIABLE_TOKEN) //must be first
-    .add(TokenType.DEFINE_NESTED);
+    .addKeyword(KeywordType.DEFINE_NESTED);
 
   static final TokenTypes HASH_TABLE_TYPES = new TokenTypes(WIKI_PAGE_TYPES)
     .add(TokenType.COLON)
@@ -120,6 +120,11 @@ class TokenTypes {
 
   private TokenTypes remove(TokenType type) {
     delimiters.remove(type);
+    return this;
+  }
+
+  private TokenTypes addKeyword(KeywordType type) {
+    keywords.add(type);
     return this;
   }
 

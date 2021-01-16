@@ -51,22 +51,23 @@ public class MarkUpSystemV3 implements MarkUpSystem {
     TokenType.ALIAS_MIDDLE,
     TokenType.ALIAS_START,
     TokenType.COMMENT,
-    TokenType.IMAGE,
     TokenType.LINK,
     TokenType.LITERAL_START,
     TokenType.NEW_LINE,
-    TokenType.PATH,
     TokenType.PREFORMAT_START,
 
     TokenType.BLANK_SPACE,
     TokenType.BRACKET_END,
     TokenType.BRACKET_START
+  ),
+    Arrays.asList(
+      KeywordType.IMAGE,
+      KeywordType.PATH
   ));
 
   private static final TokenTypes VARIABLE_DEFINITION_TYPES = new TokenTypes(Arrays.asList(
     TokenType.VARIABLE_VALUE, // must be first
     TokenType.COMMENT,
-    TokenType.DEFINE,
     TokenType.LITERAL_START,
     TokenType.NEW_LINE,
     TokenType.PREFORMAT_START,
@@ -76,6 +77,7 @@ public class MarkUpSystemV3 implements MarkUpSystem {
     TokenType.BRACE_END
   ),
     Arrays.asList(
+      KeywordType.DEFINE, //todo: handle define nested too?
       KeywordType.INCLUDE
   ));
 

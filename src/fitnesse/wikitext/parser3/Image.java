@@ -10,6 +10,7 @@ class Image {
   static Symbol parse(Parser parser) {
     Symbol result = new TaggedSymbol(SymbolType.IMAGE);
     String content = parser.advance().getContent();
+    parser.advance(); //todo: check blank
     if (content.startsWith("!img-l")) {
       result.putProperty(Names.IMAGE_CLASS, Names.LEFT);
     } else if (content.startsWith("!img-r")) {

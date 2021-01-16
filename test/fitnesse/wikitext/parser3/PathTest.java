@@ -8,8 +8,8 @@ import org.junit.Test;
 import static fitnesse.wikitext.parser3.Helper.*;
 
 public class PathTest {
-  @Test public void scansPath() {
-    assertScansWordAtStart("!path", "Path");
+  @Test public void scans() {
+    assertScansKeyword("!path", "Path");
   }
 
   @Test public void parses() {

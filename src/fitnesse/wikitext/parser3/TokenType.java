@@ -33,22 +33,12 @@ public class TokenType {
   public static final TokenType COMMENT = new TokenType("Comment")
     .matches(startLine(), text("#"), endWith(newLine()))
     .isStart();
-  public static final TokenType CONTENTS = new TokenType("Contents", "!contents");
-  public static final TokenType DEFINE = new TokenType("Define").matches(word("!define"));
-  public static final TokenType DEFINE_NESTED = new TokenType("Define").matches(word("!define"));
   public static final TokenType EXPRESSION_END = new TokenType("ExpressionEnd", "=}");
   public static final TokenType EXPRESSION_START = new TokenType("ExpressionStart", "${=");
   public static final TokenType END = new TokenType("End");
   public static final TokenType HASH_TABLE = new TokenType("HashTable", "!{")
     .useScan(HashTable::scan);
-  public static final TokenType HEADER = new TokenType("Header")
-    .matches(startLine(), matchOne(word("!1"), word("!2"), word("!3"), word("!4"), word("!5"), word("!6")));
-  public static final TokenType HEADINGS = new TokenType("Headings")
-    .matches(startLine(), text("!headings"));
   public static final TokenType HORIZONTAL_RULE = new TokenType("HorizontalRule").matches(text("---"), repeat("-"));
-  public static final TokenType HELP = new TokenType("Help").matches(text("!help"));
-  public static final TokenType IMAGE = new TokenType("Image")
-    .matchOneOf(word("!img"), word("!img-l"), word("!img-r"));
   public static final TokenType ITALIC = new TokenType("Italic", "''");
   public static final TokenType LINK = new TokenType("Link")
     .matchOneOf(text("http://"), text("https://"));
@@ -68,15 +58,11 @@ public class TokenType {
     .matches(startLine(), blank(), digit());
   public static final TokenType PARENTHESIS_END = new TokenType("ParenthesisEnd", ")");
   public static final TokenType PARENTHESIS_START = new TokenType("ParenthesisStart", "(");
-  public static final TokenType PATH = new TokenType("Path")
-    .matches(startLine(), word("!path"));
   public static final TokenType PLAIN_TEXT_TABLE_END = new TokenType("PlainTextTableEnd", "]!");
   public static final TokenType PLAIN_TEXT_TABLE_START = new TokenType("PlainTextTableStart", "![");
   public static final TokenType PREFORMAT_END = new TokenType("PreformatEnd", "}}}");
   public static final TokenType PREFORMAT_START = new TokenType("PreformatStart", "{{{")
     .useScan(Preformat::scan);
-  public static final TokenType SEE = new TokenType("See")
-    .matches(word("!see"));
   public static final TokenType STRIKE = new TokenType("Strike", "--");
   public static final TokenType STYLE = new TokenType("Style", "!style_");
   public static final TokenType TABLE_START = new TokenType("TableStart")

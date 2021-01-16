@@ -5,10 +5,10 @@ import org.junit.Test;
 import static fitnesse.wikitext.parser3.Helper.*;
 
 public class ImageTest {
-  @Test public void scansImage() {
-    assertScansWord("!img", "Image");
-    assertScansWord("!img-r", "Image");
-    assertScansWord("!img-l", "Image");
+  @Test public void scans() {
+    assertScansKeyword("!img", "Image");
+    assertScansKeyword("!img-r", "Image");
+    assertScansKeyword("!img-l", "Image");
   }
 
   @Test public void parses() {

@@ -8,16 +8,12 @@ import static fitnesse.wikitext.parser3.Helper.*;
 
 public class HeaderTest {
   @Test public void scans() {
-    assertScans("Header=!1 ,Text=stuff", "!1 stuff");
-    assertScans("Header=!2 ,Text=stuff", "!2 stuff");
-    assertScans("Header=!3 ,Text=stuff", "!3 stuff");
-    assertScans("Header=!4 ,Text=stuff", "!4 stuff");
-    assertScans("Header=!5 ,Text=stuff", "!5 stuff");
-    assertScans("Header=!6 ,Text=stuff", "!6 stuff");
-  }
-
-  @Test public void noScanNotAtStart() {
-    assertScans("BlankSpace= ,Text=!4,BlankSpace= ,Text=stuff", " !4 stuff");
+    assertScansKeyword("!1", "Header");
+    assertScansKeyword("!2", "Header");
+    assertScansKeyword("!3", "Header");
+    assertScansKeyword("!4", "Header");
+    assertScansKeyword("!5", "Header");
+    assertScansKeyword("!6", "Header");
   }
 
   @Test public void parses() {

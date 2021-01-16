@@ -6,7 +6,7 @@ import static fitnesse.wikitext.parser3.Helper.*;
 
 public class KeywordTest {
   @Test public void scansSee() {
-    assertScans("See=!see ,Text=something", "!see something");
+    assertScansKeyword("!see", "See");
   }
 
   @Test public void parsesSee() {

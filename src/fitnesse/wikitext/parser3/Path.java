@@ -6,6 +6,7 @@ class Path {
 
   static Symbol parse(Parser parser) {
     parser.advance();
+    parser.advance(); //todo: check blank
     return parser.textType(SymbolType.TEXT).parseList(SymbolType.PATH, Terminator.END_LINE);
   }
 
