@@ -20,6 +20,7 @@ public class HeaderTest {
     for (int i = 0; i < 999; i++) page.nextId();
     assertParses("HEADER(LIST(TEXT=stuff))[id=999,level=1]", "!1 stuff", page);
     assertParses("HEADER(LIST(TEXT=hi))[id=1000,level=1],TEXT=there", "!1 hi\nthere", page);
+    assertParses("TABLE(LIST(LIST(HEADER(LIST(TEXT=stuff))[id=0,level=4])))", "|!4 stuff|\n");
   }
 
   @Test public void translates() {

@@ -5,7 +5,7 @@ import fitnesse.html.HtmlTag;
 class HashTable {
   static void scan(Token token, TokenSource source) {
     //todo: does this work with nested {...} ?
-    source.use(TokenTypes.HASH_TABLE_TYPES, type -> type == TokenType.BRACE_END);
+    source.use(TokenTypes.HASH_TABLE_TYPES, type -> type == DelimiterType.BRACE_END);
   }
 
   static Symbol parse(Parser parser) {
@@ -16,7 +16,7 @@ class HashTable {
       result.add(row);
       row.add(parser.parseList(SymbolType.LIST, KEY_TERMINATOR));
       row.add(parser.parseList(SymbolType.LIST, ROW_TERMINATOR));
-    } while (parser.peek(-1).isType(TokenType.COMMA));
+    } while (parser.peek(-1).isType(DelimiterType.COMMA));
     return result;
   }
 
@@ -35,6 +35,6 @@ class HashTable {
     return HtmlTag.name("td").attribute("class", cellClass).body(translator.translate(cell).trim());
   }
 
-  private static final Terminator KEY_TERMINATOR = new Terminator(type -> type == TokenType.COLON);
-  private static final Terminator ROW_TERMINATOR = new Terminator(type -> type == TokenType.COMMA || type == TokenType.BRACE_END);
+  private static final Terminator KEY_TERMINATOR = new Terminator(type -> type == DelimiterType.COLON);
+  private static final Terminator ROW_TERMINATOR = new Terminator(type -> type == DelimiterType.COMMA || type == DelimiterType.BRACE_END);
 }

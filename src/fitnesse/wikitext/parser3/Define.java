@@ -9,7 +9,7 @@ class Define {
     if (!parser.peek(2).isWord()) {
       return parser.makeError("Name must be alphanumeric", 2);
     }
-    if (!parser.peek(3).isType(TokenType.BLANK_SPACE)) {
+    if (!parser.peek(3).isType(DelimiterType.BLANK_SPACE)) {
       return parser.makeError("Missing blank space", 3);
     }
     if (!parser.peek(4).isStartType()) {

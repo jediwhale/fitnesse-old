@@ -109,6 +109,6 @@ public class TokenSourceTest {
   private static final TokenType tokenOne = new TokenType("tokenOne", "%");
   private static final TokenType tokenTwo = new TokenType("tokenTwo", "^^");
   private static final TokenType tokenEndCustom = new TokenType("tokenEndCustom", "=@");
-  private static final TokenType tokenCustom = new TokenType("tokenCustom", "@=").useScan(tokenEndCustom);
+  private static final TokenType tokenCustom = new DelimiterType("tokenCustom", "@=").useScan(tokenEndCustom);
   private static final TokenTypes types = new TokenTypes(Arrays.asList(tokenOne, tokenTwo, tokenCustom));
 }

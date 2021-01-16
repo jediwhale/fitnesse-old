@@ -9,7 +9,7 @@ class Header {
     result.putProperty(Names.LEVEL, parser.advance().getContent().substring(1, 2));
     parser.advance(); //todo: check blank
     result.putProperty(Names.ID, Integer.toString(variables.nextId()));
-    result.add(parser.parseList(SymbolType.LIST, Terminator.END_LINE));
+    result.add(parser.parseListInParent(SymbolType.LIST, Terminator.END_LINE));
     return result;
   }
 }

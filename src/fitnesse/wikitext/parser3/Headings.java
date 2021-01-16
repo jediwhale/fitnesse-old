@@ -7,7 +7,7 @@ class Headings {
   static Symbol parse(Parser parser) {
     Symbol result =  new TaggedSymbol(SymbolType.HEADINGS);
     parser.advance();
-    if (parser.peek(0).isType(TokenType.BLANK_SPACE) && parser.peek(1).getContent().equals("-" + Names.STYLE)) {
+    if (parser.peek(0).isType(DelimiterType.BLANK_SPACE) && parser.peek(1).getContent().equals("-" + Names.STYLE)) {
       parser.advance();
       parser.advance();
       parser.advance(); //todo: check blankspace

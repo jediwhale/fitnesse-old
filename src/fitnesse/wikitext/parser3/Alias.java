@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 public class Alias {
   static void scan(Token token, TokenSource source) {
-    source.use(ALIAS_TYPES, type -> type == TokenType.ALIAS_END);
+    source.use(ALIAS_TYPES, type -> type == DelimiterType.ALIAS_END);
   }
 
   public static Symbol parse(Parser parser) {
@@ -48,7 +48,7 @@ public class Alias {
   }
 
   private static final TokenTypes ALIAS_TYPES = new TokenTypes(Arrays.asList(
-    TokenType.VARIABLE_VALUE, //must be first
-    TokenType.ALIAS_END, TokenType.EXPRESSION_START, TokenType.EXPRESSION_END, TokenType.BRACE_END
+    DelimiterType.VARIABLE_VALUE, //must be first
+    DelimiterType.ALIAS_END, DelimiterType.EXPRESSION_START, DelimiterType.EXPRESSION_END, DelimiterType.BRACE_END
   ));
 }

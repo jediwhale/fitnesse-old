@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 class Terminator {
-  static final Terminator END_LINE = new Terminator(type -> type == TokenType.NEW_LINE || type == TokenType.END);
+  static final Terminator END_LINE = new Terminator(type -> type == DelimiterType.NEW_LINE || type == TokenType.END);
   static final Terminator NONE = new Terminator(type -> false);
 
   static Terminator make(Token start) { return make(start, ""); }
@@ -47,16 +47,16 @@ class Terminator {
 
   private static Map<TokenType, TokenType> makeEndTypes() {
     Map<TokenType, TokenType> map = new HashMap<>();
-    map.put(TokenType.ALIAS_START, TokenType.ALIAS_MIDDLE);
-    map.put(TokenType.ALIAS_MIDDLE, TokenType.ALIAS_END);
-    map.put(TokenType.BRACE_START, TokenType.BRACE_END);
-    map.put(TokenType.BRACKET_START, TokenType.BRACKET_END);
-    map.put(TokenType.EXPRESSION_START, TokenType.EXPRESSION_END);
-    map.put(TokenType.LITERAL_START, TokenType.LITERAL_END);
-    map.put(TokenType.NESTING_START, TokenType.NESTING_END);
-    map.put(TokenType.NESTING_PSEUDO_START, TokenType.NESTING_PSEUDO_END);
-    map.put(TokenType.PARENTHESIS_START, TokenType.PARENTHESIS_END);
-    map.put(TokenType.PREFORMAT_START, TokenType.PREFORMAT_END);
+    map.put(DelimiterType.ALIAS_START, DelimiterType.ALIAS_MIDDLE);
+    map.put(DelimiterType.ALIAS_MIDDLE, DelimiterType.ALIAS_END);
+    map.put(DelimiterType.BRACE_START, DelimiterType.BRACE_END);
+    map.put(DelimiterType.BRACKET_START, DelimiterType.BRACKET_END);
+    map.put(DelimiterType.EXPRESSION_START, DelimiterType.EXPRESSION_END);
+    map.put(DelimiterType.LITERAL_START, DelimiterType.LITERAL_END);
+    map.put(DelimiterType.NESTING_START, DelimiterType.NESTING_END);
+    map.put(DelimiterType.NESTING_PSEUDO_START, DelimiterType.NESTING_PSEUDO_END);
+    map.put(DelimiterType.PARENTHESIS_START, DelimiterType.PARENTHESIS_END);
+    map.put(DelimiterType.PREFORMAT_START, DelimiterType.PREFORMAT_END);
     return Collections.unmodifiableMap(map);
   }
 }

@@ -6,7 +6,7 @@ class Help {
   static Symbol parse(Parser parser) {
     Symbol result =  new TaggedSymbol(SymbolType.HELP);
     parser.advance();
-    if (parser.peek(0).isType(TokenType.BLANK_SPACE) && parser.peek(1).getContent().equals(Names.EDITABLE)) {
+    if (parser.peek(0).isType(DelimiterType.BLANK_SPACE) && parser.peek(1).getContent().equals(Names.EDITABLE)) {
       result.putProperty(Names.EDITABLE, "");
       parser.advance();
       parser.advance();

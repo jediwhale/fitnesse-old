@@ -47,18 +47,18 @@ public class MarkUpSystemV3 implements MarkUpSystem {
   }
 
   private static final TokenTypes REFACTORING_TYPES = new TokenTypes(Arrays.asList(
-    TokenType.ALIAS_END,
-    TokenType.ALIAS_MIDDLE,
-    TokenType.ALIAS_START,
-    TokenType.COMMENT,
-    TokenType.LINK,
-    TokenType.LITERAL_START,
-    TokenType.NEW_LINE,
-    TokenType.PREFORMAT_START,
+    DelimiterType.ALIAS_END,
+    DelimiterType.ALIAS_MIDDLE,
+    DelimiterType.ALIAS_START,
+    DelimiterType.COMMENT,
+    DelimiterType.LINK,
+    DelimiterType.LITERAL_START,
+    DelimiterType.NEW_LINE,
+    DelimiterType.PREFORMAT_START,
 
-    TokenType.BLANK_SPACE,
-    TokenType.BRACKET_END,
-    TokenType.BRACKET_START
+    DelimiterType.BLANK_SPACE,
+    DelimiterType.BRACKET_END,
+    DelimiterType.BRACKET_START
   ),
     Arrays.asList(
       KeywordType.IMAGE,
@@ -66,15 +66,15 @@ public class MarkUpSystemV3 implements MarkUpSystem {
   ));
 
   private static final TokenTypes VARIABLE_DEFINITION_TYPES = new TokenTypes(Arrays.asList(
-    TokenType.VARIABLE_VALUE, // must be first
-    TokenType.COMMENT,
-    TokenType.LITERAL_START,
-    TokenType.NEW_LINE,
-    TokenType.PREFORMAT_START,
-    TokenType.PREFORMAT_END,
+    DelimiterType.VARIABLE_VALUE, // must be first
+    DelimiterType.COMMENT,
+    DelimiterType.LITERAL_START,
+    DelimiterType.NEW_LINE,
+    DelimiterType.PREFORMAT_START,
+    DelimiterType.PREFORMAT_END,
 
-    TokenType.BLANK_SPACE,
-    TokenType.BRACE_END
+    DelimiterType.BLANK_SPACE,
+    DelimiterType.BRACE_END
   ),
     Arrays.asList(
       KeywordType.DEFINE, //todo: handle define nested too?

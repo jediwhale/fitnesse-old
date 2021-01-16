@@ -13,7 +13,7 @@ class WikiList {
       }
       else {
         parser.advance();
-        if (parser.peek(0).isType(TokenType.BLANK_SPACE)) parser.advance();
+        if (parser.peek(0).isType(DelimiterType.BLANK_SPACE)) parser.advance();
         Symbol item = new BranchSymbol(SymbolType.LIST);
         while (!parser.peek(0).isEndOfLine()) item.add(parser.parseCurrent());
         parser.advance();

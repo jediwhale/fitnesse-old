@@ -3,10 +3,6 @@ package fitnesse.wikitext.parser3;
 import java.util.Arrays;
 import java.util.List;
 
-import static fitnesse.wikitext.parser3.MatchContent.matchOne;
-import static fitnesse.wikitext.parser3.MatchContent.startLine;
-import static fitnesse.wikitext.parser3.MatchContent.word;
-
 class KeywordType extends TokenType {
 
   static final KeywordType ANCHOR_NAME = new KeywordType("AnchorName", "!anchor");

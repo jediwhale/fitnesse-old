@@ -21,5 +21,5 @@ class Collapsible {
     return result;
   }
 
-  static final Terminator END_COLLAPSIBLE = new Terminator(TokenType.COLLAPSIBLE_END);
+  static final Terminator END_COLLAPSIBLE = new Terminator(DelimiterType.COLLAPSIBLE_END);
 }

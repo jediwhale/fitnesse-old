@@ -28,11 +28,11 @@ public class Token {
   public boolean isType(TokenType type) { return this.type == type; }
 
   public boolean isStartType() {
-    return isType(TokenType.BRACE_START) || isType(TokenType.BRACKET_START) || isType(TokenType.PARENTHESIS_START);
+    return isType(DelimiterType.BRACE_START) || isType(DelimiterType.BRACKET_START) || isType(DelimiterType.PARENTHESIS_START);
   }
 
   public boolean isEndOfLine() {
-    return isType(TokenType.NEW_LINE) || isType(TokenType.END) || isType(TokenType.NESTING_END);
+    return isType(DelimiterType.NEW_LINE) || isType(TokenType.END) || isType(DelimiterType.NESTING_END);
   }
 
   public boolean isWord() {

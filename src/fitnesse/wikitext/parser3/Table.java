@@ -39,7 +39,7 @@ class Table {
     else {
       populateRow = Table::addSingleCell;
     }
-    if (parser.peek(0).isType(TokenType.BLANK_SPACE)) {
+    if (parser.peek(0).isType(DelimiterType.BLANK_SPACE)) {
       parser.advance();
       result.add(makeRow(parser, populateRow));
     }
@@ -48,14 +48,14 @@ class Table {
     }
     do {
       result.add(makeRow(parser, populateRow));
-    } while (!parser.peek(0).isType(TokenType.END) && !parser.peek(0).isType(TokenType.PLAIN_TEXT_TABLE_END));
+    } while (!parser.peek(0).isType(TokenType.END) && !parser.peek(0).isType(DelimiterType.PLAIN_TEXT_TABLE_END));
     parser.advance();
     return result;
   }
 
   private static Symbol makeRow(Parser parser, BiConsumer<Symbol, String> populateRow) {
     Symbol row = new TaggedSymbol(SymbolType.LIST);
-    String rowText = parser.parseText(new Terminator(TokenType.NEW_LINE));
+    String rowText = parser.parseText(new Terminator(DelimiterType.NEW_LINE));
     populateRow.accept(row, rowText);
     return row;
   }
@@ -79,7 +79,7 @@ class Table {
       Symbol row = new TaggedSymbol(SymbolType.LIST);
       do {
         Symbol cell = parser.parseList(SymbolType.LIST,
-          new Terminator(type -> type == TokenType.CELL_DELIMITER || type == TokenType.TABLE_END, "|", ""));
+          new Terminator(type -> type == DelimiterType.CELL_DELIMITER || type == DelimiterType.TABLE_END, "|", ""));
         row.add(cell);
       } while (!isEndOfRow(parser.peek(-1)));
       result.add(row);
@@ -92,7 +92,7 @@ class Table {
   }
 
   private static boolean isEndOfTable(Token token) {
-    return token.isType(TokenType.TABLE_END) || token.isType(TokenType.END);
+    return token.isType(DelimiterType.TABLE_END) || token.isType(TokenType.END);
   }
 
   static String translate(Symbol table, Translator translator) {
@@ -116,17 +116,17 @@ class Table {
   private static final String LITERAL_DELIMITER = String.valueOf(134);
 
   private static final TokenTypes LITERAL_TABLE_TYPES = new TokenTypes(Arrays.asList(
-    TokenType.VARIABLE_VALUE, // must be first
-    TokenType.EXPRESSION_START,
-    TokenType.EXPRESSION_END,
-    TokenType.LITERAL_START,
-    TokenType.LITERAL_END,
-    TokenType.BRACE_END,
-    TokenType.NEW_LINE,
-    TokenType.TABLE_END,
-    TokenType.CELL_DELIMITER,
-    TokenType.NESTING_PSEUDO_START,
-    TokenType.NESTING_PSEUDO_END
+    DelimiterType.VARIABLE_VALUE, // must be first
+    DelimiterType.EXPRESSION_START,
+    DelimiterType.EXPRESSION_END,
+    DelimiterType.LITERAL_START,
+    DelimiterType.LITERAL_END,
+    DelimiterType.BRACE_END,
+    DelimiterType.NEW_LINE,
+    DelimiterType.TABLE_END,
+    DelimiterType.CELL_DELIMITER,
+    DelimiterType.NESTING_PSEUDO_START,
+    DelimiterType.NESTING_PSEUDO_END
   ));
 
   private static class CellTranslator implements Translator {

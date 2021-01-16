@@ -8,45 +8,45 @@ import java.util.List;
 class TokenTypes {
   private static final TokenTypes CORE_TYPES = new TokenTypes(
     Arrays.asList(
-      TokenType.ALIAS_START,
-      TokenType.ALIAS_MIDDLE,
-      TokenType.ALIAS_END,
-      TokenType.ANCHOR_REFERENCE,
-      TokenType.BOLD_ITALIC,
-      TokenType.BULLET_LIST,
-      TokenType.COLLAPSIBLE_END,
-      TokenType.COLLAPSIBLE_START,
-      TokenType.COMMENT,
-      TokenType.EXPRESSION_START,
-      TokenType.EXPRESSION_END,
-      TokenType.HASH_TABLE,
-      TokenType.HORIZONTAL_RULE,
-      TokenType.LINK,
-      TokenType.LITERAL_START,
-      TokenType.NESTING_START,
-      TokenType.NESTING_END,
-      TokenType.NUMBERED_LIST,
-      TokenType.PLAIN_TEXT_TABLE_START,
-      TokenType.PLAIN_TEXT_TABLE_END,
-      TokenType.PREFORMAT_START,
-      TokenType.PREFORMAT_END,
-      TokenType.STYLE,
-      TokenType.TABLE_START,
-      TokenType.TABLE_END,
+      DelimiterType.ALIAS_START,
+      DelimiterType.ALIAS_MIDDLE,
+      DelimiterType.ALIAS_END,
+      DelimiterType.ANCHOR_REFERENCE,
+      DelimiterType.BOLD_ITALIC,
+      DelimiterType.BULLET_LIST,
+      DelimiterType.COLLAPSIBLE_END,
+      DelimiterType.COLLAPSIBLE_START,
+      DelimiterType.COMMENT,
+      DelimiterType.EXPRESSION_START,
+      DelimiterType.EXPRESSION_END,
+      DelimiterType.HASH_TABLE,
+      DelimiterType.HORIZONTAL_RULE,
+      DelimiterType.LINK,
+      DelimiterType.LITERAL_START,
+      DelimiterType.NESTING_START,
+      DelimiterType.NESTING_END,
+      DelimiterType.NUMBERED_LIST,
+      DelimiterType.PLAIN_TEXT_TABLE_START,
+      DelimiterType.PLAIN_TEXT_TABLE_END,
+      DelimiterType.PREFORMAT_START,
+      DelimiterType.PREFORMAT_END,
+      DelimiterType.STYLE,
+      DelimiterType.TABLE_START,
+      DelimiterType.TABLE_END,
 
-      TokenType.LITERAL_END,
-      TokenType.NEW_LINE,
-      TokenType.BLANK_SPACE,
-      TokenType.BOLD,
-      TokenType.BRACE_START,
-      TokenType.BRACE_END,
-      TokenType.BRACKET_START,
-      TokenType.BRACKET_END,
-      TokenType.CELL_DELIMITER,
-      TokenType.ITALIC,
-      TokenType.PARENTHESIS_START,
-      TokenType.PARENTHESIS_END,
-      TokenType.STRIKE
+      DelimiterType.LITERAL_END,
+      DelimiterType.NEW_LINE,
+      DelimiterType.BLANK_SPACE,
+      DelimiterType.BOLD,
+      DelimiterType.BRACE_START,
+      DelimiterType.BRACE_END,
+      DelimiterType.BRACKET_START,
+      DelimiterType.BRACKET_END,
+      DelimiterType.CELL_DELIMITER,
+      DelimiterType.ITALIC,
+      DelimiterType.PARENTHESIS_START,
+      DelimiterType.PARENTHESIS_END,
+      DelimiterType.STRIKE
     ),
     Arrays.asList(
       KeywordType.ANCHOR_NAME,
@@ -66,23 +66,23 @@ class TokenTypes {
     ));
 
   static final TokenTypes WIKI_PAGE_TYPES = new TokenTypes(CORE_TYPES)
-    .addFirst(TokenType.VARIABLE_VALUE) //must be first
+    .addFirst(DelimiterType.VARIABLE_VALUE) //must be first
     .addKeyword(KeywordType.DEFINE);
 
   static final TokenTypes DEFINE_TYPES = new TokenTypes(CORE_TYPES)
-    .addFirst(TokenType.VARIABLE_TOKEN) //must be first
+    .addFirst(DelimiterType.VARIABLE_TOKEN) //must be first
     .addKeyword(KeywordType.DEFINE_NESTED);
 
   static final TokenTypes HASH_TABLE_TYPES = new TokenTypes(WIKI_PAGE_TYPES)
-    .add(TokenType.COLON)
-    .add(TokenType.COMMA);
+    .add(DelimiterType.COLON)
+    .add(DelimiterType.COMMA);
 
   static final TokenTypes STANDARD_TABLE_TYPES = new TokenTypes(WIKI_PAGE_TYPES)
-    .add(TokenType.NESTING_PSEUDO_START)
-    .add(TokenType.NESTING_PSEUDO_END);
+    .add(DelimiterType.NESTING_PSEUDO_START)
+    .add(DelimiterType.NESTING_PSEUDO_END);
 
   static final TokenTypes NO_LINK_TABLE_TYPES = new TokenTypes(STANDARD_TABLE_TYPES)
-    .remove(TokenType.LINK);
+    .remove(DelimiterType.LINK);
 
   TokenTypes(List<TokenType> delimiters) {
     this(delimiters, Collections.emptyList());
