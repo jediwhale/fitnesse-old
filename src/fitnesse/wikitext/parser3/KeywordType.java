@@ -20,6 +20,7 @@ class KeywordType extends TokenType {
   static final KeywordType NOTE = new KeywordType("Note", "!note");
   static final KeywordType PATH = new KeywordType("Path", "!path"); //todo: was atStart?
   static final KeywordType SEE = new KeywordType("See", "!see");
+  static final KeywordType STYLE = new KeywordType("Style", "!style");
   static final KeywordType TODAY = new KeywordType("Today", "!today");
 
   KeywordType(String name, String ... matches)  {

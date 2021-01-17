@@ -30,7 +30,6 @@ class TokenTypes {
       DelimiterType.PLAIN_TEXT_TABLE_END,
       DelimiterType.PREFORMAT_START,
       DelimiterType.PREFORMAT_END,
-      DelimiterType.STYLE,
       DelimiterType.TABLE_START,
       DelimiterType.TABLE_END,
 
@@ -62,6 +61,7 @@ class TokenTypes {
       KeywordType.NOTE,
       KeywordType.PATH,
       KeywordType.SEE,
+      KeywordType.STYLE,
       KeywordType.TODAY
     ));
 

@@ -64,7 +64,7 @@ class ParseRules {
     rules.put(DelimiterType.PREFORMAT_START, Preformat::parse);
     rules.put(KeywordType.SEE, Keyword.parse(SymbolType.SEE));
     rules.put(DelimiterType.STRIKE, Pair.parse(SymbolType.STRIKE));
-    rules.put(DelimiterType.STYLE, Style::parse);
+    rules.put(KeywordType.STYLE, Style::parse);
     rules.put(KeywordType.TODAY, Today::parse);
     rules.put(DelimiterType.TABLE_START, Table::parseStandard);
     return rules;

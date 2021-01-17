@@ -75,7 +75,6 @@ class DelimiterType extends TokenType {
   static final DelimiterType PLAIN_TEXT_TABLE_START = new DelimiterType("PlainTextTableStart", "![");
   static final DelimiterType PREFORMAT_END = new DelimiterType("PreformatEnd", "}}}");
   static final DelimiterType STRIKE = new DelimiterType("Strike", "--");
-  static final DelimiterType STYLE = new DelimiterType("Style", "!style_"); //todo: to keywordtype
   static final DelimiterType TABLE_START = new DelimiterType("TableStart")
     .matches(startLine(), matchOne(text("-!|"), text("!|"), text("-^|"), text("^|"), text("-|"), text("|")));
   static final DelimiterType TABLE_END = new DelimiterType("TableEnd")
