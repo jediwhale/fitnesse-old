@@ -62,6 +62,6 @@ public class Names {
   //properties for the !today widget
   public static final String INCREMENT = "Increment";
 
-  //properties for the table widget
+  //properties for the !style widget
   public static final String CLASS = "class";
 }

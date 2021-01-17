@@ -1,7 +1,6 @@
 package fitnesse.wikitext.parser3;
 
 import fitnesse.wikitext.shared.LastModifiedHtml;
-import fitnesse.wikitext.shared.MarkUpConfig;
 import fitnesse.wikitext.shared.ParsingPage;
 import fitnesse.wikitext.shared.ToHtml;
 
@@ -10,7 +9,6 @@ import java.util.EnumMap;
 public class HtmlTranslator implements Translator {
 
   public HtmlTranslator(Symbol syntaxTree, ParsingPage page) {
-    this.page = page;
     symbolTypes = new EnumMap<>(SymbolType.class);
     symbolTypes.put(SymbolType.ANCHOR_NAME, Translate.with(ToHtml::anchorName).content());
     symbolTypes.put(SymbolType.ANCHOR_REFERENCE, Translate.with(ToHtml::anchorReference).content());
@@ -43,7 +41,7 @@ public class HtmlTranslator implements Translator {
     symbolTypes.put(SymbolType.PREFORMAT, Translate.with(ToHtml::pair).text("pre").content());
     symbolTypes.put(SymbolType.SEE, See::translate);
     symbolTypes.put(SymbolType.STRIKE, Translate.with(ToHtml::pair).text("strike").content());
-    symbolTypes.put(SymbolType.STYLE, Style::translate);
+    symbolTypes.put(SymbolType.STYLE, Translate.with(ToHtml::style).content());
     symbolTypes.put(SymbolType.TABLE, Table::translate);
     symbolTypes.put(SymbolType.TEXT, Symbol::translateContent);
     symbolTypes.put(SymbolType.TODAY, (symbol, t) -> ToHtml.today(symbol));
@@ -55,6 +53,5 @@ public class HtmlTranslator implements Translator {
     return symbolTypes.get(symbolType);
   }
 
-  private final ParsingPage page;
   private final EnumMap<SymbolType, TranslateRule> symbolTypes;
 }

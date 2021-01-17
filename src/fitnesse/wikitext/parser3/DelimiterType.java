@@ -2,7 +2,6 @@ package fitnesse.wikitext.parser3;
 
 import java.util.Collections;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static fitnesse.wikitext.parser3.MatchContent.blank;

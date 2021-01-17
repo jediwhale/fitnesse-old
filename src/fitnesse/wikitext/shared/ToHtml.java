@@ -105,6 +105,10 @@ public class ToHtml {
     return new HtmlTag("span").attribute("class", "meta").body("classpath: " + strings[0]).htmlInline();
   }
 
+  public static String style(String[] strings, PropertySource source) {
+    return HtmlTag.name("span").attribute("class", source.findProperty(Names.CLASS, "")).body(strings[0]).htmlInline();
+  }
+
   public static String today(PropertySource source) {
     //todo: dry with v2
     String increment = source.findProperty(Names.INCREMENT, "");

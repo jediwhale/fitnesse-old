@@ -34,17 +34,17 @@ public class StyleTest {
 
   @Test
   public void parsesStyleWithBraces() {
-    assertParses("STYLE(TEXT=hi,LIST(TEXT=there))", "!style_hi{there}");
+    assertParses("STYLE(LIST(TEXT=there))[class=hi]", "!style_hi{there}");
   }
 
   @Test
   public void parsesStyleWithBrackets() {
-    assertParses("STYLE(TEXT=hi,LIST(TEXT=there))", "!style_hi[there]");
+    assertParses("STYLE(LIST(TEXT=there))[class=hi]", "!style_hi[there]");
   }
 
   @Test
   public void parsesStyleWithParentheses() {
-    assertParses("STYLE(TEXT=hi,LIST(TEXT=there))", "!style_hi(there)");
+    assertParses("STYLE(LIST(TEXT=there))[class=hi]", "!style_hi(there)");
   }
 
   @Test

@@ -1,6 +1,6 @@
 package fitnesse.wikitext.parser3;
 
-import fitnesse.html.HtmlTag;
+import fitnesse.wikitext.shared.Names;
 
 public class Style {
   public static Symbol parse(Parser parser) {
@@ -12,19 +12,15 @@ public class Style {
     if (!parser.peek(2).isStartType()) {
       return parser.makeError("Expected { ( or [", 2);
     }
-    Symbol result = new BranchSymbol(SymbolType.STYLE);
+    Symbol result = new TaggedSymbol(SymbolType.STYLE);
+    result.putProperty(Names.CLASS, cssClass);
     parser.advance();
     parser.advance();
-    result.add(new LeafSymbol(SymbolType.TEXT, cssClass)); //todo: could be STYLE content?
     Token start = parser.peek(0);
     parser.advance();
     Symbol list = parser.parseList(SymbolType.LIST, Terminator.make(start, contents));
     if (list.hasError()) return list;
-    result.add(list); //todo: could be STYLE children?
+    result.add(list);
     return result;
-  }
-
-  public static String translate(Symbol symbol, Translator translator) {
-    return HtmlTag.name("span").attribute("class", symbol.getContent(0)).body(translator.translate(symbol.getBranch(1))).htmlInline();
   }
 }
