@@ -1,2 +1,4 @@
 !define TEST_SYSTEM {slim}
+!define PARSER_VERSION {2}
+
 !contents -R1 -g

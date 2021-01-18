@@ -1,0 +1,4 @@
+
+|script   |echo fixture                     |
+|show     |echo|${FITNESSE_VERSION}         |
+|check not|echo|${FITNESSE_VERSION}|vUnknown|

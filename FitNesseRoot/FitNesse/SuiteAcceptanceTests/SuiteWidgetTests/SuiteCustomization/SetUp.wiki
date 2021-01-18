@@ -1,0 +1,8 @@
+!|Import          |
+|fitnesse.fixtures|
+
+!| SetUp|!-Plugins=fitnesse.testsystems.slim.CustomScriptTableRenderingPlugin-! |
+
+|Library     |
+|page driver |
+|echo fixture|

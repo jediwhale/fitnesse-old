@@ -1,0 +1,5 @@
+!define TEST_SYSTEM {slim}
+
+The display of wiki pages can be customized with plug-in classes
+
+!contents -R1 -g

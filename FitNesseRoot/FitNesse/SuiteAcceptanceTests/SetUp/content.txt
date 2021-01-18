@@ -2,3 +2,6 @@
 |fitnesse.fixtures|
 
 !|SetUp|
+
+|set up parser|${PARSER_VERSION}|
+

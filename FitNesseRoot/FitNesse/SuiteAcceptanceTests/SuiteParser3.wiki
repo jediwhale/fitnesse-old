@@ -1,0 +1,10 @@
+---
+SymbolicLinks
+  SuiteSharedTests: .FitNesse.SuiteSharedTests
+---
+Tests for work in progress on a new parser.
+
+!define TEST_SYSTEM {slim}
+!define PARSER_VERSION {3}
+
+!contents -R1 -g

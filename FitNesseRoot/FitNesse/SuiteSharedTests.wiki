@@ -1,0 +1,4 @@
+These tests are included via symbolic links in the parser suites.
+
+!define TEST_SYSTEM {slim}
+!contents -R1 -g

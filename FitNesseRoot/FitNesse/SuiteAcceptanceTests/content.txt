@@ -12,6 +12,7 @@
 | >SuiteTestHistory | ''Test History tests'' |
 | >SuiteVersionsControllerTests | Versions controller tests |
 | >SuiteTestSystems | Test interaction with custom test systems |
+| >SuiteParser3 | Work in progress on a new parser |
 
 !2 ''Classpaths''
 !define SUT_PATH (!-
@@ -37,3 +38,4 @@ Use a non-default port number, so SLIM tests systems can be run as well:
 !define COLLAPSE_TEARDOWN {true}
 
 !define TITLE_TAG {li}
+!define PARSER_VERSION {2}
