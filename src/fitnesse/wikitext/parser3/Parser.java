@@ -4,7 +4,9 @@ import fitnesse.wikitext.shared.ParsingPage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 class Parser {
 
@@ -17,37 +19,31 @@ class Parser {
   }
 
   Parser textType(SymbolType type) {
-    return new Parser(tokens, page, rules.withTextType(type), watchTokens, parentTerminator);
-  }
-
-  Parser watchTokens(Consumer<Token> watchTokens) {
-    return new Parser(tokens, page, rules, watchTokens, parentTerminator);
+    return new Parser(tokens, page, rules.withTextType(type), parentTerminator);
   }
 
   Parser withContent(String content) {
-    return new Parser(new TokenSource(tokens, new Content(content, page)), page, rules, token -> {}, parentTerminator);
+    return new Parser(new TokenSource(tokens, new Content(content, page)), page, rules, parentTerminator);
   }
 
   Parser withTerminator(Terminator parentTerminator) {
-    return new Parser(tokens, page, rules, watchTokens, parentTerminator);
+    return new Parser(tokens, page, rules, parentTerminator);
   }
 
   Parser withTokenTypes(TokenTypes tokenTypes) {
-    return new Parser(new TokenSource(tokens, tokenTypes), page, rules, watchTokens, parentTerminator);
+    return new Parser(new TokenSource(tokens, tokenTypes), page, rules, parentTerminator);
   }
 
   Parser(String input, TokenTypes tokenTypes, ParsingPage page) {
     this.page = page;
     this.tokens = new TokenSource(new Content(input, page), tokenTypes);
     this.rules = new ParseRules(page);
-    this.watchTokens = token -> {};
     this.parentTerminator = Terminator.NONE;
   }
 
-  private Parser(TokenSource tokens, ParsingPage page, ParseRules rules, Consumer<Token> watchTokens, Terminator parentTerminator) {
+  private Parser(TokenSource tokens, ParsingPage page, ParseRules rules, Terminator parentTerminator) {
     this.tokens = tokens;
     this.rules = rules;
-    this.watchTokens = watchTokens;
     this.page = page;
     this.parentTerminator = parentTerminator;
   }
@@ -60,9 +56,7 @@ class Parser {
   void popTypes() { tokens.popTypes(); }
 
   Token advance() {
-    Token result =  tokens.take();
-    watchTokens.accept(result);
-    return result;
+    return tokens.take();
   }
 
   Symbol parseCurrent() {
@@ -98,12 +92,17 @@ class Parser {
     return parseList(symbolType, terminator, parentTerminator, withTerminator(parentTerminator));
   }
 
-  String parseText(Terminator terminator) {
-    StringBuilder result = new StringBuilder();
-    Parser child = watchTokens(token -> result.append(token.getContent())).withTerminator(terminator);
-    child.parseToTerminator(terminator, child::parseCurrent, result::append); //todo: test what error looks like?
-    advance();
-    return result.toString();
+  <R> R collectText(Terminator terminator, Function<String, R> mapResult, BiFunction<String, String, R> mapError) {
+    StringBuilder text = new StringBuilder();
+    while (true) {
+      Token next = advance();
+      if (terminator.matches(next.getType())) break;
+      if (next.isType(TokenType.END)) {
+        return mapError.apply(text.toString(), terminator.missing("!define"));
+      }
+      text.append(next.getContent());
+    }
+    return mapResult.apply(text.toString());
   }
 
   private Symbol parseList(SymbolType symbolType, Terminator includedTerminator, Terminator excludedTerminator, Parser child) {
@@ -133,6 +132,5 @@ class Parser {
   private final ParsingPage page;
   private final TokenSource tokens;
   private final ParseRules rules;
-  private final Consumer<Token> watchTokens;
   private final Terminator parentTerminator;
 }

@@ -3,6 +3,9 @@ package fitnesse.wikitext.parser3;
 import fitnesse.html.HtmlTag;
 import fitnesse.wikitext.shared.VariableStore;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 class Define {
   static Symbol parse(Parser parser, VariableStore variables) {
     Symbol result = new BranchSymbol(SymbolType.DEFINE);
@@ -18,14 +21,25 @@ class Define {
     parser.advance();
     parser.advance(); //todo: check blank
     result.add(parser.parseCurrent());
-    parser.advance();
-    result.add(Symbol.text(parser.withTokenTypes(TokenTypes.DEFINE_TYPES).parseText(Terminator.make(parser.advance()))));
+    parser.advance(); //todo: check blank
 
-    variables.putVariable(result.getContent(0), result.getContent(1));
-    return result;
+    //todo: change what's in define types
+
+    Function<String, Symbol> mapText = text -> {
+      result.add(Symbol.text(text));
+      variables.putVariable(result.getContent(0), result.getContent(1));
+      return result;
+    };
+
+    BiFunction<String, String, Symbol> mapError = (text, error) ->
+      Symbol.makeList(mapText.apply(text), Symbol.error(error));
+
+    return parser
+      .withTokenTypes(TokenTypes.DEFINE_TYPES)
+      .collectText(Terminator.make(parser.advance()), mapText, mapError);
   }
 
-  static Symbol parseNested(Parser parser) {
+  static Symbol parseNested(Parser parser) { //todo: can be removed with changes to define-types?
     // this is used when a define appears inside another define
     // it does not return a parse tree or define a variable
     // it just advances through the tokens to accumulate text for the outer define

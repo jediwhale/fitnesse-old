@@ -15,7 +15,9 @@ public class VariableTest {
   public void parsesPut() {
     assertParses("DEFINE(TEXT=x,TEXT=y)", "!define x {y}");
     assertParses("DEFINE(TEXT=x,TEXT=''y'')", "!define x {''y''}");
-    assertParses("DEFINE(TEXT=x,TEXT=!define y {z})", "!define x {!define y {z}}");
+    assertParses("DEFINE(TEXT=x,TEXT=!define y (z))", "!define x {!define y (z)}");
+    //todo: tests with nested define as literal text and with literal character?
+    assertParses("LIST(DEFINE(TEXT=x,TEXT=y),ERROR=Missing terminator: } for !define)", "!define x {y");
   }
 
   @Test
@@ -31,6 +33,7 @@ public class VariableTest {
     assertTranslates(Helper.toError("!define  Name must be alphanumeric") + "@x y", "!define @x y");
     assertTranslates(Helper.toError("!define x Missing blank space") + "{y}", "!define x{y}");
     assertTranslates(Helper.toError("!define x  Expected { ( or [") + "y", "!define x y");
+    assertTranslates(translateDefine("x=y") + Helper.toError("Missing terminator: } for !define"), "!define x {y");
   }
 
   @Test

@@ -4,12 +4,13 @@ import fitnesse.wikitext.shared.LastModifiedHtml;
 import fitnesse.wikitext.shared.ParsingPage;
 import fitnesse.wikitext.shared.ToHtml;
 
-import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HtmlTranslator implements Translator {
 
   public HtmlTranslator(Symbol syntaxTree, ParsingPage page) {
-    symbolTypes = new EnumMap<>(SymbolType.class);
+    symbolTypes = new HashMap<>();
     symbolTypes.put(SymbolType.ANCHOR_NAME, Translate.with(ToHtml::anchorName).content());
     symbolTypes.put(SymbolType.ANCHOR_REFERENCE, Translate.with(ToHtml::anchorReference).content());
     symbolTypes.put(SymbolType.BOLD, Translate.with(ToHtml::pair).text("b").content());
@@ -53,5 +54,5 @@ public class HtmlTranslator implements Translator {
     return symbolTypes.get(symbolType);
   }
 
-  private final EnumMap<SymbolType, TranslateRule> symbolTypes;
+  private final Map<SymbolType, TranslateRule> symbolTypes;
 }

@@ -5,6 +5,8 @@ import fitnesse.wikitext.shared.Names;
 
 import java.util.Arrays;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 class Table {
 
@@ -55,8 +57,9 @@ class Table {
 
   private static Symbol makeRow(Parser parser, BiConsumer<Symbol, String> populateRow) {
     Symbol row = new TaggedSymbol(SymbolType.LIST);
-    String rowText = parser.parseText(new Terminator(DelimiterType.NEW_LINE));
-    populateRow.accept(row, rowText);
+    Function<String, String> mapText = text -> text;
+    BiFunction<String, String, String> mapError = (text, error) -> text;
+    populateRow.accept(row, parser.collectText(Terminator.END_LINE, mapText, mapError));
     return row;
   }
 

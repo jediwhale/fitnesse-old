@@ -38,6 +38,7 @@ class Terminator {
   boolean matches(TokenType type) { return matcher.test(type); }
 
   String missing() { return prefix + (prefix.length() > 0 ? " " : "") + "Missing terminator: " + description; }
+  String missing(String name) { return "Missing terminator: " + description + " for " + name; }
 
   private final String description;
   private final String prefix;
