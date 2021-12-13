@@ -1,4 +1,28 @@
 !2 ${FITNESSE_VERSION}
+
+!2 20211030
+* Switch community pages from Slack to Gitter. ([[1339][https://github.com/unclebob/fitnesse/pull/1339]])
+
+!2 20211006
+* Values of Slim symbols prefixed by 'SECRET_' are not shown in test report. ([[1333][https://github.com/unclebob/fitnesse/pull/1333]])
+* The jUnit test reporter now reports tests that are shown as ignored in the wiki (blue bar in html result, e.g. a stop test exception was thrown in a !-SuiteSetUp-!) as 'ignored'. ([[1327][https://github.com/unclebob/fitnesse/pull/1327]])
+
+!2 20210606
+* 2nd attempt to fix non-backwards compatible change in fitnesse.testsystems.TestSystemListener ([[1325][https://github.com/unclebob/fitnesse/issues/1325]])
+
+!2 20210605
+* Fix non-backwards compatible change in fitnesse.testsystems.TestSystemListener ([[1325][https://github.com/unclebob/fitnesse/issues/1325]])
+
+!2 20210516
+* Release process updated to no longer use Bintray.
+* Improve handling of Slim symbols embedded in strings ([[1324][https://github.com/unclebob/fitnesse/issues/1324]])
+
+!2 20210410
+* Ability to show number of test pages in table of context of suite. ([[1318][https://github.com/unclebob/fitnesse/pull/1318]])
+* Create distinct rerun failed page per suite, to allow concurent suites to run. ([[1316][https://github.com/unclebob/fitnesse/pull/1316]])
+* Small change of classpath ordering. ([[1317][https://github.com/unclebob/fitnesse/pull/1317]])
+
+!2 20201213
 * New table type: 'No links table' to create tables where wiki-words, email addresses and URLs are not automatically converted to hyperlinks ([[1310][https://github.com/unclebob/fitnesse/pull/1310]])
 * Facilitate running a suite in partitions by adding a JUnit !-RunListener-! and Gradle !-TestListener-! that generate XML result files per page, instead of per suite. ([[1297][https://github.com/unclebob/fitnesse/pull/1297]])
 * Upgrade bootstrap to 4.5.3 and JQuery to 3.5.1 ([[1309][https://github.com/unclebob/fitnesse/pull/1309]])
