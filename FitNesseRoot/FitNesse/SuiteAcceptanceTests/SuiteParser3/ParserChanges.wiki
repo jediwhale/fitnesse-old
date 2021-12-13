@@ -1,0 +1,8 @@
+---
+Test
+---
+!|script|MarkUp|
+||||some comments|
+|check|with2|!define x {!style_red{hi} there}|<span class="meta">variable defined: x=!style_red{hi} there</span>|
+|check|with3|!define x {!style_red{hi} there}|<span class="meta">variable defined: x=!style_red{hi</span> there}|
+|check|with3|!define x (!style_red{hi} there)|<span class="meta">variable defined: x=!style_red{hi} there</span>|

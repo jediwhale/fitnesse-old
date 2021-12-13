@@ -9,7 +9,6 @@ class KeywordType extends TokenType {
   static final KeywordType CENTER = new KeywordType("Center", "!c"); //todo: was atStart?
   static final KeywordType CONTENTS = new KeywordType("Contents", "!contents");
   static final KeywordType DEFINE = new KeywordType("Define", "!define");
-  static final KeywordType DEFINE_NESTED = new KeywordType("Define", "!define");
   static final KeywordType HEADER = new KeywordType("Header", "!1", "!2", "!3", "!4", "!5", "!6"); //todo: was atStart?
   static final KeywordType HEADINGS = new KeywordType("Headings", "!headings"); //todo: was atStart?
   static final KeywordType HELP = new KeywordType("Help", "!help");

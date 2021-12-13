@@ -12,3 +12,6 @@ To add your first "page", click the [[Edit][.FrontPage?edit]] button and add a [
 |[[Slack Community][https://fitnesse-community-inviter.herokuapp.com/]]|''Join the Slack Community.''              |
 
 !note Release ${FITNESSE_VERSION}
+
+!define x {a}
+!define y x

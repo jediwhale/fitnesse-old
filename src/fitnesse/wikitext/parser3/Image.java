@@ -8,7 +8,7 @@ import java.util.List;
 
 class Image {
   static Symbol parse(Parser parser) {
-    Symbol result = new TaggedSymbol(SymbolType.IMAGE);
+    Symbol result = new BranchSymbol(SymbolType.IMAGE);
     String content = parser.advance().getContent();
     parser.advance(); //todo: check blank
     if (content.startsWith("!img-l")) {

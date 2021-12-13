@@ -5,7 +5,7 @@
 
 !4 Define variables on this sub page. They can be used on the main page
 !define result {77.0}
-!define quotient4 {${= ${numerator} / ${denominator} =}.0}
+!define quotient4 (${= ${numerator} / ${denominator} =}.0)
 
 print quotient  = ${quotient}
 print quotient2 = ${quotient2}

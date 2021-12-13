@@ -12,7 +12,7 @@ public class Style {
     if (!parser.peek(2).isStartType()) {
       return parser.makeError("Expected { ( or [", 2);
     }
-    Symbol result = new TaggedSymbol(SymbolType.STYLE);
+    Symbol result = new BranchSymbol(SymbolType.STYLE);
     result.putProperty(Names.CLASS, cssClass);
     parser.advance();
     parser.advance();

@@ -9,7 +9,7 @@ import fitnesse.wikitext.shared.VariableStore;
 
 class Contents {
   static Symbol parse(Parser parser, VariableStore variables) {
-    Symbol result = new TaggedSymbol(SymbolType.CONTENTS);
+    Symbol result = new BranchSymbol(SymbolType.CONTENTS);
     do {
       Token next = parser.advance();
       String option = next.getContent();

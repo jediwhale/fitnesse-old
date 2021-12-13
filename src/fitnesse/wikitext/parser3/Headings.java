@@ -5,7 +5,7 @@ import fitnesse.wikitext.shared.Names;
 
 class Headings {
   static Symbol parse(Parser parser) {
-    Symbol result =  new TaggedSymbol(SymbolType.HEADINGS);
+    Symbol result =  new BranchSymbol(SymbolType.HEADINGS);
     parser.advance();
     if (parser.peek(0).isType(DelimiterType.BLANK_SPACE) && parser.peek(1).getContent().equals("-" + Names.STYLE)) {
       parser.advance();

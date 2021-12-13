@@ -31,7 +31,7 @@ class Table {
   }
 
   private static Symbol parseWithCustomDelimiter(Parser parser) {
-    Symbol result = new TaggedSymbol(SymbolType.TABLE);
+    Symbol result = new BranchSymbol(SymbolType.TABLE);
     parser.advance();
     BiConsumer<Symbol, String> populateRow;
     if (parser.peek(0).isType(TokenType.TEXT)) {
@@ -56,7 +56,7 @@ class Table {
   }
 
   private static Symbol makeRow(Parser parser, BiConsumer<Symbol, String> populateRow) {
-    Symbol row = new TaggedSymbol(SymbolType.LIST);
+    Symbol row = new BranchSymbol(SymbolType.LIST);
     Function<String, String> mapText = text -> text;
     BiFunction<String, String, String> mapError = (text, error) -> text;
     populateRow.accept(row, parser.collectText(Terminator.END_LINE, mapText, mapError));
@@ -70,32 +70,34 @@ class Table {
   }
 
   private static void addSingleCell(Symbol row, String rowText) {
-    Symbol cell = new TaggedSymbol(SymbolType.LIST);
+    Symbol cell = new BranchSymbol(SymbolType.LIST);
     cell.add(Symbol.text(rowText));
     row.add(cell);
   }
 
   private static Symbol parseWithBarDelimiter(Parser parser) {
-    Symbol result = new TaggedSymbol(SymbolType.TABLE);
+    Symbol result = new BranchSymbol(SymbolType.TABLE);
     parser.advance();
     do {
-      Symbol row = new TaggedSymbol(SymbolType.LIST);
+      Symbol row = new BranchSymbol(SymbolType.LIST);
       do {
         Symbol cell = parser.parseList(SymbolType.LIST,
           new Terminator(type -> type == DelimiterType.CELL_DELIMITER || type == DelimiterType.TABLE_END, "|", ""));
         row.add(cell);
-      } while (!isEndOfRow(parser.peek(-1)));
+      } while (!isEndOfRow(parser)); //todo: clean up
       result.add(row);
-    } while (!isEndOfTable(parser.peek(-1)));
+    } while (!isEndOfTable(parser)); //todo; clean up
     return result;
   }
 
-  private static boolean isEndOfRow(Token token) {
-    return token.getContent().contains("\r") || token.getContent().contains("\n") || isEndOfTable(token);
+  private static boolean isEndOfRow(Parser parser) {
+    Token token = parser.peek(-1);
+    return !token.getContent().contains("|") || token.getContent().contains("\r") || token.getContent().contains("\n") || isEndOfTable(parser);
   }
 
-  private static boolean isEndOfTable(Token token) {
-    return token.isType(DelimiterType.TABLE_END) || token.isType(TokenType.END);
+  private static boolean isEndOfTable(Parser parser) {
+    Token token = parser.peek(-1);
+    return !token.getContent().contains("|") || token.isType(DelimiterType.TABLE_END) || token.isType(TokenType.END);
   }
 
   static String translate(Symbol table, Translator translator) {

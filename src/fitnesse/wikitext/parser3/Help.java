@@ -4,7 +4,7 @@ import fitnesse.wikitext.shared.Names;
 
 class Help {
   static Symbol parse(Parser parser) {
-    Symbol result =  new TaggedSymbol(SymbolType.HELP);
+    Symbol result =  new BranchSymbol(SymbolType.HELP);
     parser.advance();
     if (parser.peek(0).isType(DelimiterType.BLANK_SPACE) && parser.peek(1).getContent().equals(Names.EDITABLE)) {
       result.putProperty(Names.EDITABLE, "");

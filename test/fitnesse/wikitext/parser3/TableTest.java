@@ -35,9 +35,15 @@ public class TableTest {
     assertParses("TABLE(LIST(LIST(TEXT=a)),LIST(LIST(TEXT=b)))", "|a|\n|b|");
   }
 
+  @Test public void parsesErrors() {
+    assertParses("TABLE(LIST(LIST(ERROR=Missing terminator: |,TEXT=a)))", "|a");
+    assertParses("TABLE(LIST(LIST(ERROR=Missing terminator: |,LIST(ERROR='' Missing terminator: '',TEXT=a,TEXT=|))))", "|''a|");
+  }
+
   @Test public void parsesLiteral() {
     assertParses("TABLE(LIST(LIST(TEXT=PageOne)))","!|PageOne|");
     assertParses("TABLE(LIST(LIST(TEXT=''a'')))","!|''a''|");
+    assertParses("TABLE(LIST(LIST(TEXT=a))),NOTE(LIST(TEXT=x))", "!|a|\n!note x\n");
   }
 
   //todo: should this be valid?

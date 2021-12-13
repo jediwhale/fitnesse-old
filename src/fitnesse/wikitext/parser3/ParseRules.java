@@ -41,7 +41,6 @@ class ParseRules {
     rules.put(DelimiterType.COMMENT, Comment::parse);
     rules.put(KeywordType.CONTENTS, parser -> Contents.parse(parser, page));
     rules.put(KeywordType.DEFINE, parser -> Define.parse(parser, page));
-    rules.put(KeywordType.DEFINE_NESTED, Define::parseNested);
     rules.put(DelimiterType.EXPRESSION_START, parser -> Expression.parse(parser, page));
     rules.put(DelimiterType.HASH_TABLE, HashTable::parse);
     rules.put(KeywordType.HEADER, parser -> Header.parse(parser, page));

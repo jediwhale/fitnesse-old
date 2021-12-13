@@ -4,6 +4,12 @@ SymbolicLinks
 ---
 Tests for work in progress on a new parser.
 
+Goals:
+* improved performance
+* cleaner code
+* unambiguous syntax
+* better error reporting
+
 !define TEST_SYSTEM {slim}
 !define PARSER_VERSION {3}
 

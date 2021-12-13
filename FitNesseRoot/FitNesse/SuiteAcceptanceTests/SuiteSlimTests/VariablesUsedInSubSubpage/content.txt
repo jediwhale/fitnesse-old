@@ -6,7 +6,7 @@ This behaviour is shown in the below examples:
 !3 Define initial values for numerator, denominator and quotient
 !define numerator {10}
 !define denominator {1}
-!define quotient {${= %3.0f : ${numerator} / ${denominator} =}.0}
+!define quotient (${= %3.0f : ${numerator} / ${denominator} =}.0)
 !define quotient2 quotient
 
 !include >VariablesRedefinedMultipleTimesOnSamePageAndUsedInSubpage

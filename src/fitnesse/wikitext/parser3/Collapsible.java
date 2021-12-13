@@ -4,7 +4,7 @@ import fitnesse.wikitext.shared.Names;
 
 class Collapsible {
   static Symbol parse(Parser parser) {
-    Symbol result = new TaggedSymbol(SymbolType.COLLAPSIBLE);
+    Symbol result = new BranchSymbol(SymbolType.COLLAPSIBLE);
     parser.advance();
     if (parser.peek(0).getContent().equals(">")) {
       result.putProperty(Names.STATE, Names.CLOSED);

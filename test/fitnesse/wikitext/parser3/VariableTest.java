@@ -32,7 +32,8 @@ public class VariableTest {
   public void translatesPutErrors() {
     assertTranslates(Helper.toError("!define  Name must be alphanumeric") + "@x y", "!define @x y");
     assertTranslates(Helper.toError("!define x Missing blank space") + "{y}", "!define x{y}");
-    assertTranslates(Helper.toError("!define x  Expected { ( or [") + "y", "!define x y");
+    assertTranslates(Helper.toError("!define x  Expected { ( or [") + "}", "!define x }");
+    assertTranslates(Helper.toError("!define x  Variable not found") + "y", "!define x y");
     assertTranslates(translateDefine("x=y") + Helper.toError("Missing terminator: } for !define"), "!define x {y");
   }
 
@@ -40,6 +41,8 @@ public class VariableTest {
   public void putsVariables() {
     Helper.parse("!define x {y}", page);
     assertEquals("y", page.findVariable("x").orElse(""));
+    Helper.parse("!define z x", page);
+    assertEquals("y", page.findVariable("z").orElse(""));
   }
 
   @Test

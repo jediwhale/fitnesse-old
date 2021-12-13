@@ -15,7 +15,8 @@ public class ExpressionTest {
   }
 
   @Test public void parses() {
-    assertParses("EXPRESSION(LIST(TEXT=1+2))", "${=1+2=}");
+    assertParses("EXPRESSION(TEXT=1+2)", "${=1+2=}");
+    assertParses("LIST(ERROR=${= Missing terminator: =},TEXT=1+2=)", "${=1+2=");
   }
 
   @Test public void translates() {

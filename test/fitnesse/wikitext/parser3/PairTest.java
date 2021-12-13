@@ -33,6 +33,7 @@ public class PairTest {
   @Test
   public void parsesBold() {
     assertParses("BOLD(TEXT=hi)", "'''hi'''");
+    assertParses("LIST(ERROR=''' Missing terminator: ''',TEXT=hi)", "'''hi");
   }
 
   @Test

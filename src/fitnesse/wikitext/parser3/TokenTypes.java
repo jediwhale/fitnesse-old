@@ -69,10 +69,6 @@ class TokenTypes {
     .addFirst(DelimiterType.VARIABLE_VALUE) //must be first
     .addKeyword(KeywordType.DEFINE);
 
-  static final TokenTypes DEFINE_TYPES = new TokenTypes(CORE_TYPES)
-    .addFirst(DelimiterType.VARIABLE_TOKEN) //must be first
-    .addKeyword(KeywordType.DEFINE_NESTED);
-
   static final TokenTypes HASH_TABLE_TYPES = new TokenTypes(WIKI_PAGE_TYPES)
     .add(DelimiterType.COLON)
     .add(DelimiterType.COMMA);

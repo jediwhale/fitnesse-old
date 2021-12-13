@@ -7,8 +7,12 @@ public class MarkUpConfig {
   public static String version = "2";
 
   public static MarkUpSystem make() {
-    return MarkUpConfig.version.equals("3") ? new MarkUpSystemV3() : new MarkUpSystemV2();
+    return make(MarkUpConfig.version);
     //return new MarkUpSystemV2();
     //return new MarkUpSystemV3();
+  }
+
+  public static MarkUpSystem make(String aVersion) {
+    return aVersion.equals("3") ? new MarkUpSystemV3() : new MarkUpSystemV2();
   }
 }

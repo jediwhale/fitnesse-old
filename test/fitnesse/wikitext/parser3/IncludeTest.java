@@ -16,6 +16,7 @@ public class IncludeTest {
     FakeSourcePage.pages.clear();
     FakeSourcePage.addPage("root.MyPage", "stuff");
     assertParses("INCLUDE(WIKI_LINK=MyPage,LIST(TEXT=stuff))", "!include MyPage", page);
+    assertParses("INCLUDE(WIKI_LINK=MyPage,LIST(TEXT=stuff))[-teardown=]", "!include -teardown MyPage", page);
   }
 
   @Test public void parsesNested() {
